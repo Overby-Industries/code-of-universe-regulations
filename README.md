@@ -7,6 +7,8 @@
 
 **The Ethical Governance Framework for a Post-Scarcity, Multi-Species Space Civilization**
 
+> *Honesty • Honour • Courage • Commitment*
+
 ---
 
 ## Vision
