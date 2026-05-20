@@ -1,12 +1,18 @@
-# TITLE 0 - PDDC Implementation Roadmap — Flight Path for Institutional Buildout
+# TITLE 0 - HEADER AND PREAMBLE
 
-## PART 0 - The Aevoric Commonwealth (Aevoria)
+## PART 0 - Document Identity
 
-### §0.1 - Coordinating Council — Issued under PDDC §18.3 Effective: 
+### §0.1 - Document Header
 
-Day 1, Year 1 Aevoric Era — 20 May 2026 C.E.
+(a) Title: PDDC Implementation Roadmap — Flight Path for Institutional Buildout
 
-(a) Status: Binding — Living Document — Updated per §1.2
+(b) Jurisdiction: The Aevoric Commonwealth (Aevoria)
+
+(c) Authority: Coordinating Council — Issued under PDDC §18.3
+
+(d) Effective: Day 1, Year 1 Aevoric Era — 20 May 2026 C.E.
+
+(e) Status: Binding — Living Document — Updated per §1.2
 
 ### §0.2 - Preamble
 
@@ -307,7 +313,7 @@ Phase 2 is complete when:
 
 (e) Establish inter-organizational CUR relationships; and
 
-(f) Launch the Keefe Ascension Medal inaugural award process.
+(f) Launch the Ascending Arc Medal inaugural award process.
 
 ### §5.3 - Phase 3 Waypoint Milestones
 
@@ -321,7 +327,7 @@ Phase 2 is complete when:
 
 (e) Waypoint P3-05 — CUR Integration Verification: Complete formal verification that Commonwealth instruments are consistent with CUR Master Framework and CUR-FOUNDATION-001. Responsible: CoC. Due: Month 20, Year 2 A.E.
 
-(f) Waypoint P3-06 — Keefe Ascension Medal Inaugural Award: Conduct the first General Assembly vote for the Keefe Ascension Medal, the highest civic honor of the Commonwealth under PDDC §18.4. Responsible: GA. Due: Month 24, Year 2 A.E.
+(f) Waypoint P3-06 — Ascending Arc Medal Inaugural Award: Conduct the first General Assembly vote for the Ascending Arc Medal, the highest civic honor of the Commonwealth under PDDC §18.4. Responsible: GA. Due: Month 24, Year 2 A.E.
 
 (g) Waypoint P3-07 — Year 2 Budget Cycle: Complete the second full Annual Budget cycle with demonstrated improvement in democratic participation metrics relative to the first cycle. Responsible: Treasury Assembly. Due: Month 15, Year 2 A.E.
 
@@ -590,7 +596,7 @@ Phase 3 Milestones:
 
 (jj) P3-05 — CUR Integration Verification — Month 20, Year 2 A.E.
 
-(kk) P3-06 — Keefe Ascension Medal Inaugural Award — Month 24, Year 2 A.E.
+(kk) P3-06 — Ascending Arc Medal Inaugural Award — Month 24, Year 2 A.E.
 
 (ll) P3-07 — Year 2 Budget Cycle — Month 15, Year 2 A.E.
 

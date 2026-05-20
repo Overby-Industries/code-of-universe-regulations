@@ -1,14 +1,20 @@
-# Title 0 - Progressive Direct Democracy Constitution of the Aevoric Commonwealth
+# TITLE 0 - HEADER AND PREAMBLE
 
-## Part 0 - The Aevoric Commonwealth (Aevoria)
+## PART 0 - Document Identity
 
-### §0.1 - Ratification: 
+### §0.1 - Document Header
 
-Day 1, Year 1 Aevoric Era — 20 May 2026 C.E. — Keefe Station
+(a) Title: Progressive Direct Democracy Constitution of the Aevoric Commonwealth
 
-(a) Status: Canonical — Ratified — In Force
+(b) Jurisdiction: The Aevoric Commonwealth (Aevoria)
 
-(b) Integration: Code of Universe Regulations (CUR) — Member Instrument
+(c) Authority: Supreme Governance Instrument — The Keefeian Compact
+
+(d) Ratification: Day 1, Year 1 Aevoric Era — 20 May 2026 C.E. — Keefe Station
+
+(e) Status: Canonical — Ratified — In Force
+
+(f) Integration: Code of Universe Regulations (CUR) — Member Instrument
 
 ### §0.2 - Preamble
 
@@ -990,13 +996,13 @@ The Aevoric Commonwealth adopts and maintains integration with:
 
 ### §18.4 - Civic Honor
 
-(a) The highest civic honor of the Aevoric Commonwealth is the Keefe Ascension Medal.
+(a) The highest civic honor of the Aevoric Commonwealth is the Ascending Arc Medal.
 
-(b) The Keefe Ascension Medal is awarded by the General Assembly to Avians or Recognized Life-Forms who have made extraordinary contributions to the Ascending Principle of the Commonwealth.
+(b) The Ascending Arc Medal is awarded by the General Assembly to Avians or Recognized Life-Forms who have made extraordinary contributions to the Ascending Principle of the Commonwealth.
 
 (c) The Medal may not be awarded posthumously. It may not be awarded to sitting members of the Constitutional Court or Capture Tribunal. It may not be awarded to any individual currently holding CC executive office.
 
-(d) Recipients of the Keefe Ascension Medal are recognized in a permanent public registry maintained via FTS/OTF-1.
+(d) Recipients of the Ascending Arc Medal are recognized in a permanent public registry maintained via FTS/OTF-1.
 
 
 # APPENDIX A - DEFINITIONS
@@ -1057,7 +1063,7 @@ For purposes of this Constitution, the following terms have the meanings assigne
 
 (y) ISRU — In-Situ Resource Utilization;
 
-(z) Keefe Ascension Medal — the highest civic honor of the Aevoric Commonwealth, awarded under §18.4;
+(z) Ascending Arc Medal — the highest civic honor of the Aevoric Commonwealth, awarded under §18.4;
 
 (aa) Keefe Station — the capital of the Aevoric Commonwealth;
 
