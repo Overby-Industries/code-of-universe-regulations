@@ -1,20 +1,14 @@
-# TITLE 0 - HEADER AND PREAMBLE
+# TITLE 0 - Progressive Direct Democracy Constitution of the Aevoric Commonwealth
 
-## PART 0 - Document Identity
+## PART 0 - The Aevoric Commonwealth (Aevoria)
 
-### §0.1 - Document Header
+### §0.1 - Supreme Governance Instrument — The Keefeian Compact Ratification: 
 
-(a) Title: Progressive Direct Democracy Constitution of the Aevoric Commonwealth
+Day 1, Year 1 Aevoric Era — 20 May 2026 C.E. — Keefe Station
 
-(b) Jurisdiction: The Aevoric Commonwealth (Aevoria)
+(a) Status: Canonical — Ratified — In Force
 
-(c) Authority: Supreme Governance Instrument — The Keefeian Compact
-
-(d) Ratification: Day 1, Year 1 Aevoric Era — 20 May 2026 C.E. — Keefe Station
-
-(e) Status: Canonical — Ratified — In Force
-
-(f) Integration: Code of Universe Regulations (CUR) — Member Instrument
+(b) Integration: Code of Universe Regulations (CUR) — Member Instrument
 
 ### §0.2 - Preamble
 

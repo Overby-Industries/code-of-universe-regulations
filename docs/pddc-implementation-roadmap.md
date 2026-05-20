@@ -1,18 +1,12 @@
-# TITLE 0 - HEADER AND PREAMBLE
+# TITLE 0 - PDDC Implementation Roadmap — Flight Path for Institutional Buildout
 
-## PART 0 - Document Identity
+## PART 0 - The Aevoric Commonwealth (Aevoria)
 
-### §0.1 - Document Header
+### §0.1 - Coordinating Council — Issued under PDDC §18.3 Effective: 
 
-(a) Title: PDDC Implementation Roadmap — Flight Path for Institutional Buildout
+Day 1, Year 1 Aevoric Era — 20 May 2026 C.E.
 
-(b) Jurisdiction: The Aevoric Commonwealth (Aevoria)
-
-(c) Authority: Coordinating Council — Issued under PDDC §18.3
-
-(d) Effective: Day 1, Year 1 Aevoric Era — 20 May 2026 C.E.
-
-(e) Status: Binding — Living Document — Updated per §1.2
+(a) Status: Binding — Living Document — Updated per §1.2
 
 ### §0.2 - Preamble
 
