@@ -46,6 +46,8 @@ The CUR is the governing framework of the **Aevoric Commonwealth** (Aevoria), a 
 | National Colors | Midnight Blue, Sunrise Gold, Cloud White |
 | Emblem | The Ascending Arc |
 
+![Aevoria](aevoria.png)
+
 The name Aevoria carries both the eternity of the epoch (Latin: *aevum*) and the spirit of flight (Latin: *avis*) — meaning the place of eternal flight. Its citizens are Avians. Its governance is The Aevoric Commonwealth.
 
 ---
