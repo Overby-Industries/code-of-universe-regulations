@@ -1,12 +1,11 @@
 # CUR-FOUNDATION-001.md
 
-**Code of Universe Regulations (CUR)**  
-**Foundation Document 001: Anti-Capture and Resilience**
-
-**Version:** 1.0.0-Official-Evergreen
-**Date:** May 15, 2026  
-**Project:** Overby Industries – Rights for All Life / Project Helga  
-**Status:** Draft - Official-Evergreen
+- **Code of Universe Regulations (CUR)**  
+- **Foundation Document 001: Anti-Capture and Resilience**
+- **Version:** 1.0.1-Official-Evergreen
+- **Date:** May 15, 2026  
+- **Project:** Overby Industries – Rights for All Life / Project Helga  
+- **Status:** Draft - Official-Evergreen
 
 ---
 
