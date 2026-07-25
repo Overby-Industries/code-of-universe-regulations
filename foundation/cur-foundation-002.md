@@ -1,16 +1,16 @@
 # CUR-FOUNDATION-002
 
-## Finite State Machine (FSM) Governance Specification
+### Finite State Machine (FSM) Governance Specification
 
 - **Document ID:** CUR-FOUNDATION-002
-- **Status:** v1.0.1-Official-Evergreen
+- **Version:** 1.0.1-Official-Evergreen
 - **Authority Level:** Foundation Document
+- **Status:** Draft Official-Evergreen
 - **Depends On:** CUR-FOUNDATION-001, RIGHTS-FOR-ALL-LIFE.md
 - **Applies To:** All Aevoric Commonwealth Governance Systems
 
----
 
-# 1. Purpose
+## 1. Purpose
 
 The Finite State Machine (FSM) Governance Specification defines the operational behavior of the Aevoric Commonwealth.
 
@@ -18,26 +18,24 @@ Unlike traditional governments that rely primarily on trust, precedent, or insti
 
 The FSM serves as the constitutional kernel of the Commonwealth.
 
----
-
-# 2. Design Objectives
+## 2. Design Objectives
 
 The FSM shall:
 
+* Prevent deprivation of constitutionally guaranteed life-supporting services.
 * Protect Rights for All Life.
 * Prevent institutional capture.
 * Prevent concentration of unchecked authority.
 * Prevent suspension of constitutional protections.
 * Maintain transparency and auditability.
 * Detect governance faults.
+* Preserve life, continuity, and constitutional integrity.
 * Revert to safe operational states when faults occur.
 * Preserve democratic legitimacy.
 
----
+## 3. Core Governance States
 
-# 3. Core Governance States
-
-## STATE-001: Normal Operation
+### STATE-001: Normal Operation
 
 The default operational state.
 
@@ -56,9 +54,7 @@ Permitted Transitions:
 * Judicial Review
 * Protected Mode
 
----
-
-## STATE-002: Deliberation
+### STATE-002: Deliberation
 
 Proposal review and public discussion.
 
@@ -74,9 +70,7 @@ Permitted Transitions:
 * Proposal Withdrawal
 * Constitutional Review
 
----
-
-## STATE-003: Voting
+### STATE-003: Voting
 
 Formal democratic decision process.
 
@@ -92,17 +86,16 @@ Permitted Transitions:
 * Rejection
 * Protected Mode
 
----
-
-## STATE-004: Constitutional Review
+### STATE-004: Constitutional Review
 
 Judicial validation phase.
 
 Characteristics:
 
-* Constitutional Court review.
+* Constitutional compliance review.
 * Rights impact assessment.
 * FSM compliance verification.
+* Judicial and citizen oversight as defined by constitutional law.
 
 Permitted Transitions:
 
@@ -110,9 +103,7 @@ Permitted Transitions:
 * Rejection
 * Protected Mode
 
----
-
-## STATE-005: Implementation
+### STATE-005: Implementation
 
 Approved actions enter operational execution.
 
@@ -128,9 +119,7 @@ Permitted Transitions:
 * Audit Investigation
 * Protected Mode
 
----
-
-## STATE-006: Outcome Monitoring
+### STATE-006: Outcome Monitoring
 
 Continuous evaluation phase.
 
@@ -146,16 +135,14 @@ Permitted Transitions:
 * Audit Investigation
 * Protected Mode
 
----
-
-## STATE-007: Audit Investigation
+### STATE-007: Audit Investigation
 
 Formal fault analysis state.
 
 Characteristics:
 
-* Human audit teams activated.
-* AI audit systems activated.
+* Citizen auditors activated.
+* Silicon auditors activated.
 * Evidence preservation enforced.
 
 Permitted Transitions:
@@ -164,9 +151,7 @@ Permitted Transitions:
 * Violation Dismissed
 * Protected Mode
 
----
-
-## STATE-008: Protected Mode
+### STATE-008: Protected Mode
 
 Safe-state recovery condition.
 
@@ -187,9 +172,7 @@ Permitted Transitions:
 * Recovery Review
 * Normal Operation
 
----
-
-## STATE-009: Recovery Review
+### STATE-009: Recovery Review
 
 Verification state following Protected Mode.
 
@@ -204,12 +187,35 @@ Permitted Transitions:
 * Normal Operation
 * Protected Mode
 
----
+### STATE-010: Vital Continuity Response
 
-# 4. Protected Mode Trigger Conditions
+Immediate continuity preservation state.
+
+Purpose:
+
+Preserve life and restore Vital Continuity Services.
+
+Characteristics:
+
+* Constitutional event generated.
+* Immediate corrective actions initiated.
+* Resource reserves accessible.
+* Continuity restoration prioritized.
+* Public notification active.
+
+Permitted Transitions:
+
+* Continuity Restored
+* Protected Mode
+* Root Cause Analysis
+
+## 4. Protected Mode Trigger Conditions
 
 The FSM shall automatically enter Protected Mode upon detection of:
 
+* Vital Continuity Service collapse.
+* Systemic deprivation of constitutionally guaranteed services.
+* Failure of life-supporting infrastructure.
 * Vote tampering.
 * Rights suspension attempts.
 * Unauthorized authority concentration.
@@ -224,11 +230,9 @@ The FSM shall automatically enter Protected Mode upon detection of:
 
 Protected Mode activation shall require no human approval.
 
----
+## 5. Constitutional Fault Categories
 
-# 5. Constitutional Fault Categories
-
-## Class I Faults
+### Class I Faults
 
 Administrative errors.
 
@@ -238,9 +242,7 @@ Examples:
 * Reporting delays.
 * Minor procedural defects.
 
----
-
-## Class II Faults
+### Class II Faults
 
 Institutional violations.
 
@@ -250,9 +252,7 @@ Examples:
 * Transparency failures.
 * Voting irregularities.
 
----
-
-## Class III Faults
+### Class III Faults
 
 Constitutional threats.
 
@@ -262,14 +262,14 @@ Examples:
 * Authority concentration.
 * Judicial interference.
 
----
-
-## Class IV Faults
+### Class IV Faults
 
 Existential threats.
 
 Examples:
 
+* Deliberate denial of Vital Continuity Services.
+* Deliberate creation of deprivation conditions.
 * Enslavement attempts.
 * Democratic abolition.
 * Species exclusion.
@@ -277,86 +277,70 @@ Examples:
 
 Automatic Protected Mode activation required.
 
----
-
-# 6. Forbidden States
+## 6. Forbidden States
 
 The following states are permanently unreachable.
 
 No transition path may exist.
 
-## FORBIDDEN-001
+### FORBIDDEN-001
 
 Citizen Ownership
 
 No person, species, intelligence, or lifeform may be owned.
 
----
+### FORBIDDEN-002
 
-## FORBIDDEN-002
+Extra-Constitutional Authority
 
-Permanent Emergency Government
+No crisis, disaster, conflict, system failure, or other condition shall create authority outside the constitutional framework.
 
-Emergency governance structures may not become permanent.
+Constitutional authority shall remain unchanged under all operating conditions.
 
----
-
-## FORBIDDEN-003
+### FORBIDDEN-003
 
 Rights Suspension
 
 Fundamental Rights for All Life may not be suspended.
 
----
-
-## FORBIDDEN-004
+### FORBIDDEN-004
 
 Unreviewable Authority
 
 No office, institution, citizen, AI, council, or assembly may exist beyond constitutional review.
 
----
-
-## FORBIDDEN-005
+### FORBIDDEN-005
 
 Species-Based Governance Privilege
 
 Humans, silicon-based entities, animals, hybrids, and future recognized lifeforms shall possess equal constitutional standing under Rights for All Life.
 
----
-
-# 7. Governance Variables
+## 7. Governance Variables
 
 The FSM shall continuously monitor:
 
-## Citizen Variables
+### Citizen Variables
 
 * Reputation
 * Civic Participation
 * Constitutional Violations
 * Trust Index
 
----
-
-## Economic Variables
+### Economic Variables
 
 * Wealth
 * Resource Ownership
 * Resource Distribution
 * Commons Contribution
 
----
-
-## Institutional Variables
+### Institutional Variables
 
 * Transparency Score
 * Audit Health
 * Judicial Independence
 * Democratic Participation
 
----
-
-## Influence Variables
+### Influence Variables
 
 * Political Influence
 * Information Influence
@@ -367,9 +351,7 @@ Influence shall not be prohibited.
 
 Influence concentration shall be monitored for capture risk.
 
----
-
-# 8. Anti-Capture Monitoring
+## 8. Anti-Capture Monitoring
 
 The FSM shall maintain a Capture Risk Index (CRI).
 
@@ -386,9 +368,15 @@ Threshold breaches trigger mandatory audits.
 
 Severe breaches may trigger Protected Mode.
 
----
+### 8.1 Simulator Validation
 
-# 9. Transparency Requirements
+All FSM states, transitions, fault conditions, and recovery mechanisms shall be executable within the Aevoria Simulator or successor constitutional simulation environments approved by constitutional law.
+
+The Aevoria Simulator serves as the primary validation environment for governance architecture, constitutional resilience testing, and anti-capture verification.
+
+Simulation results may be used to identify vulnerabilities, validate constitutional resilience, and improve governance architecture.
+
+## 9. Transparency Requirements
 
 All FSM transitions shall generate:
 
@@ -399,9 +387,7 @@ All FSM transitions shall generate:
 
 No state transition may occur without record generation.
 
----
-
-# 10. Amendment Restrictions
+## 10. Amendment Restrictions
 
 The following provisions shall require the highest constitutional amendment threshold:
 
@@ -413,9 +399,7 @@ The following provisions shall require the highest constitutional amendment thre
 
 These protections exist to prevent constitutional self-destruction.
 
----
-
-# 11. Guiding Principle
+## 11. Guiding Principle
 
 The purpose of the FSM is not to control citizens.
 
