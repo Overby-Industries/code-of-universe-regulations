@@ -1,9 +1,10 @@
 # CUR-FOUNDATION-004
-> Governance Entity Model (GEM)
+### Governance Entity Model (GEM)
 
 - **Document ID:** CUR-FOUNDATION-004
-- **Status:** 1.0.1-Official-Evergreen
+- **Version:** 1.0.1-Official-Evergreen
 - **Authority Level:** Foundation Document
+- **Status:** Draft-Official-Evergreen
 - **Depends On:** CUR-FOUNDATION-001, CUR-FOUNDATION-002, CUR-FOUNDATION-003, RIGHTS-FOR-ALL-LIFE.md
 - **Applies To:** All Aevoric Commonwealth Governance Systems
 
@@ -50,11 +51,11 @@ All entities belong to one of the following categories:
 
 ## 4. Citizen Entity
 
-**ENTITY-001:** Citizen
+### ENTITY-001: Citizen
 
 A recognized member of the Commonwealth.
 
-> Attributes
+### Attributes
 - CitizenID:
 - SpeciesType:
 - Sector:
@@ -68,27 +69,27 @@ A recognized member of the Commonwealth.
 - OfficesHeld:
 - OrganizationsJoined:
 
-> Rights
+### Rights
 - Vote
 - Propose
 - Appeal
 - Participate
 - Hold Office
 
-> Responsibilities
+### Responsibilities
 - Follow CUR
 - Participate in Governance
 
-> Respect 
+### Respect 
 - Rights for All Life
 
 ## 5. Silicon-Based Entity
 
-**ENTITY-002:** Silicon Citizen
+### ENTITY-002: Silicon Citizen
 
 A recognized artificial intelligence or digital life form.
 
-> Attributes
+### Attributes
 - EntityID:
 - Classification:
 - OperationalStatus:
@@ -98,21 +99,21 @@ A recognized artificial intelligence or digital life form.
 - InfluenceScore:
 - AuditHistory:
 
-> Rights
+### Rights
 
 Equal constitutional protections under Rights for All Life.
 
-> Restrictions
+### Restrictions
 
 Subject to audit and constitutional review.
 
 ## 6. Organization Entity
 
-**ENTITY-003:** Organization
+### ENTITY-003: Organization
 
 Voluntary association of citizens.
 
-> Examples:
+### Examples:
 
 - Cooperatives
 - Research Institutions
@@ -120,7 +121,7 @@ Voluntary association of citizens.
 - Industrial Guilds
 - Educational Foundations
 
-> Attributes
+### Attributes
 - OrganizationID:
 - Members:
 - Assets:
@@ -131,39 +132,39 @@ Voluntary association of citizens.
 
 ## 7. Sector Entity
 
-**ENTITY-004:** Sector
+### ENTITY-004: Sector
 
 Administrative and geographic division of the Commonwealth.
 
-> Examples:
+### Examples:
 
 - Sector Avia
 - Future Orbital Sectors
 - Planetary Sectors
 
-> Attributes
+### Attributes
 - SectorID:
 - Population:
 
-> Resources:
+### Resources:
 - Infrastructure:
 - ParticipationRate:
 - Representation:
 
 ## 8. Government Institution Entity
 
-**ENTITY-005:** Constitutional Institution
+### ENTITY-005: Constitutional Institution
 
 Recognized governing body.
 
-> Examples:
+### Examples:
 
 - General Assembly
 - Coordinating Council
 - Constitutional Court
 - Treasury Assembly
 
-> Attributes
+### Attributes
 
 - InstitutionID:
 - AuthorityLevel:
@@ -174,11 +175,11 @@ Recognized governing body.
 
 ## 9. Proposal Entity
 
-**ENTITY-006:** Proposal
+### ENTITY-006: Proposal
 
 A governance action submitted for review.
 
-> Attributes
+### Attributes
 - ProposalID:
 - Author:
 - Category:
@@ -188,7 +189,7 @@ A governance action submitted for review.
 - VoteCount:
 - ConstitutionalStatus:
 
-> Lifecycle
+### Lifecycle
 
 ```mermaid
 graph TD;
@@ -197,11 +198,11 @@ Draft-->Review-->Voting-->Constitutional-Review-->Implementation-->Monitoring;
 
 ## 10. Vote Entity
 
-**ENTITY-007:** Vote
+### ENTITY-007: Vote
 
 A formal democratic decision record.
 
-> Attributes
+### Attributes
 - VoteID:
 - ProposalID:
 - VoterID:
@@ -209,7 +210,7 @@ A formal democratic decision record.
 - VoteType:
 - ValidationStatus:
 
-> Requirements
+### Requirements
 - Verifiable
 - Auditable
 - Anonymous when appropriate
@@ -217,11 +218,11 @@ A formal democratic decision record.
 
 ## 11. Audit Entity
 
-**ENTITY-008:** Audit
+### ENTITY-008: Audit
 
 A constitutional review process.
 
-> Attributes
+### Attributes
 - AuditID:
 - TargetEntity:
 - TriggerReason:
@@ -230,7 +231,7 @@ A constitutional review process.
 - Findings:
 - Recommendations:
 
-> Audit Types
+### Audit Types
 - Routine
 - Random
 - Triggered
@@ -239,11 +240,11 @@ A constitutional review process.
 
 ## 12. Violation Entity
 
-**ENTITY-009:** Violation
+### ENTITY-009: Violation
 
 A confirmed breach of CUR.
 
-> Attributes
+### Attributes
 - ViolationID:
 - Entity:
 - Severity:
@@ -262,11 +263,11 @@ A confirmed breach of CUR.
 
 ## 13. Sanction Entity
 
-**ENTITY-010:** Sanction
+### ENTITY-010: Sanction
 
 Corrective action imposed after due process.
 
-> Attributes
+### Attributes
 - SanctionID:
 - ViolationID:
 - Type:
@@ -274,7 +275,7 @@ Corrective action imposed after due process.
 - Status:
 - AppealStatus:
 
-> Examples
+### Examples
 - Fine
 - Restitution
 - Office Removal
@@ -283,11 +284,11 @@ Corrective action imposed after due process.
 
 ## 14. Appeal Entity
 
-**ENTITY-011:** Appeal
+### ENTITY-011: Appeal
 
 Formal challenge to a decision.
 
-> Attributes
+### Attributes
 - AppealID:
 - TargetDecision:
 - Appellant:
@@ -297,11 +298,11 @@ Formal challenge to a decision.
 
 ## 15. Resource Entity
 
-**ENTITY-012:** Resource
+### ENTITY-012: Resource
 
 A physical or digital asset.
 
-> Examples:
+### Examples:
 
 - Water
 - Metals
@@ -309,7 +310,7 @@ A physical or digital asset.
 - Computing Capacity
 - Manufacturing Feedstock
 
-> Attributes
+### Attributes
 - ResourceID:
 - Type:
 - Quantity:
@@ -319,18 +320,18 @@ A physical or digital asset.
 
 ## 16. Infrastructure Entity
 
-**ENTITY-013:** Infrastructure
+### ENTITY-013: Infrastructure
 
 Critical systems supporting civilization.
 
-> Examples:
+### Examples:
 - Keefe Station
 - SSTO Fleets
 - Mining Networks
 - Communications Systems
 - Energy Grids
 
-> Attributes
+### Attributes
 - InfrastructureID:
 - Type:
 - OperationalStatus:
@@ -340,11 +341,11 @@ Critical systems supporting civilization.
 
 ## 17. Influence Entity
 
-**ENTITY-014:** Influence Profile
+### ENTITY-014: Influence Profile
 
 Tracks non-financial power.
 
-> Attributes
+### Attributes
 - InfluenceID:
 - PoliticalInfluence:
 - EconomicInfluence:
@@ -352,7 +353,7 @@ Tracks non-financial power.
 - SocialInfluence:
 - OrganizationalInfluence:
 
-> Purpose Supports:
+### Purpose Supports:
 
 - CRI Monitoring
 - Anti-Capture Analysis
@@ -405,7 +406,7 @@ No authority may exist without an entity definition.
 
 No entity may possess powers not explicitly defined within CUR.
 
-> All entities remain subject to:
+All entities remain subject to:
 
 - Rights for All Life
 - Constitutional Review
