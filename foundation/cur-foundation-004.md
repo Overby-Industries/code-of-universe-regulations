@@ -236,7 +236,15 @@ A constitutional review process.
 - Random
 - Triggered
 - Constitutional
-- Emergency
+- Protected Mode
+
+Note: There is no emergency audit type. PDDC §12.6 prohibits emergency
+declarations, emergency authority, and every functional equivalent, and
+§12.6(e) renders any instrument using that language void ab initio. The
+Protected Mode audit type is the audit automatically initiated when the fault
+handler of PDDC §12.4 activates Protected Mode. Protected Mode is a routine
+resilience mechanism and is never a crisis, an emergency, or an exceptional
+circumstance (PDDC §12.5(b)). It confers no additional audit authority.
 
 ## 12. Violation Entity
 
