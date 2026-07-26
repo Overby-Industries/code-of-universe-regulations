@@ -75,7 +75,7 @@ three states at once.
 | Axis | Type | States | Source |
 |---|---|---|---|
 | A — Constitutional | `ConstitutionalState` | AUTONOMOUS, COLLABORATIVE, RESTING, CONTRIBUTING, CHALLENGED, PROTECTED | PDDC §12.2(a) |
-| B — Governance process | `GovernanceState` | NORMAL_OPERATION, DELIBERATION, VOTING, CONSTITUTIONAL_REVIEW, IMPLEMENTATION, OUTCOME_MONITORING, AUDIT_INVESTIGATION, PROTECTED_MODE, RECOVERY_REVIEW | FOUNDATION-002 §3 |
+| B — Governance process | `GovernanceState` | NORMAL_OPERATION, DELIBERATION, VOTING, CONSTITUTIONAL_REVIEW, IMPLEMENTATION, OUTCOME_MONITORING, AUDIT_INVESTIGATION, PROTECTED_MODE, RECOVERY_REVIEW, VITAL_CONTINUITY_RESPONSE | FOUNDATION-002 §3 |
 | C — Operational compliance | `ComplianceState` | COMPLIANT, VIOLATION, PENDING_REVIEW, SUSPENDED, CERTIFIED, BLACKLISTED | operational layer |
 
 A mining charter can be `BLACKLISTED`. The crew that held it stays
@@ -425,6 +425,81 @@ happened. Suspending a *being* rather than an *authorisation* remains forbidden.
 **9.7 — `LawDomain` is missing CUR-N.** `regulatory_engine.hpp` in the Aevoria
 Simulator predates `titles/CUR-N/` and enumerates six domains.
 `cur::LawDomain` has seven, adding `DOMAIN_NON_HUMAN_COGNITIVE`.
+
+**9.8 — CRI bands contradict between two foundation documents.** This one needs
+resolving in the corpus; the library cannot satisfy both.
+
+| Band | FOUNDATION-003 §4 | CTAF (010) §17 |
+|---|---|---|
+| Stable | 0–19 | 0–24 |
+| Observation | 20–39 | 25–49 |
+| Elevated | 40–59 | 50–74 |
+| High Risk | 60–79 | 75–89 |
+| Critical | 80–100 | 90–100 |
+
+The library implements **FOUNDATION-003 §4**, on the grounds that 003 is the CRI
+specification and 010 merely references it. The choice is not cosmetic — it
+changes when mandatory audits and Protected Mode evaluation fire. Under 003 a
+score of 62 is High Risk and notifies the Constitutional Court; under 010 the
+same score is only Elevated. **Recommended:** amend CTAF §17 to cite
+FOUNDATION-003 §4 rather than restating the scale.
+
+**9.9 — CDM (007) §20 omits STATE-010.** Its `FSM State Record` lists nine
+allowed states, ending at `RecoveryReview`. FOUNDATION-002 §3 now defines a
+tenth, `STATE-010 Vital Continuity Response`, which the library implements as
+`GS_VITAL_CONTINUITY_RESPONSE`. CDM-015 `Capture Risk Record` likewise has no
+VCI field. **Recommended:** update 007 §20 and CDM-015; 007 is marked Draft
+v0.1 and appears to predate the FOUNDATION-013 work.
+
+**9.10 — VCI has no published weights.** FOUNDATION-003 §11 defines four VCI
+variable groups but, unlike CRI in §12, gives no weighting. The library uses
+equal weights (0.25 each). Biological and silicon life support are weighted
+equally deliberately: `FORBIDDEN-005` prohibits species-based privilege, and
+weighting one substrate's survival above the other's would be exactly that.
+**Recommended:** publish VCI weights in §11.
+
+**9.11 — Emergency vocabulary removed from three instruments.** PDDC §12.6(e)
+renders any instrument using the language of emergency void ab initio. Three
+places granted or named emergency mechanisms rather than prohibiting them, and
+have been corrected:
+
+- `foundation/cur-foundation-004.md` ENTITY-008 listed **Emergency** as an audit
+  type → now **Protected Mode**.
+- `foundation/cur-foundation-010.md` CTAF §5 defined an **Emergency Audit
+  "triggered automatically by Protected Mode"** → now **Protected Mode Audit**.
+  This was self-contradictory as written: PDDC §12.5(b) states Protected Mode
+  must never be characterised as an emergency, so an emergency audit could not
+  be triggered by it.
+- `GOVERNANCE.md` §6 **"Emergency Procedures"** granted any single Core
+  Maintainer power to unilaterally lock the repository → rewritten as
+  **"Fault Handling and Protected Mode"**, following the four steps of PDDC
+  §12.4, with no unilateral authority and the repository staying readable and
+  forkable throughout.
+
+`test_no_emergency_vocabulary()` asserts that no event type, governance state,
+or constitutional state in the library carries the word, and that asserting a
+`FS_PERMANENT_EMERGENCY` transition faults rather than succeeding.
+
+**9.12 — Vital Continuity is a hard floor under the compliance axis.**
+FOUNDATION-013 states that no recognised lifeform may be denied Vital Continuity
+Services "while investigations, audits, appeals, or administrative processes
+remain pending", and CREF §4 makes guaranteed necessities unconditional on
+wealth, employment, or political alignment. This is the post-scarcity guarantee,
+and it binds the FSM: **no compliance state gates a Vital Continuity Service.**
+`EV_VITAL_CONTINUITY_DENIED` is a Class IV fault from every state including
+`KS_BLACKLISTED`, via the `FS_VITAL_CONTINUITY_DENIAL` forbidden state.
+FOUNDATION-003 §11's Constitutional Safeguard — "VCI scores shall not be used to
+deny access to constitutionally guaranteed services" — is expressed as
+`VitalContinuityModel::may_gate_service_access()`, which returns `false`
+unconditionally so the prohibition is greppable from code.
+
+**9.13 — RFAL precautionary default.** `TIER_ASSESSMENT_PROTOCOL.md` §1.2 places
+the burden of proof on *withholding* protection, not on claiming it. So
+`EntityRegistry::register_entity` defaults `SubjectClass` to
+`SUBJ_SENTIENT_BEING`: an unclassified entity is protected, and declaring
+something an `SUBJ_OPERATIONAL_LICENSE` — the only class for which `SUSPENDED`
+and `BLACKLISTED` are reachable — is an affirmative act. Defaulting the other
+way would put the burden on the entity.
 
 ---
 

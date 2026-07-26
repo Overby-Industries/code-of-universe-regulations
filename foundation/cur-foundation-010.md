@@ -112,9 +112,19 @@ Highest-level review.
 
 Triggered when constitutional integrity is at risk.
 
-Emergency Audit
+Protected Mode Audit
 
-Triggered automatically by Protected Mode.
+Triggered automatically when the fault handler of PDDC §12.4 activates
+Protected Mode.
+
+This audit type is deliberately not named an emergency audit. PDDC §12.6
+prohibits emergency declarations, emergency authority, and every functional
+equivalent, and §12.6(e) renders any instrument using that language void ab
+initio. PDDC §12.5(b) further states that Protected Mode must never be
+characterised as crisis, emergency, or exceptional circumstance.
+
+A Protected Mode Audit is mandatory, not extraordinary. It grants the auditor
+no authority beyond an ordinary constitutional audit.
 
 6. Audit Lifecycle
 Audit Request

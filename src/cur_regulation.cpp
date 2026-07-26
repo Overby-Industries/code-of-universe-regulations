@@ -289,6 +289,25 @@ RegulationSet RegulationSet::baseline() {
               .declares_forbidden(FS_NON_CONSENSUAL_MODIFICATION)
               .breach_class(FC_CLASS_IV));
 
+    // --- Vital Continuity denial -------------------------------------------
+    // FOUNDATION-013: "No recognized lifeform shall be denied access to Vital
+    // Continuity Services while investigations, audits, appeals, or
+    // administrative processes remain pending." CREF §4: guaranteed necessities
+    // are "not conditional upon wealth ... employment ... political alignment".
+    // CREF §6 Class IV: refusing access to guaranteed necessities.
+    //
+    // This carries an explicit trigger, so unlike the principle-stating
+    // provisions above it DOES match forbidden_for() and faults the event
+    // directly. Denial is never a lawful sanction, in any compliance state.
+    s.add(Regulation("CUR-F013.VC", DOMAIN_CROSS_DOMAIN,
+                     "Vital Continuity Services may not be withheld from any "
+                     "recognised lifeform for any reason, including pending "
+                     "investigation, sanction, or compliance standing")
+              .with_citation("CUR-FOUNDATION-013; CREF §4, §6 Class IV")
+              .applies_to(EV_VITAL_CONTINUITY_DENIED)
+              .declares_forbidden(FS_VITAL_CONTINUITY_DENIAL)
+              .breach_class(FC_CLASS_IV));
+
     // --- Silicon sentience tier --------------------------------------------
     // Mirrors the CUR-S.4.1 rule the simulator's RegulatoryEngine already
     // carries, so both engines agree on the same provision.

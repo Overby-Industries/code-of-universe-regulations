@@ -80,6 +80,7 @@ enum GovernanceState : uint8_t {
     GS_AUDIT_INVESTIGATION,    // STATE-007
     GS_PROTECTED_MODE,         // STATE-008
     GS_RECOVERY_REVIEW,        // STATE-009
+    GS_VITAL_CONTINUITY_RESPONSE,  // STATE-010
     GS_COUNT
 };
 
@@ -124,6 +125,18 @@ enum ForbiddenState : uint8_t {
     FS_RIGHTS_SUSPENSION,            // FOUNDATION-002 FORBIDDEN-003
     FS_UNREVIEWABLE_AUTHORITY,       // FOUNDATION-002 FORBIDDEN-004
     FS_SPECIES_PRIVILEGE,            // FOUNDATION-002 FORBIDDEN-005
+
+    // FOUNDATION-013 Vital Continuity Principle; CREF §6 Class IV.
+    // "No recognized lifeform shall be denied access to Vital Continuity
+    // Services while investigations, audits, appeals, or administrative
+    // processes remain pending." CREF §4 adds that guaranteed necessities are
+    // not conditional upon wealth, employment, or political alignment.
+    //
+    // This is the post-scarcity guarantee expressed as an unreachable state.
+    // It is the reason no compliance state — not VIOLATION, not SUSPENDED, not
+    // BLACKLISTED — may gate a Vital Continuity Service. Withholding one is not
+    // a sanction the FSM can impose; it is a Class IV fault.
+    FS_VITAL_CONTINUITY_DENIAL,
     FS_COUNT
 };
 
@@ -223,6 +236,13 @@ enum EventType : uint16_t {
     EV_CERTIFICATION_REVOKED,
     EV_REMEDIATION_COMPLETED,
     EV_REVIEW_TIMEOUT,
+
+    // Vital Continuity events — FOUNDATION-013, FOUNDATION-002 STATE-010,
+    // FOUNDATION-003 §11, CREF §7 and §11.
+    EV_VITAL_CONTINUITY_FAILURE,      // service interrupted, degraded, depleted
+    EV_VITAL_CONTINUITY_RESTORED,     // "Continuity Restored" (STATE-010 exit)
+    EV_ROOT_CAUSE_ANALYSIS_COMPLETED, // "Root Cause Analysis" (STATE-010 exit)
+    EV_VITAL_CONTINUITY_DENIED,       // access withheld — always a Class IV fault
 
     EV_COUNT
 };
@@ -441,6 +461,24 @@ inline constexpr ComplianceTransition COMPLIANCE_TABLE[] = {
          guard::APPEAL_EXHAUSTED,
      FC_CLASS_IV, "CUR-FOUNDATION-002 §5 Class IV"},
 
+    // ---- Vital Continuity (FOUNDATION-013, CREF §11) ----------------------
+    // A licence-holder whose operation interrupts a Vital Continuity Service is
+    // in violation at Class III regardless of prior standing. Certification
+    // offers no shelter here.
+    {KS_COMPLIANT, EV_VITAL_CONTINUITY_FAILURE, KS_VIOLATION,
+     guard::NONE, FC_CLASS_III, "CUR-FOUNDATION-013; CREF §11"},
+    {KS_CERTIFIED, EV_VITAL_CONTINUITY_FAILURE, KS_VIOLATION,
+     guard::NONE, FC_CLASS_III, "CUR-FOUNDATION-013; CREF §11"},
+    {KS_VIOLATION, EV_VITAL_CONTINUITY_FAILURE, KS_VIOLATION,
+     guard::NONE, FC_CLASS_III, "CUR-FOUNDATION-013; CREF §11"},
+
+    // Restoration moves to review, never straight back to good standing.
+    // FOUNDATION-013: "Restoration of continuity shall take precedence over
+    // fault assignment, administrative review, disciplinary proceedings, or
+    // resource accounting." Restoration comes first; the review still happens.
+    {KS_VIOLATION, EV_VITAL_CONTINUITY_RESTORED, KS_PENDING_REVIEW,
+     guard::NONE, FC_NONE, "CUR-FOUNDATION-013; CREF §12"},
+
     // ---- from KS_BLACKLISTED ----------------------------------------------
     // Recourse out of BLACKLISTED. These two rows are what keep the state from
     // being permanent exclusion without remedy under PDDC §12.3(a)(1); the
@@ -471,31 +509,48 @@ constexpr uint16_t gs_bit(GovernanceState s) {
     return static_cast<uint16_t>(1u << static_cast<uint8_t>(s));
 }
 
+// STATE-010 Vital Continuity Response is reachable from EVERY state. That is
+// not a convenience — FOUNDATION-013 requires that restoration "take precedence
+// over fault assignment, administrative review, disciplinary proceedings, or
+// resource accounting", and a service failure does not wait for the process to
+// be in a agreeable state first. Same reasoning as Protected Mode, and CREF §8
+// branches to it directly out of complaint validation.
 inline constexpr uint16_t GOVERNANCE_PERMITTED[GS_COUNT] = {
     // STATE-001 Normal Operation
     gs_bit(GS_DELIBERATION) | gs_bit(GS_AUDIT_INVESTIGATION) |
-        gs_bit(GS_CONSTITUTIONAL_REVIEW) | gs_bit(GS_PROTECTED_MODE),
+        gs_bit(GS_CONSTITUTIONAL_REVIEW) | gs_bit(GS_PROTECTED_MODE) |
+        gs_bit(GS_VITAL_CONTINUITY_RESPONSE),
     // STATE-002 Deliberation
     gs_bit(GS_VOTING) | gs_bit(GS_NORMAL_OPERATION) |
-        gs_bit(GS_CONSTITUTIONAL_REVIEW),
+        gs_bit(GS_CONSTITUTIONAL_REVIEW) | gs_bit(GS_VITAL_CONTINUITY_RESPONSE),
     // STATE-003 Voting
     gs_bit(GS_CONSTITUTIONAL_REVIEW) | gs_bit(GS_NORMAL_OPERATION) |
-        gs_bit(GS_PROTECTED_MODE),
+        gs_bit(GS_PROTECTED_MODE) | gs_bit(GS_VITAL_CONTINUITY_RESPONSE),
     // STATE-004 Constitutional Review
     gs_bit(GS_IMPLEMENTATION) | gs_bit(GS_NORMAL_OPERATION) |
-        gs_bit(GS_PROTECTED_MODE),
+        gs_bit(GS_PROTECTED_MODE) | gs_bit(GS_VITAL_CONTINUITY_RESPONSE),
     // STATE-005 Implementation
     gs_bit(GS_OUTCOME_MONITORING) | gs_bit(GS_AUDIT_INVESTIGATION) |
-        gs_bit(GS_PROTECTED_MODE),
+        gs_bit(GS_PROTECTED_MODE) | gs_bit(GS_VITAL_CONTINUITY_RESPONSE),
     // STATE-006 Outcome Monitoring
     gs_bit(GS_NORMAL_OPERATION) | gs_bit(GS_AUDIT_INVESTIGATION) |
-        gs_bit(GS_PROTECTED_MODE),
+        gs_bit(GS_PROTECTED_MODE) | gs_bit(GS_VITAL_CONTINUITY_RESPONSE),
     // STATE-007 Audit Investigation
-    gs_bit(GS_NORMAL_OPERATION) | gs_bit(GS_PROTECTED_MODE),
+    gs_bit(GS_NORMAL_OPERATION) | gs_bit(GS_PROTECTED_MODE) |
+        gs_bit(GS_VITAL_CONTINUITY_RESPONSE),
     // STATE-008 Protected Mode
-    gs_bit(GS_RECOVERY_REVIEW) | gs_bit(GS_NORMAL_OPERATION),
+    gs_bit(GS_RECOVERY_REVIEW) | gs_bit(GS_NORMAL_OPERATION) |
+        gs_bit(GS_VITAL_CONTINUITY_RESPONSE),
     // STATE-009 Recovery Review
-    gs_bit(GS_NORMAL_OPERATION) | gs_bit(GS_PROTECTED_MODE),
+    gs_bit(GS_NORMAL_OPERATION) | gs_bit(GS_PROTECTED_MODE) |
+        gs_bit(GS_VITAL_CONTINUITY_RESPONSE),
+    // STATE-010 Vital Continuity Response — FOUNDATION-002 §3 lists exactly
+    // three exits: Continuity Restored, Protected Mode, Root Cause Analysis.
+    // "Continuity Restored" returns to Normal Operation; "Root Cause Analysis"
+    // is the investigation phase of the FOUNDATION-013 response sequence and
+    // maps to STATE-007 Audit Investigation.
+    gs_bit(GS_NORMAL_OPERATION) | gs_bit(GS_PROTECTED_MODE) |
+        gs_bit(GS_AUDIT_INVESTIGATION),
 };
 
 // ---------------------------------------------------------------------------

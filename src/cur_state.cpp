@@ -29,6 +29,7 @@ const char* to_string(GovernanceState s) {
         case GS_AUDIT_INVESTIGATION: return "AUDIT_INVESTIGATION";
         case GS_PROTECTED_MODE: return "PROTECTED_MODE";
         case GS_RECOVERY_REVIEW: return "RECOVERY_REVIEW";
+        case GS_VITAL_CONTINUITY_RESPONSE: return "VITAL_CONTINUITY_RESPONSE";
         case GS_COUNT: break;
     }
     return "UNKNOWN";
@@ -59,6 +60,7 @@ const char* to_string(ForbiddenState s) {
         case FS_RIGHTS_SUSPENSION: return "RIGHTS_SUSPENSION";
         case FS_UNREVIEWABLE_AUTHORITY: return "UNREVIEWABLE_AUTHORITY";
         case FS_SPECIES_PRIVILEGE: return "SPECIES_PRIVILEGE";
+        case FS_VITAL_CONTINUITY_DENIAL: return "VITAL_CONTINUITY_DENIAL";
         case FS_COUNT: break;
     }
     return "UNKNOWN";
@@ -151,6 +153,12 @@ const char* to_string(EventType e) {
         case EV_CERTIFICATION_REVOKED: return "certification_revoked";
         case EV_REMEDIATION_COMPLETED: return "remediation_completed";
         case EV_REVIEW_TIMEOUT: return "review_timeout";
+
+        case EV_VITAL_CONTINUITY_FAILURE: return "vital_continuity_failure";
+        case EV_VITAL_CONTINUITY_RESTORED: return "vital_continuity_restored";
+        case EV_ROOT_CAUSE_ANALYSIS_COMPLETED:
+            return "root_cause_analysis_completed";
+        case EV_VITAL_CONTINUITY_DENIED: return "vital_continuity_denied";
 
         case EV_COUNT: break;
     }

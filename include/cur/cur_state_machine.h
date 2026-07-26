@@ -198,6 +198,24 @@ public:
     double capture_risk() const { return capture_risk_; }
     CaptureRiskBand capture_risk_band() const;
 
+    // --- vital continuity -------------------------------------------------
+    // Recomputes VCI and logs a band CHANGE in either direction — degradation
+    // and recovery both matter for continuity, unlike capture risk where only
+    // the worsening direction triggers a response.
+    //
+    // A critical score (<20) drives the affected entity into STATE-010 Vital
+    // Continuity Response with no second condition and no approval, per
+    // FOUNDATION-002 §4 and FOUNDATION-013.
+    //
+    // Mind the direction: VCI 100 is healthy, VCI 0 is collapse. Opposite to
+    // capture_risk(). See cur_capture_index.h.
+    double update_vital_continuity(EntityHandle h,
+                                   const VitalContinuityInputs& in,
+                                   uint64_t tick);
+    double vital_continuity() const { return vital_continuity_; }
+    VitalContinuityBand vital_continuity_band() const;
+    VitalContinuityModel& continuity_model() { return continuity_model_; }
+
     // --- lifecycle --------------------------------------------------------
     // Clears entities, log, amendments, and CRI; keeps regulations and
     // observers. Use between simulator runs.
@@ -249,6 +267,12 @@ private:
     // from the registry rather than trusting the caller.
     uint16_t satisfied_guards(const Event& e, const EntityRecord& target) const;
 
+    // Fill the subject, actor, and full-state-vector columns on a record.
+    // Every LogRecord this class writes goes through here, so CTAF §14 and
+    // CAPS §17 cannot be satisfied at one log site and forgotten at another.
+    void stamp_record(LogRecord& r, const EntityRecord& e,
+                      EntityHandle actor) const;
+
     void notify_transition(const TransitionResult& r, const EntityRecord& e);
     void notify_refusal(const TransitionResult& r, const EntityRecord& e);
     void notify_fault(const FaultRecord& f);
@@ -275,6 +299,13 @@ private:
 
     double capture_risk_ = 0.0;
     CaptureRiskBand capture_risk_band_ = CRB_STABLE;
+
+    // Starts at 100.0, not 0.0. On this axis zero means total life-support
+    // collapse, so a default-constructed machine must start healthy.
+    double vital_continuity_ = 100.0;
+    VitalContinuityBand vital_continuity_band_ = VCB_STABLE;
+    VitalContinuityModel continuity_model_;
+
     bool strict_entities_ = true;
 };
 

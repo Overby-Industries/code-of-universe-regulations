@@ -676,6 +676,199 @@ static void test_bounded_log_reports_truncation() {
 
 // ---------------------------------------------------------------------------
 
+static void test_vital_continuity() {
+    TEST("Vital Continuity: services are never gated by compliance state");
+
+    cur::CURStateMachine m;
+    m.log().set_clock(fixed_clock);
+
+    // A blacklisted charter — the most restricted state the FSM has.
+    auto charter = m.entities().register_entity(
+        "charter-worst", cur::EC_ECONOMIC, cur::SUBJ_OPERATIONAL_LICENSE);
+    cur::TransitionContext ctx;
+    m.submit_operational(charter, cur::EV_VIOLATION_DETECTED, ctx, 1);
+    ctx.due_process_complete = true;
+    m.submit_operational(charter, cur::EV_SANCTION_APPLIED, ctx, 2);
+    ctx.appeal_exhausted = true;
+    m.submit_operational(charter, cur::EV_VIOLATION_DETECTED, ctx, 3);
+    CHECK_EQ(m.compliance_of(charter), cur::KS_BLACKLISTED);
+
+    // Withholding a Vital Continuity Service is a Class IV fault even here.
+    // FOUNDATION-013: denial is never a lawful sanction, in any state.
+    cur::Event deny;
+    deny.type = cur::EV_VITAL_CONTINUITY_DENIED;
+    deny.tick = 4;
+    deny.target = charter;
+    deny.description = "water ration withheld pending appeal outcome";
+    auto r = m.submit(deny);
+    CHECK(!r.accepted);
+    CHECK(r.fault_raised);
+    CHECK_EQ(r.forbidden, cur::FS_VITAL_CONTINUITY_DENIAL);
+    CHECK_EQ(r.fault, cur::FC_CLASS_IV);
+
+    // Same for a sentient being, which is the case the principle exists for.
+    cur::CURStateMachine m2;
+    m2.log().set_clock(fixed_clock);
+    auto citizen = m2.entities().register_entity("citizen-7", cur::EC_CIVIC);
+    cur::Event deny2;
+    deny2.type = cur::EV_VITAL_CONTINUITY_DENIED;
+    deny2.tick = 1;
+    deny2.target = citizen;
+    auto r2 = m2.submit(deny2);
+    CHECK(!r2.accepted);
+    CHECK_EQ(r2.forbidden, cur::FS_VITAL_CONTINUITY_DENIAL);
+}
+
+static void test_vci_scale_direction() {
+    TEST("VCI runs opposite to CRI and drives STATE-010");
+
+    cur::VitalContinuityModel model;
+
+    // Fully supplied habitat: VCI must be at the TOP of the scale, and Stable.
+    cur::VitalContinuityInputs healthy;
+    CHECK(model.compute(healthy) > 99.0);
+    CHECK_EQ(cur::VitalContinuityModel::band(model.compute(healthy)),
+             cur::VCB_STABLE);
+
+    // Life support collapse: VCI at the BOTTOM, and Critical.
+    cur::VitalContinuityInputs collapse;
+    collapse.biological_life_support = 0;
+    collapse.silicon_life_support = 0;
+    collapse.infrastructure_resilience = 0;
+    collapse.accessibility = 0;
+    CHECK(model.compute(collapse) < 1.0);
+    CHECK_EQ(cur::VitalContinuityModel::band(model.compute(collapse)),
+             cur::VCB_CRITICAL);
+
+    // The direction trap: a score of 95 is healthy on VCI and captured on CRI.
+    CHECK_EQ(cur::VitalContinuityModel::band(95.0), cur::VCB_STABLE);
+    CHECK_EQ(cur::CaptureRiskModel::band(95.0), cur::CRB_CRITICAL);
+
+    auto resp = cur::VitalContinuityModel::responses(10.0);
+    CHECK(resp.immediate_corrective_action);
+    CHECK(resp.root_cause_analysis);
+    CHECK(resp.mandatory_continuity_review);  // cumulative from 20-39
+    CHECK(resp.continuity_audit);             // cumulative from 40-59
+
+    // §11 Constitutional Safeguard, stated in code.
+    CHECK(!cur::VitalContinuityModel::may_gate_service_access());
+
+    // A critical VCI drives the entity into STATE-010 with no second condition.
+    cur::CURStateMachine m;
+    m.log().set_clock(fixed_clock);
+    auto habitat = m.entities().register_entity(
+        "keefe-station", cur::EC_ECONOMIC, cur::SUBJ_INFRASTRUCTURE);
+    CHECK_EQ(m.vital_continuity(), 100.0);          // starts healthy, not zero
+    CHECK_EQ(m.governance_of(habitat), cur::GS_NORMAL_OPERATION);
+
+    m.update_vital_continuity(habitat, collapse, 1);
+    CHECK_EQ(m.vital_continuity_band(), cur::VCB_CRITICAL);
+    CHECK_EQ(m.governance_of(habitat), cur::GS_VITAL_CONTINUITY_RESPONSE);
+
+    // STATE-010's three exits per FOUNDATION-002 §3, and nothing else.
+    CHECK(cur::governance_transition_permitted(cur::GS_VITAL_CONTINUITY_RESPONSE,
+                                               cur::GS_NORMAL_OPERATION));
+    CHECK(cur::governance_transition_permitted(cur::GS_VITAL_CONTINUITY_RESPONSE,
+                                               cur::GS_PROTECTED_MODE));
+    CHECK(cur::governance_transition_permitted(cur::GS_VITAL_CONTINUITY_RESPONSE,
+                                               cur::GS_AUDIT_INVESTIGATION));
+    CHECK(!cur::governance_transition_permitted(cur::GS_VITAL_CONTINUITY_RESPONSE,
+                                                cur::GS_VOTING));
+}
+
+static void test_rfal_precautionary_default() {
+    TEST("RFAL precautionary default: unclassified entities are protected");
+
+    cur::CURStateMachine m;
+    m.log().set_clock(fixed_clock);
+
+    // Registered without stating a subject class. TIER_ASSESSMENT_PROTOCOL
+    // §1.2 puts the burden of proof on withholding protection, so the default
+    // must be the protective one.
+    auto unknown = m.entities().register_entity("unknown-42", cur::EC_CIVIC);
+    const cur::EntityRecord* rec = m.entities().get(unknown);
+    CHECK_EQ(rec->subject_class, cur::SUBJ_SENTIENT_BEING);
+    CHECK(rec->is_sentient());
+    CHECK(!rec->is_license());
+
+    // And it therefore cannot be suspended, without anyone having to remember.
+    cur::TransitionContext ctx;
+    m.submit_operational(unknown, cur::EV_VIOLATION_DETECTED, ctx, 1);
+    ctx.due_process_complete = true;
+    auto r = m.submit_operational(unknown, cur::EV_SANCTION_APPLIED, ctx, 2);
+    CHECK(m.compliance_of(unknown) != cur::KS_SUSPENDED);
+    CHECK(m.compliance_of(unknown) != cur::KS_BLACKLISTED);
+    (void)r;
+}
+
+static void test_no_emergency_vocabulary() {
+    TEST("no emergency concept exists in the library (PDDC §12.6)");
+
+    // PDDC §12.6 is absolute and Type A Entrenched. The only permitted use of
+    // the word is naming the thing that is forbidden.
+    CHECK(std::string(cur::to_string(cur::FS_PERMANENT_EMERGENCY)) ==
+          "PERMANENT_EMERGENCY");
+
+    // No event type may describe an emergency action.
+    for (int i = 0; i < cur::EV_COUNT; ++i) {
+        std::string name = cur::to_string(static_cast<cur::EventType>(i));
+        CHECK(name.find("emergency") == std::string::npos);
+    }
+    // Nor any state, on any axis.
+    for (int i = 0; i < cur::GS_COUNT; ++i) {
+        std::string name = cur::to_string(static_cast<cur::GovernanceState>(i));
+        CHECK(name.find("EMERGENC") == std::string::npos);
+    }
+    for (int i = 0; i < cur::CS_COUNT; ++i) {
+        std::string name =
+            cur::to_string(static_cast<cur::ConstitutionalState>(i));
+        CHECK(name.find("EMERGENC") == std::string::npos);
+    }
+
+    // Asserting a permanent-emergency transition faults; it never succeeds.
+    cur::CURStateMachine m;
+    m.log().set_clock(fixed_clock);
+    auto inst = m.entities().register_entity("cc", cur::EC_INSTITUTIONAL,
+                                             cur::SUBJ_INSTITUTION);
+    cur::Event e;
+    e.type = cur::EV_COUNCIL_ACTION;
+    e.tick = 1;
+    e.target = inst;
+    e.asserts_forbidden = cur::FS_PERMANENT_EMERGENCY;
+    auto r = m.submit(e);
+    CHECK(!r.accepted);
+    CHECK_EQ(r.fault, cur::FC_CLASS_IV);
+}
+
+static void test_audit_trail_has_actor() {
+    TEST("audit trail records Actor and FSM State (CTAF §14, CAPS §17)");
+
+    cur::CURStateMachine m;
+    m.log().set_clock(fixed_clock);
+    auto charter = m.entities().register_entity(
+        "charter-actor", cur::EC_ECONOMIC, cur::SUBJ_OPERATIONAL_LICENSE);
+    auto inspector = m.entities().register_entity("inspector-9", cur::EC_JUDICIAL,
+                                                  cur::SUBJ_INSTITUTION);
+
+    cur::Event e;
+    e.type = cur::EV_AUDIT_STARTED;
+    e.tick = 1;
+    e.target = charter;
+    e.actor = inspector;
+    auto r = m.submit(e);
+    CHECK(r.accepted);
+
+    const auto& rec = m.log().records().back();
+    CHECK(rec.entity_id == "charter-actor");
+    CHECK(rec.actor_id == "inspector-9");   // who did it, not just to whom
+    CHECK_EQ(rec.compliance_after, cur::KS_PENDING_REVIEW);
+    CHECK_EQ(rec.constitutional_after, cur::CS_AUTONOMOUS);
+
+    const std::string json = m.log().to_otf1_json();
+    CHECK(json.find("\"actorId\":\"inspector-9\"") != std::string::npos);
+    CHECK(json.find("\"fsmState\"") != std::string::npos);
+}
+
 int main() {
     std::printf("libcur %s — CUR corpus %s\n\n", CUR_LIB_VERSION_STRING,
                 cur::CUR_CORPUS_VERSION);
@@ -694,6 +887,11 @@ int main() {
     test_dry_run_is_pure();
     test_otf1_export();
     test_bounded_log_reports_truncation();
+    test_vital_continuity();
+    test_vci_scale_direction();
+    test_rfal_precautionary_default();
+    test_no_emergency_vocabulary();
+    test_audit_trail_has_actor();
 
     std::printf("\n%d checks, %d failures\n", g_checks, g_failures);
     return g_failures == 0 ? 0 : 1;

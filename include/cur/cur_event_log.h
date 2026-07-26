@@ -76,10 +76,25 @@ struct LogRecord {
     // staying a one-way street; see cur_event.h.
     int64_t wall_clock_utc = 0;
 
-    // Subject
+    // Subject — the entity acted upon.
     EntityHandle entity = INVALID_ENTITY;
     std::string entity_id;
     SubjectClass subject_class = SUBJ_SENTIENT_BEING;
+
+    // Actor — the entity that acted. Required by two independent provisions:
+    // CTAF §14 lists Actor first among audit trail components, and CAPS §17
+    // lists Sender among the fields every interaction must record. Without it
+    // the trail says what happened to whom but never who did it, which is not
+    // an audit trail. Equal to `entity` for self-directed events.
+    EntityHandle actor = INVALID_ENTITY;
+    std::string actor_id;
+
+    // Full three-axis state after this record. CTAF §14 requires FSM State as
+    // an audit trail component; from_state/to_state only describe the one axis
+    // named by `axis`, so a reader could not otherwise reconstruct the rest.
+    ConstitutionalState constitutional_after = CS_AUTONOMOUS;
+    GovernanceState governance_after = GS_NORMAL_OPERATION;
+    ComplianceState compliance_after = KS_COMPLIANT;
 
     // What happened. from/to are the ordinals of whichever axis `axis` names.
     EventType trigger = EV_NONE;

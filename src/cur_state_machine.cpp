@@ -62,6 +62,26 @@ void CURStateMachine::remove_observer(ICURObserver* o) {
 
 void CURStateMachine::clear_observers() { observers_.clear(); }
 
+void CURStateMachine::stamp_record(LogRecord& r, const EntityRecord& e,
+                                   EntityHandle actor) const {
+    r.entity = e.handle;
+    r.entity_id = e.id;
+    r.subject_class = e.subject_class;
+
+    // CTAF §14 Actor / CAPS §17 Sender. An event with no declared actor is
+    // self-directed, so the subject is also the actor — recorded explicitly
+    // rather than left blank, because a blank actor column in an audit trail
+    // is indistinguishable from a lost one.
+    const EntityRecord* a = entities_.get(actor);
+    r.actor = a != nullptr ? a->handle : e.handle;
+    r.actor_id = a != nullptr ? a->id : e.id;
+
+    // CTAF §14 FSM State — all three axes as they stand after this record.
+    r.constitutional_after = e.state.constitutional;
+    r.governance_after = e.state.governance;
+    r.compliance_after = e.state.compliance;
+}
+
 void CURStateMachine::notify_transition(const TransitionResult& r,
                                         const EntityRecord& e) {
     for (ICURObserver* o : observers_) o->on_transition(r, e);
@@ -214,9 +234,7 @@ void CURStateMachine::run_fault_handler(EntityRecord& target, const Event& e,
     decl.axis = REC_AXIS_NONE;
     decl.tick = e.tick;
     decl.event_sequence = e.sequence;
-    decl.entity = target.handle;
-    decl.entity_id = target.id;
-    decl.subject_class = target.subject_class;
+    stamp_record(decl, target, e.actor);
     decl.trigger = e.type;
     decl.fault = fc;
     decl.forbidden = forbidden;
@@ -240,9 +258,7 @@ void CURStateMachine::run_fault_handler(EntityRecord& target, const Event& e,
     rev.axis = REC_AXIS_COMPLIANCE;
     rev.tick = e.tick;
     rev.event_sequence = e.sequence;
-    rev.entity = target.handle;
-    rev.entity_id = target.id;
-    rev.subject_class = target.subject_class;
+    stamp_record(rev, target, e.actor);
     rev.trigger = e.type;
     rev.from_state = static_cast<uint8_t>(before.compliance);
     rev.to_state = static_cast<uint8_t>(target.last_known_safe.compliance);
@@ -267,9 +283,7 @@ void CURStateMachine::run_fault_handler(EntityRecord& target, const Event& e,
     pm.axis = REC_AXIS_CONSTITUTIONAL;
     pm.tick = e.tick;
     pm.event_sequence = e.sequence;
-    pm.entity = target.handle;
-    pm.entity_id = target.id;
-    pm.subject_class = target.subject_class;
+    stamp_record(pm, target, e.actor);
     pm.trigger = e.type;
     pm.from_state = static_cast<uint8_t>(before.constitutional);
     pm.to_state = static_cast<uint8_t>(CS_PROTECTED);
@@ -456,9 +470,7 @@ TransitionResult CURStateMachine::submit(const Event& e) {
         rec.axis = REC_AXIS_COMPLIANCE;
         rec.tick = e.tick;
         rec.event_sequence = e.sequence;
-        rec.entity = target->handle;
-        rec.entity_id = target->id;
-        rec.subject_class = target->subject_class;
+        stamp_record(rec, *target, e.actor);
         rec.trigger = e.type;
         rec.from_state = static_cast<uint8_t>(target->state.compliance);
         rec.to_state = static_cast<uint8_t>(target->state.compliance);
@@ -506,9 +518,7 @@ TransitionResult CURStateMachine::submit(const Event& e) {
     rec.axis = REC_AXIS_COMPLIANCE;
     rec.tick = e.tick;
     rec.event_sequence = e.sequence;
-    rec.entity = target->handle;
-    rec.entity_id = target->id;
-    rec.subject_class = target->subject_class;
+    stamp_record(rec, *target, e.actor);
     rec.trigger = e.type;
     rec.from_state = static_cast<uint8_t>(from);
     rec.to_state = static_cast<uint8_t>(row->to);
@@ -703,9 +713,7 @@ bool CURStateMachine::certify_recovery(EntityHandle h, bool instrument_remediate
         rec.kind = REC_TRANSITION_REFUSED;
         rec.axis = REC_AXIS_CONSTITUTIONAL;
         rec.tick = tick;
-        rec.entity = target->handle;
-        rec.entity_id = target->id;
-        rec.subject_class = target->subject_class;
+        stamp_record(rec, *target, INVALID_ENTITY);
         rec.from_state = static_cast<uint8_t>(target->state.constitutional);
         rec.to_state = static_cast<uint8_t>(target->state.constitutional);
         rec.fault = FC_CLASS_I;
@@ -728,9 +736,7 @@ bool CURStateMachine::certify_recovery(EntityHandle h, bool instrument_remediate
     rr.kind = REC_PROTECTED_MODE_EXITED;
     rr.axis = REC_AXIS_GOVERNANCE;
     rr.tick = tick;
-    rr.entity = target->handle;
-    rr.entity_id = target->id;
-    rr.subject_class = target->subject_class;
+    stamp_record(rr, *target, INVALID_ENTITY);
     rr.from_state = static_cast<uint8_t>(GS_PROTECTED_MODE);
     rr.to_state = static_cast<uint8_t>(GS_RECOVERY_REVIEW);
     rr.citation = "PDDC §12.5(d); MECHANICS §12.5(b) State Recovery Certificate";
@@ -751,9 +757,7 @@ bool CURStateMachine::certify_recovery(EntityHandle h, bool instrument_remediate
     rec.kind = REC_PROTECTED_MODE_EXITED;
     rec.axis = REC_AXIS_CONSTITUTIONAL;
     rec.tick = tick;
-    rec.entity = target->handle;
-    rec.entity_id = target->id;
-    rec.subject_class = target->subject_class;
+    stamp_record(rec, *target, INVALID_ENTITY);
     rec.from_state = static_cast<uint8_t>(from_cs);
     rec.to_state = static_cast<uint8_t>(target->state.constitutional);
     rec.citation = "PDDC §12.5(d)";
@@ -1016,6 +1020,73 @@ CaptureRiskBand CURStateMachine::capture_risk_band() const {
     return capture_risk_band_;
 }
 
+VitalContinuityBand CURStateMachine::vital_continuity_band() const {
+    return vital_continuity_band_;
+}
+
+double CURStateMachine::update_vital_continuity(EntityHandle h,
+                                                const VitalContinuityInputs& in,
+                                                uint64_t tick) {
+    const VitalContinuityBand previous = vital_continuity_band_;
+
+    vital_continuity_ = continuity_model_.compute(in);
+    vital_continuity_band_ = VitalContinuityModel::band(vital_continuity_);
+
+    EntityRecord* target = entities_.get(h);
+
+    // Both directions are logged. Continuity recovering is as much a
+    // constitutional fact as continuity degrading, and FOUNDATION-013 makes
+    // restoration the priority — so it has to be visible in the trail.
+    if (vital_continuity_band_ != previous) {
+        LogRecord rec;
+        rec.kind = REC_TRANSITION_ACCEPTED;
+        rec.axis = REC_AXIS_NONE;
+        rec.tick = tick;
+        rec.trigger = vital_continuity_band_ < previous
+                          ? EV_VITAL_CONTINUITY_FAILURE
+                          : EV_VITAL_CONTINUITY_RESTORED;
+        rec.from_state = static_cast<uint8_t>(previous);
+        rec.to_state = static_cast<uint8_t>(vital_continuity_band_);
+        rec.fault = vital_continuity_band_ == VCB_CRITICAL ? FC_CLASS_IV
+                                                           : FC_NONE;
+        rec.citation = "CUR-FOUNDATION-003 §11; CUR-FOUNDATION-013";
+        rec.detail = std::string("VCI ") + to_string(previous) + " -> " +
+                     to_string(vital_continuity_band_);
+        if (target != nullptr) stamp_record(rec, *target, INVALID_ENTITY);
+        log_.append(rec);
+    }
+
+    // FOUNDATION-002 §4: Vital Continuity Service collapse is a Protected Mode
+    // trigger requiring no human approval. FOUNDATION-013 routes it through
+    // STATE-010 first, because restoration precedes fault assignment — the
+    // response state exists so the system acts before it investigates.
+    if (target != nullptr && vci_requires_continuity_response(vital_continuity_) &&
+        target->state.governance != GS_VITAL_CONTINUITY_RESPONSE) {
+        const GovernanceState from = target->state.governance;
+        if (governance_transition_permitted(from, GS_VITAL_CONTINUITY_RESPONSE)) {
+            target->state.governance = GS_VITAL_CONTINUITY_RESPONSE;
+
+            LogRecord rec;
+            rec.kind = REC_TRANSITION_ACCEPTED;
+            rec.axis = REC_AXIS_GOVERNANCE;
+            rec.tick = tick;
+            rec.trigger = EV_VITAL_CONTINUITY_FAILURE;
+            rec.from_state = static_cast<uint8_t>(from);
+            rec.to_state = static_cast<uint8_t>(GS_VITAL_CONTINUITY_RESPONSE);
+            rec.fault = FC_CLASS_IV;
+            rec.citation =
+                "CUR-FOUNDATION-002 §3 STATE-010, §4; CUR-FOUNDATION-013";
+            rec.detail =
+                "immediate continuity restoration prioritised over fault "
+                "assignment (FOUNDATION-013)";
+            stamp_record(rec, *target, INVALID_ENTITY);
+            log_.append(rec);
+        }
+    }
+
+    return vital_continuity_;
+}
+
 // ---------------------------------------------------------------------------
 // Lifecycle
 // ---------------------------------------------------------------------------
@@ -1027,6 +1098,8 @@ void CURStateMachine::reset() {
     table_.assign(COMPLIANCE_TABLE, COMPLIANCE_TABLE + COMPLIANCE_TABLE_SIZE);
     capture_risk_ = 0.0;
     capture_risk_band_ = CRB_STABLE;
+    vital_continuity_ = 100.0;  // healthy is 100 on this axis, not 0
+    vital_continuity_band_ = VCB_STABLE;
 }
 
 }  // namespace cur

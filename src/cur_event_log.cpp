@@ -199,7 +199,19 @@ std::string EventLog::record_to_otf1_json(const LogRecord& r) {
     kv(os, "axis", to_string(r.axis), pfirst);
     kv(os, "entityId", r.entity_id, pfirst);
     kv(os, "subjectClass", to_string(r.subject_class), pfirst);
+    // CTAF §14 Actor / CAPS §17 Sender.
+    kv(os, "actorId", r.actor_id, pfirst);
     kv(os, "trigger", to_string(r.trigger), pfirst);
+
+    // CTAF §14 FSM State — the full three-axis vector, not just the one axis
+    // this record happens to describe.
+    if (!pfirst) os << ",";
+    pfirst = false;
+    os << "\"fsmState\":{";
+    os << "\"constitutional\":\"" << to_string(r.constitutional_after) << "\"";
+    os << ",\"governance\":\"" << to_string(r.governance_after) << "\"";
+    os << ",\"compliance\":\"" << to_string(r.compliance_after) << "\"";
+    os << "}";
 
     if (r.axis != REC_AXIS_NONE) {
         kv(os, "fromState", r.from_state_name(), pfirst);
@@ -280,6 +292,11 @@ uint64_t EventLog::content_digest() const {
         mix_u64(static_cast<uint64_t>(r.entity));
         mix_str(r.entity_id);
         mix_u64(static_cast<uint64_t>(r.subject_class));
+        mix_u64(static_cast<uint64_t>(r.actor));
+        mix_str(r.actor_id);
+        mix_u64(static_cast<uint64_t>(r.constitutional_after));
+        mix_u64(static_cast<uint64_t>(r.governance_after));
+        mix_u64(static_cast<uint64_t>(r.compliance_after));
         mix_u64(static_cast<uint64_t>(r.trigger));
         mix_u64(static_cast<uint64_t>(r.from_state));
         mix_u64(static_cast<uint64_t>(r.to_state));

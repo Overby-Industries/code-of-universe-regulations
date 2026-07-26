@@ -94,4 +94,72 @@ bool cri_escalates_to_protected_mode(double cri,
     return cri >= 80.0 && constitutional_violation_confirmed;
 }
 
+// ---------------------------------------------------------------------------
+// Vital Continuity Index
+// ---------------------------------------------------------------------------
+
+const char* to_string(VitalContinuityBand b) {
+    switch (b) {
+        case VCB_CRITICAL: return "Critical";
+        case VCB_HIGH_RISK: return "High Risk";
+        case VCB_ELEVATED: return "Elevated Risk";
+        case VCB_OBSERVATION: return "Observation";
+        case VCB_STABLE: return "Stable";
+        case VCB_COUNT: break;
+    }
+    return "Unknown";
+}
+
+double VitalContinuityModel::compute(const VitalContinuityInputs& in) const {
+    // No inversion anywhere in here. Every VCI input is already oriented so
+    // that higher is better, and so is the output. This is the opposite
+    // convention to CaptureRiskModel::compute() by design, not by oversight.
+    const double vci =
+        clamp_0_100(in.biological_life_support) * weights_.biological_life_support +
+        clamp_0_100(in.silicon_life_support) * weights_.silicon_life_support +
+        clamp_0_100(in.infrastructure_resilience) *
+            weights_.infrastructure_resilience +
+        clamp_0_100(in.accessibility) * weights_.accessibility;
+    return clamp_0_100(vci);
+}
+
+VitalContinuityBand VitalContinuityModel::band(double vci) {
+    // FOUNDATION-003 §11 "VCI Scale". Ascending score = ascending health, so
+    // the comparisons run the other way round from CaptureRiskModel::band().
+    if (vci < 20.0) return VCB_CRITICAL;
+    if (vci < 40.0) return VCB_HIGH_RISK;
+    if (vci < 60.0) return VCB_ELEVATED;
+    if (vci < 80.0) return VCB_OBSERVATION;
+    return VCB_STABLE;
+}
+
+VitalContinuityModel::Response VitalContinuityModel::responses(double vci) {
+    // §11 "VCI Response Thresholds". Cumulative downward: a Critical score
+    // carries every response from every healthier band as well.
+    Response r;
+    if (vci < 80.0) {
+        r.additional_monitoring = true;
+        r.capacity_planning_review = true;
+    }
+    if (vci < 60.0) {
+        r.continuity_audit = true;
+        r.reserve_verification = true;
+    }
+    if (vci < 40.0) {
+        r.mandatory_continuity_review = true;
+        r.activate_resource_reserves = true;
+        r.public_continuity_reporting = true;
+    }
+    if (vci < 20.0) {
+        r.generate_constitutional_event = true;
+        r.immediate_corrective_action = true;
+        r.root_cause_analysis = true;
+    }
+    return r;
+}
+
+bool vci_requires_continuity_response(double vci) {
+    return vci < 20.0;
+}
+
 }  // namespace cur
