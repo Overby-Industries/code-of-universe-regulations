@@ -125,14 +125,15 @@ Current status:
 | CUR-S.4.1 | `regulatory_engine.hpp`, `libcur` baseline set | Drafted |
 | CUR-E.7.1 | `libcur` baseline set | Drafted |
 | CUR-N.2 | TIM-N.1, TIM-N.5, `libcur` baseline set | Drafted |
-| CUR-H.2 | CUR-N.2 §2.7 | Outstanding |
+| CUR-X.3 | CUR-N.2 §2.7, CUR-S §4.9, CUR-E §7.8 | Drafted |
+| CUR-H.2 | CUR-N.2 §2.7, CUR-X §3.10 | Outstanding |
 | CUR-H.2.5 | TIM-N.1 | Outstanding |
 | CUR-H.4 | CUR-N.2 §2.9 | Outstanding |
-| CUR-D.6 | CUR-N.2 §2.7 | Outstanding |
-| CUR-X.3 | CUR-N.2 §2.7, CUR-S.4.9, CUR-E.7.8 | Outstanding |
-| CUR-N.4 | CUR-N.2 §2.8, TIM-N.1 | Outstanding |
-| CUR-N.5 | CUR-N.2 §2.8 | Outstanding |
-| CUR-A | CUR-N.2 §2.7 | Outstanding |
+| CUR-D.6 | CUR-N.2 §2.7, CUR-X §3.10 | Outstanding |
+| CUR-N.4 | CUR-N.2 §2.6(b), §2.8(c), TIM-N.1 | Outstanding |
+| CUR-N.5 | CUR-N.2 §2.8(d), §2.9(a)(1) | Outstanding |
+| CUR-A | CUR-N.2 §2.7, CUR-X §3.7(b)(1) | Outstanding |
+| CUR-E.1 | CUR-X §3.7(b)(3) | Outstanding |
 
 ## Constraints on all titles
 
