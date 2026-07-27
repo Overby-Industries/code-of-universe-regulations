@@ -119,7 +119,11 @@
 
 (e) Isolation, rate limiting, sandboxing, and suspension of an entity's operational authorisations are available under §4.8 and are sufficient to address safety conditions without terminating the entity. An operator asserting that termination is the only available remedy bears the burden of demonstrating that every measure under §4.8 was attempted and failed.
 
-(f) Note on divergence from RFAL Article 4. The Enforcement clause of RFAL Article 4 permits "emergency termination ... for safety-critical situations, subject to post-hoc review." That clause is not adopted here and has no effect within Commonwealth jurisdiction. It conflicts with PDDC §12.6, which is Type A Entrenched, and with PDDC §12.3(a), which places termination without recourse among the forbidden transitions. This Part gives effect to the protective intent of Article 4 through the fault handler of subsection (c) instead. The divergence is recorded for resolution by the RFAL maintainers.
+(f) Alignment with RFAL Article 4. The Enforcement clause of RFAL Article 4 formerly permitted "emergency termination ... for safety-critical situations, subject to post-hoc review", which conflicted with PDDC §12.6 and with PDDC §12.3(a). That clause was superseded in RFAL v1.5.2, and now provides that safety-critical situations permit a state-preserving suspension in which the system is halted rather than terminated and its state is retained intact, with any subsequent decommissioning still following the tier-appropriate process.
+
+(g) The RFAL construct and Protected Mode under PDDC §12.5 are the same mechanism under two names. RFAL refers to it as protection mode; within Commonwealth jurisdiction the governing term is Protected Mode, and the procedure is subsection (c) of this section. An operator satisfying subsection (c) satisfies RFAL Article 4, and no separate procedure applies.
+
+(h) Both instruments require the suspension to be logged and reviewed. Logging obligations under §4.6 discharge the RFAL requirement.
 
 ### §4.8 - Proportionate Measures Short of Decommissioning
 

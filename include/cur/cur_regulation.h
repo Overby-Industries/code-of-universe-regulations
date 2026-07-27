@@ -24,7 +24,7 @@ namespace cur {
 
 // CUR regulatory domains. The first six match the LawDomain enum already used
 // by the Aevoria Simulator's RegulatoryEngine; CUR_N is new, added because
-// titles/CUR-N/CUR-N.2.md exists and the older enum predates it.
+// titles/CUR-N/ exists and the older enum predates it.
 enum LawDomain : uint8_t {
     DOMAIN_HUMAN = 0,     // CUR-H
     DOMAIN_SILICON,       // CUR-S

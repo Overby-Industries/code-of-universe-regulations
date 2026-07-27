@@ -97,13 +97,20 @@ code should resolve to a real provision here. Where code needs a rule the corpus
 has not yet stated, the citation reads `PENDING` and names the drafting target —
 it is never attributed to text that does not exist.
 
-## Note on CUR-N
+## Citation stability
 
-`titles/CUR-N/CUR-N.2.md` predates this convention and uses a different form:
-uppercase filenames, `# Part 2:` and `## Section 2.1:` headers rather than
-`## PART 2 -` and `### §2.1 -`. Its substance is unaffected and its citations
-are stable. A conformance pass is outstanding; until then, cite it as `CUR-N.2`
-and its sections as `CUR-N.2 §2.1`.
+Section numbers are load-bearing. Once a Part is published, its section numbers
+are not renumbered — provisions are cited from other titles, from operational
+manuals, and from code, and renumbering silently breaks all of them.
+
+Where a conformance pass or amendment reorganises subsections, the Part carries
+a bridging provision preserving the prior citation. `CUR-N.2 §2.4(b)` is an
+example: it maps citations written against the earlier subsection lettering onto
+the current numbering, so external references keep resolving.
+
+Substantive changes made during a conformance pass are recorded in that Part's
+Implementation Notes rather than made silently. A conformance pass is a
+formatting exercise; anything that changes meaning is disclosed as an amendment.
 
 ## Drafting order
 
@@ -117,7 +124,7 @@ Current status:
 |---|---|---|
 | CUR-S.4.1 | `regulatory_engine.hpp`, `libcur` baseline set | Drafted |
 | CUR-E.7.1 | `libcur` baseline set | Drafted |
-| CUR-N.2 | TIM-N.1, TIM-N.5 | Drafted (pre-convention) |
+| CUR-N.2 | TIM-N.1, TIM-N.5, `libcur` baseline set | Drafted |
 | CUR-H.2 | CUR-N.2 §2.7 | Outstanding |
 | CUR-H.2.5 | TIM-N.1 | Outstanding |
 | CUR-H.4 | CUR-N.2 §2.9 | Outstanding |

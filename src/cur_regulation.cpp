@@ -279,13 +279,13 @@ RegulationSet RegulationSet::baseline() {
               .breach_class(FC_CLASS_IV));
 
     // --- CUR-N.2 telepathic invasion ---------------------------------------
-    // titles/CUR-N/CUR-N.2.md §2.2 is an absolute prohibition and §2.11.2(c)
-    // makes it strict liability. Modelled as a forbidden transition because
-    // §2.2(b) removes every justification, including claimed authority.
+    // titles/CUR-N/cur-n-part-2.md §2.2 is an absolute prohibition and
+    // §2.11(b)(3) makes it strict liability. Modelled as a forbidden transition
+    // because §2.2(b) removes every justification, including claimed authority.
     s.add(Regulation("CUR-N.2.2", DOMAIN_NON_HUMAN_COGNITIVE,
                      "Non-consensual telepathic invasion is absolutely "
                      "prohibited; strict liability, no complacency defence")
-              .with_citation("CUR-N.2 §2.2, §2.11.2(c)")
+              .with_citation("CUR-N.2 §2.2, §2.11(b)(3)")
               .declares_forbidden(FS_NON_CONSENSUAL_MODIFICATION)
               .breach_class(FC_CLASS_IV));
 
