@@ -129,7 +129,7 @@ Current status:
 | CUR-H.2 | CUR-N.2 §2.7, CUR-X §3.10 | Drafted |
 | CUR-H.2.5 | TIM-N.1 §7, TIM-N §7 | Drafted as CUR-H.2 §2.5(e) |
 | CUR-H.4 | CUR-N.2 §2.9, CUR-H.2 §2.9(a)(1) | Drafted |
-| CUR-H.5 | RFAL Human Bill Art. IV §4.1 (unimplemented) | Outstanding |
+| CUR-H.5 | RFAL Human Bill Art. IV §4.1, CUR-H.4 Implementation Notes | Drafted |
 | CUR-D.6 | CUR-N.2 §2.7, CUR-X §3.10, CUR-H.2 §2.3(i) | Drafted |
 | CUR-N.4 | CUR-N.2 §2.3(b), §2.6(b), §2.8(c), TIM-N.1 | Drafted |
 | CUR-N.5 | CUR-N.2 §2.8(d), §2.9(a)(1), CUR-N.4 §4.9(e) | Drafted |

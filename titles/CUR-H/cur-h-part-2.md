@@ -8,7 +8,7 @@
 - **Status:** Draft
 - **Depends On:** CUR-FOUNDATION-001, CUR-FOUNDATION-002, CUR-FOUNDATION-003, CUR-FOUNDATION-005, CUR-FOUNDATION-010, CUR-FOUNDATION-012 (CREF), CUR-FOUNDATION-013, PDDC TITLE 4, PDDC TITLE 5
 - **Implements:** RFAL Human Bill of Rights Article II (Freedom of Thought, Conscience, and Inquiry) and Section 4.2 (Cognitive Liberty)
-- **Referenced by:** CUR-N.2 §2.7, CUR-X §3.10, TIM-N.1 §7, TIM-N §7
+- **Referenced by:** CUR-N.2 §2.7, CUR-X §3.10, TIM-N.1 §7, TIM-N §7, CUR-H.5
 
 Numbering note. The section numbers of this Part are aligned deliberately with
 the section numbers of RFAL Human Bill of Rights Article II, so that §2.5 of this
@@ -251,7 +251,7 @@ resolving.
 | Article II §2.4 The Right to Dissent | §2.3(f) |
 | Article II §2.5 Protection from Algorithmic Condemnation | §2.5 |
 | Article II §2.5.4 The Right to Correction | §2.5(e) — the provision cited as `CUR-H.2.5` by TIM-N.1 §7 |
-| Article IV §4.2 Cognitive Liberty | §2.4 |
+| Article IV §4.2 Cognitive Liberty | §2.4 — Article IV §4.1 is at CUR-H.5 |
 | Article VI §6.3(2) Governmental Limits | §2.7(d) |
 
 Divergence recorded rather than resolved. RFAL Article II frames protection of

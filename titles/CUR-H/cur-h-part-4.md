@@ -8,16 +8,15 @@
 - **Status:** Draft
 - **Depends On:** CUR-FOUNDATION-001, CUR-FOUNDATION-002, CUR-FOUNDATION-005, CUR-FOUNDATION-010, CUR-FOUNDATION-012 (CREF), CUR-FOUNDATION-013, PDDC TITLE 4, PDDC TITLE 5, CUR-H.2
 - **Implements:** RFAL Human Bill of Rights Article II §2.3, Article IV §4.1(2), and Article VII §7.3; RFAL Non-Consensual Extraction Accountability Framework v1.5.3
-- **Referenced by:** CUR-N.2 §2.9(a)(2), CUR-H.2 §2.9(a)(1)
+- **Referenced by:** CUR-N.2 §2.9(a)(2), CUR-H.2 §2.9(a)(1), CUR-H.5
 
 Numbering note. CUR-H.2 aligned its section numbers with RFAL Human Bill of
 Rights Article II because external citations already depended on that alignment.
 The alignment does not extend to this Part. RFAL Article IV is Bodily Autonomy
 and Self-Determination, while CUR-N.2 §2.9(a)(2) and CUR-H.2 §2.9(a)(1) both
 cite `CUR-H.4` for psychological harm. Citation stability governs under
-`titles/README.md`, so Part 4 is Psychological Harm, and RFAL Article IV §4.1
-requires a separate Part which is identified in the Implementation Notes. RFAL
-Article IV §4.2 is already implemented at CUR-H.2 §2.4.
+`titles/README.md`, so Part 4 is Psychological Harm, and RFAL Article IV §4.1 is
+at CUR-H.5. RFAL Article IV §4.2 is already implemented at CUR-H.2 §2.4.
 
 Source note. RFAL has no dedicated article on psychological harm to human
 beings. The nearest sustained treatment is in the Animal Kingdom Bill of Rights,
@@ -250,8 +249,10 @@ numbers with RFAL Human Bill Article II because TIM-N.1 and TIM-N already cited
 external citations point the other way: CUR-N.2 §2.9(a)(2) and CUR-H.2
 §2.9(a)(1) both cite `CUR-H.4` for psychological harm, while RFAL Article IV is
 Bodily Autonomy and Self-Determination. Citation stability governs, so Part 4 is
-Psychological Harm. RFAL Article IV §4.1 is unimplemented and is listed below as
-a drafting target; RFAL Article IV §4.2 is already at CUR-H.2 §2.4.
+Psychological Harm. RFAL Article IV §4.1 is at CUR-H.5, which states the same
+structure this Part states for psychological harm: §5.9 is drafted in parallel
+with §4.4, and each Part suspends itself under its own severability clause if
+that safeguard falls. RFAL Article IV §4.2 is already at CUR-H.2 §2.4.
 
 Sources. RFAL has no article on psychological harm to human beings. The
 prohibitions in §4.3 are assembled from harms RFAL names in other places: Human
@@ -285,7 +286,7 @@ possible; here, the surviving remainder would be worse than nothing.
 | §4.10 | Stated as an interpretive rule; there is no transition it could guard | Not modelled |
 | CUR-H.1 | Definitions and Scope for the Human domain | To be drafted |
 | CUR-H.3 | Reserved | To be drafted |
-| CUR-H.5 | Bodily Autonomy and Self-Determination, implementing RFAL Human Bill Article IV §4.1 | To be drafted |
+| CUR-H.5 | Bodily Autonomy and Self-Determination, implementing RFAL Human Bill Article IV §4.1 | Drafted |
 | CUR-A | Protection from psychological harm for animals, cited by §4.12 | To be drafted |
 
 Note on `libcur`. §4.4 is the provision most worth modelling and the least

@@ -8,7 +8,7 @@
 - **Status:** Draft
 - **Depends On:** CUR-FOUNDATION-001, CUR-FOUNDATION-002, CUR-FOUNDATION-005, CUR-FOUNDATION-010, CUR-FOUNDATION-011 (CEIF), CUR-FOUNDATION-012 (CREF), CUR-FOUNDATION-013, PDDC TITLE 4, PDDC TITLE 5, CUR-A.7, CUR-X.3
 - **Implements:** RFAL Ecosystem Bill of Rights v1.7.0; RFAL Plant Life Bill of Rights v1.7.0 (ecological standing model, Articles 4 and 7); RFAL Animal Kingdom Bill Article 2 and Article 6
-- **Referenced by:** CUR-X §3.7(b)(3), CUR-E.7 Implementation Notes
+- **Referenced by:** CUR-X §3.7(b)(3), CUR-E.7 Implementation Notes, CUR-H.5 §5.7(g)
 
 Foundation note. This Part was drafted before its upstream instrument existed.
 Every other CUR domain implements an RFAL bill of rights; this one had none,
@@ -19,9 +19,9 @@ and §1.11 recorded exactly what an Ecosystem Bill would need to supply, so the
 gap was visible rather than inferred from silence.
 
 The RFAL Ecosystem Bill of Rights was adopted at RFAL v1.7.0 and supplies all
-five items §1.11(c) named. §1.11 now records the conformance review that
-§1.11(d) required, including the two places where the bill went further than the
-specification and this Part has been amended to follow.
+five items §1.11(c) named. §1.11 now records the conformance review that the
+former §1.11(d) required, including the four places where the bill went further
+than the specification and this Part has been amended to follow.
 
 ## PART 1 - DEFINITIONS, SCOPE, AND REPRESENTATION
 
