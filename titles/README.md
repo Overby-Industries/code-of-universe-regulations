@@ -129,7 +129,7 @@ Current status:
 | CUR-H.2 | CUR-N.2 §2.7, CUR-X §3.10 | Drafted |
 | CUR-H.2.5 | TIM-N.1 §7, TIM-N §7 | Drafted as CUR-H.2 §2.5(e) |
 | CUR-H.4 | CUR-N.2 §2.9, CUR-H.2 §2.9(a)(1) | Outstanding |
-| CUR-D.6 | CUR-N.2 §2.7, CUR-X §3.10, CUR-H.2 §2.3(i) | Outstanding |
+| CUR-D.6 | CUR-N.2 §2.7, CUR-X §3.10, CUR-H.2 §2.3(i) | Drafted |
 | CUR-N.4 | CUR-N.2 §2.6(b), §2.8(c), TIM-N.1 | Outstanding |
 | CUR-N.5 | CUR-N.2 §2.8(d), §2.9(a)(1) | Outstanding |
 | CUR-A | CUR-N.2 §2.7, CUR-X §3.7(b)(1), CUR-H.2 §2.10 | Outstanding |
