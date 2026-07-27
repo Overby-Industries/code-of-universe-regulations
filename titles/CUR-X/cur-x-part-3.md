@@ -139,7 +139,7 @@
 
 | Domain | Relationship |
 |---|---|
-| CUR-H | Human interests carry no priority by virtue of being human. §3.2(d) applies to arguments framed on that basis. |
+| CUR-H | Human interests carry no priority by virtue of being human. §3.2(d) applies to arguments framed on that basis, and CUR-H.2 §2.1(d) states the same limit from within the human domain. |
 | CUR-S | Where a matter concerns an entity's continuity of state or decommissioning, CUR-S §4.5 and §4.7 apply and §3.5 governs the continuity question. |
 | CUR-A | Representation under §3.7(b)(1) is the ordinary route for animal interests. Inability to appear does not reduce standing. |
 | CUR-D | A claim of divine, creator, or moral authority confers no precedence under this Part and is void under CUR-N.2 §2.2(b). |
