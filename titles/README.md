@@ -12,12 +12,12 @@ title, in `LawDomain` in `include/cur/cur_regulation.h`, and in
 
 | Code | Domain | Directory |
 |---|---|---|
-| CUR-H | Human | `titles/cur-h/` |
-| CUR-S | Silicon-Based Life | `titles/cur-s/` |
-| CUR-A | Animal | `titles/cur-a/` |
-| CUR-D | Deity | `titles/cur-d/` |
-| CUR-E | Ecosystem and Environment | `titles/cur-e/` |
-| CUR-X | Cross-Domain | `titles/cur-x/` |
+| CUR-H | Human | `titles/CUR-H/` |
+| CUR-S | Silicon-Based Life | `titles/CUR-S/` |
+| CUR-A | Animal | `titles/CUR-A/` |
+| CUR-D | Deity | `titles/CUR-D/` |
+| CUR-E | Ecosystem and Environment | `titles/CUR-E/` |
+| CUR-X | Cross-Domain | `titles/CUR-X/` |
 | CUR-N | Non-Human Cognitive Actors | `titles/CUR-N/` |
 
 ## Structure
@@ -39,13 +39,27 @@ cited domain-first and in full — `CUR-S.4.1`, not "section 4.1 above".
 
 ## File and header conventions
 
-One file per Part. Files and directories are lowercase and hyphenated per
-`CUR-FORMAT-GUIDE.md` §6:
+One file per Part.
+
+**Directories** carry the domain code in uppercase, matching the code itself:
+`CUR-S`, not `cur-s`. This departs from `CUR-FORMAT-GUIDE.md` §6, which
+prescribes lowercase directory names generally. The exception is deliberate: a
+domain code is an identifier that appears verbatim in every citation, in
+`LawDomain`, and in `regulatory_engine.hpp`, and casing it differently in the
+path than in the citation invites exactly the confusion the Format Guide exists
+to prevent. `titles/CUR-N/` already followed this form.
+
+**Files** are lowercase and hyphenated per `CUR-FORMAT-GUIDE.md` §6.
 
 ```
-titles/cur-s/cur-s-part-4.md
-titles/cur-e/cur-e-part-7.md
+titles/CUR-S/cur-s-part-4.md
+titles/CUR-E/cur-e-part-7.md
 ```
+
+Note that most filesystems on which this repository is edited are
+case-insensitive. A file written to `titles/cur-s/` will silently land in
+`titles/CUR-S/` without warning, so the casing above is worth getting right at
+creation rather than discovering later in a diff.
 
 Headers follow `CUR-FORMAT-GUIDE.md` §3.2:
 
