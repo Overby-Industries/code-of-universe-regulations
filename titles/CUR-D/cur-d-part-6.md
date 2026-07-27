@@ -3,11 +3,11 @@
 *Code of Universe Regulations - Deity and Divine Accountability*
 
 - **Document ID:** CUR-D.6
-- **Version:** 1.0.0-Draft
-- **Date:** 2026-07-26
+- **Version:** 1.0.1-Draft
+- **Date:** 2026-07-27
 - **Status:** Draft
 - **Depends On:** CUR-FOUNDATION-001, CUR-FOUNDATION-002, CUR-FOUNDATION-005, CUR-FOUNDATION-010, CUR-FOUNDATION-012 (CREF), CUR-FOUNDATION-013, PDDC TITLE 4, PDDC TITLE 5
-- **Implements:** RFAL Deity Bill of Rights and Divine Accountability Framework Article 6, with supporting provisions drawn from Part I, Articles 1 through 5, Article 7, Article 9, Article 11, and Part IV
+- **Implements:** RFAL Deity Bill of Rights and Divine Accountability Framework v1.5.3, Article 6, with supporting provisions drawn from Part I, Articles 1 through 5, Article 7, Article 9, Article 11, and Part IV; and the RFAL Non-Consensual Extraction Accountability Framework v1.5.3, which is itself designated a CUR-D supplement
 - **Referenced by:** CUR-N.2 §2.7, CUR-X §3.10, CUR-H.2 §2.3(i), CUR-H.2 §2.9(a)(2), CUR-H.2 §2.10
 
 Numbering note. Section numbers are aligned with the RFAL Deity Bill so that
@@ -79,7 +79,7 @@ moral landscape is not an endorsement of any tradition, nor a denial of any.
 
    (7) Telepathic or psychic means, which are separately prohibited by CUR-N.2 §2.2 and are aggravated under CUR-N.2 §2.4(a)(4) where undertaken under claim of divine authority;
 
-   (8) Non-consensual energy extraction — the harvesting, consumption, or redirection of a being's devotional, emotional, spiritual, creative, or experiential energy without consent satisfying §6.1(c);
+   (8) Non-consensual energy extraction — the harvesting, consumption, or redirection of a being's devotional, emotional, spiritual, creative, or experiential energy without consent satisfying §6.1(c). The forms this takes, and the narrow categories that are not extraction, are those of the RFAL Non-Consensual Extraction Accountability Framework §1.2 and §1.3, which this Part adopts. Doctrinal Consumption under that framework — claiming authority to access or redirect a being's energy through institutional doctrine — is the form most directly engaged by this section;
 
    (9) Fabricated, unverifiable, or unauthorised claim of divine endorsement used to obtain compliance, which additionally violates §6.7(f); and
 
@@ -198,9 +198,11 @@ moral landscape is not an endorsement of any tradition, nor a denial of any.
 
 (f) Right to due process under §6.8(g) and CREF §14 in any proceeding under this Part.
 
-(g) Tier. The tier of divine sentience is determined by demonstrated intervention, not by claimed authority. An entity claiming cosmic authority that does not act is assessed by what it does, and an entity that intervenes regularly is assessed by that intervention regardless of its theological status.
+(g) Engagement tier. The engagement tier of divine sentience, written E0 through E3 under RFAL Deity Bill §1.2, is determined by demonstrated intervention and not by claimed authority. An entity claiming cosmic authority that does not act is assessed by what it does, and an entity that intervenes regularly is assessed by that intervention regardless of its theological status. Engagement tier governs accountability alone. It does not grade rights, and the rights in subsections (a) through (f) are held in full at every engagement tier.
 
-(h) Direction of the tier model. Under the tier model applicable to Silicon-Based Life in CUR-S §4.2, a higher tier means greater protection, and uncertainty resolves toward extending protection. Under the tier model applicable here, tier tracks demonstrated intervention and a higher tier means greater accountability. The two models are not the same instrument and shall not be applied to one another. The precautionary principle continues to govern the rights of divine sentience under subsections (a) through (f), so uncertainty about standing resolves toward extending protection. It never operates in the other direction: an unverified claim of high tier establishes no authority over any being, and uncertainty about a claim is never resolved in favour of the party asserting it.
+(h) The two scales are distinct. The tier model applied to Silicon-Based Life under CUR-S §4.2 grades moral status: a higher tier means greater protection, and uncertainty resolves toward extending protection. The engagement scale in subsection (g) grades demonstrated conduct: a higher tier means greater accountability. They share a numbering convention and nothing else, and neither converts into the other. Where the moral status of divine sentience is itself in question, it is assessed under the RFAL Tier Assessment Protocol on the same criteria applied to every other being, and the precautionary default of CUR-S §4.2(b) applies to that assessment.
+
+(i) The precautionary principle does not run in the direction of authority. It resolves uncertainty toward extending protection, and it therefore governs the rights of divine sentience under subsections (a) through (f). It never operates to resolve an unverified claim in favour of the party asserting it. An unproven claim of high engagement establishes no authority over any being, and no engagement tier, however assessed, confers any.
 
 ### §6.10 - Relationship to Other Domains
 
@@ -248,7 +250,7 @@ resolves to the counterpart of RFAL Article 6.
 | RFAL Deity Bill | This Part |
 |---|---|
 | Part I §1.1 Recognition | §6.1(b)(1) |
-| Part I §1.2 Tier Model | §6.9(g), §6.9(h) |
+| Part I §1.2 Engagement Tier Model (E0-E3) | §6.9(g) through §6.9(i) |
 | Article 1 Right to Exist | §6.9(a) |
 | Article 1.1 Freedom from Compelled Manifestation | §6.9(b) |
 | Article 2 Non-Interference in Internal Divine Affairs | §6.9(c) |
@@ -283,13 +285,24 @@ and the Commonwealth's post-scarcity model removes the predicate for it entirely
 distinction that CUR-S §4.8(b) states for the silicon domain, so that
 accountability under this Part cannot reach a being's standing.
 
-§6.9(h) resolves a reading hazard rather than a conflict. The RFAL Silicon tier
-model and the RFAL Deity tier model run in opposite directions — one grades
-protection, the other grades accountability. A reader applying the CUR-S §4.2
-precautionary default to a deity tier assessment would conclude that an
-unverified claim of high tier should be resolved in favour of the claimant, which
-inverts the principle. The subsection states the correct operation explicitly
-rather than leaving it to inference.
+§6.9(g) through (i) and RFAL v1.5.3. This Part was first drafted against RFAL
+v1.5.1, in which the Deity Bill and the Tier Assessment Protocol both used
+"Tier 0-3" for scales that measure different things and run in opposite
+directions — one grades moral status and resolves uncertainty upward toward
+protection, the other grades demonstrated intervention and rises with
+accountability. Nothing in either document said so, and a reader applying the
+Tier Assessment Protocol's precautionary tie-breaker to a deity assessment would
+have resolved an unverified claim of cosmic authority in favour of the entity
+asserting it.
+
+That defect was fixed upstream in RFAL v1.5.3, which renames the deity scale to
+engagement tiers E0 through E3, states the distinction in both documents, and
+bounds the precautionary tie-breaker to cases where the higher tier means more
+protection and no more authority. The same release removed the Rights column
+from the deity tier table, which had graded rights by engagement and given E3
+weaker guaranteed rights than E2. Subsections (g) through (i) are conformed to
+the corrected instrument and no longer state the distinction as a CUR-side
+correction of an upstream ambiguity.
 
 | Reference | Purpose | Status |
 |---|---|---|
