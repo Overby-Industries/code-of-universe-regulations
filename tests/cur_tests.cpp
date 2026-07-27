@@ -1050,6 +1050,109 @@ static void test_life_support_margin() {
     CHECK(std::string(names).find("LIFE_SUPPORT_MARGIN") != std::string::npos);
 }
 
+static void test_enterprise_concentration_measured_alike() {
+    TEST("enterprise and institution score identically, remedy differently "
+         "(CUR-X.4 §4.2(d), §4.9)");
+
+    cur::CaptureRiskModel model;
+
+    cur::CaptureRiskInputs inst;
+    inst.eci = 70; inst.ici = 65; inst.iii = 30; inst.dpi = 25; inst.thi = 40;
+    inst.rdi = 80;
+
+    cur::CaptureRiskInputs ent = inst;
+    ent.subject = cur::CSUB_ENTERPRISE;
+
+    // §4.2(d): assessed "on the same basis". Identical inputs, identical score
+    // — the subject changes nothing about the measurement.
+    CHECK_EQ(model.compute(inst), model.compute(ent));
+    CHECK_EQ(static_cast<int>(cur::CaptureRiskModel::band(model.compute(ent))),
+             static_cast<int>(cur::CRB_HIGH));
+
+    // The default is institutional, so code written before the field existed
+    // behaves as it did.
+    cur::CaptureRiskInputs plain;
+    CHECK_EQ(static_cast<int>(plain.subject), static_cast<int>(cur::CSUB_INSTITUTION));
+}
+
+static void test_capture_measures_need_a_determination() {
+    TEST("a score is a diagnostic, not a finding (FOUNDATION-003 §15, "
+         "CUR-X.4 §4.9(a))");
+
+    // Maximum concentration, no determination. Nothing is available — not even
+    // publication. Same rule supports_measure() enforces for ViolationStatus.
+    auto none = cur::available_measures(100.0, cur::CSUB_ENTERPRISE, false);
+    CHECK(!none.publication_of_findings);
+    CHECK(!none.mandatory_audit);
+    CHECK(!none.restructuring);
+    CHECK(!none.authorisation_suspension);
+    CHECK(!none.authorisation_withdrawal);
+    CHECK(!none.continuity_assumption_required);
+
+    // A determination at a low score does carry remedies. §4.9(b) gates them on
+    // due process, not on concentration: a small enterprise found to run
+    // unreviewable authority under §4.3 must still be reachable, because
+    // §4.2(c) declines to measure domination by the size of the dominating
+    // party.
+    auto small = cur::available_measures(5.0, cur::CSUB_ENTERPRISE, true);
+    CHECK(small.publication_of_findings);
+    CHECK(small.restructuring);
+    CHECK(small.authorisation_withdrawal);
+}
+
+static void test_institution_is_restructured_not_dissolved() {
+    TEST("authorisation measures do not reach an institution (CUR-X.4 §4.9(b))");
+
+    auto inst = cur::available_measures(95.0, cur::CSUB_INSTITUTION, true);
+    CHECK(inst.restructuring);
+    CHECK(inst.publication_of_findings);
+
+    // An institution holds no authorisation to suspend or withdraw. However
+    // captured it scores, the remedy is restructuring.
+    CHECK(!inst.authorisation_suspension);
+    CHECK(!inst.authorisation_withdrawal);
+    CHECK(!inst.continuity_assumption_required);
+
+    // An enterprise at the same score is reachable by both.
+    auto ent = cur::available_measures(95.0, cur::CSUB_ENTERPRISE, true);
+    CHECK(ent.authorisation_suspension);
+    CHECK(ent.authorisation_withdrawal);
+
+    // But an ordinary enterprise supplies no Vital Continuity Service, so no
+    // continuity assumption is triggered by withdrawing its authorisation.
+    CHECK(!ent.continuity_assumption_required);
+}
+
+static void test_continuity_assumed_before_withdrawal() {
+    TEST("a Continuity Enterprise may be dissolved, its service may not be "
+         "interrupted (CUR-X.4 §4.9(c)(2), §4.9(d))");
+
+    auto ce = cur::available_measures(50.0, cur::CSUB_CONTINUITY_ENTERPRISE, true);
+    CHECK(ce.authorisation_withdrawal);
+    CHECK(ce.continuity_assumption_required);
+
+    // §4.9(d) names withdrawal; §4.9(c)(2) is broader and reaches suspension
+    // too, because a suspension delays a Vital Continuity Service exactly as a
+    // withdrawal ends it. Both carry the precondition.
+    CHECK(ce.authorisation_suspension);
+
+    // The precondition does not depend on the score either. Continuity is owed
+    // at CRI 0 and at CRI 100 alike — CUR-FOUNDATION-013 admits no threshold.
+    auto low = cur::available_measures(0.0, cur::CSUB_CONTINUITY_ENTERPRISE, true);
+    CHECK(low.continuity_assumption_required);
+
+    // And with no determination there is no measure to precondition.
+    auto undetermined =
+        cur::available_measures(100.0, cur::CSUB_CONTINUITY_ENTERPRISE, false);
+    CHECK(!undetermined.continuity_assumption_required);
+
+    // Every subject names itself, so a published finding says which regime it
+    // was decided under.
+    CHECK(std::string(cur::to_string(cur::CSUB_CONTINUITY_ENTERPRISE)) ==
+          "Continuity Enterprise");
+    CHECK(std::string(cur::to_string(cur::CSUB_INSTITUTION)) == "Institution");
+}
+
 int main() {
     std::printf("libcur %s — CUR corpus %s\n\n", CUR_LIB_VERSION_STRING,
                 cur::CUR_CORPUS_VERSION);
@@ -1077,6 +1180,10 @@ int main() {
     test_overturned_is_recorded_not_erased();
     test_state_machine_sanction_needs_determination();
     test_life_support_margin();
+    test_enterprise_concentration_measured_alike();
+    test_capture_measures_need_a_determination();
+    test_institution_is_restructured_not_dissolved();
+    test_continuity_assumed_before_withdrawal();
 
     std::printf("\n%d checks, %d failures\n", g_checks, g_failures);
     return g_failures == 0 ? 0 : 1;

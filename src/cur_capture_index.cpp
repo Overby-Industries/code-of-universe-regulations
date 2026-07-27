@@ -14,6 +14,16 @@ const char* to_string(CaptureRiskBand b) {
     return "Unknown";
 }
 
+const char* to_string(CaptureSubject s) {
+    switch (s) {
+        case CSUB_INSTITUTION: return "Institution";
+        case CSUB_ENTERPRISE: return "Enterprise";
+        case CSUB_CONTINUITY_ENTERPRISE: return "Continuity Enterprise";
+        case CSUB_COUNT: break;
+    }
+    return "Unknown";
+}
+
 namespace {
 
 double clamp_0_100(double v) {
@@ -92,6 +102,54 @@ bool cri_escalates_to_protected_mode(double cri,
     // conditions are required, and §15 is explicit that a high score is a
     // diagnostic, not a finding of guilt.
     return cri >= 80.0 && constitutional_violation_confirmed;
+}
+
+CaptureMeasures available_measures(double cri, CaptureSubject subject,
+                                   bool determination_confirmed) {
+    CaptureMeasures m;
+
+    // CUR-X.4 §4.9(a): accountability runs on determination made with due
+    // process. FOUNDATION-003 §15: "High CRI values do not constitute guilt."
+    // A score of 100 with no determination behind it yields nothing.
+    if (!determination_confirmed) return m;
+
+    // Note what is NOT gated on the score. §4.9(b) conditions these measures on
+    // determination, not on concentration, and deliberately so: gating them on
+    // a high CRI would leave a small enterprise that has been found to run
+    // unreviewable authority under §4.3 with no remedy attached to the finding,
+    // because a small enterprise does not move a Commonwealth-scale
+    // concentration index. §4.2(c) refuses that result — domination is
+    // domination, and it is not measured by the size of the dominating party.
+    //
+    // The CRI still matters here; it is simply not the trigger. It drives the
+    // §12 automatic responses through responses(), which run with no
+    // determination at all, and cri passes through unused for that reason.
+    (void)cri;
+
+    m.publication_of_findings = true;
+    m.mandatory_audit = true;
+    m.restitution = true;
+    m.restructuring = true;
+
+    // An institution holds no authorisation to act on. It is restructured under
+    // §4.9(b); there is no route here by which a governance institution is
+    // dissolved, however captured it scores.
+    if (subject == CSUB_ENTERPRISE || subject == CSUB_CONTINUITY_ENTERPRISE) {
+        m.authorisation_suspension = true;
+        m.authorisation_withdrawal = true;
+    }
+
+    // §4.9(d) names withdrawal. §4.9(c)(2) is broader and reaches this too: no
+    // measure may "withhold, delay, or condition" a Vital Continuity Service
+    // for any being, and a suspension delays one exactly as a withdrawal ends
+    // it. So both authorisation measures against a Continuity Enterprise carry
+    // the same precondition — continuity assumed first, then the measure.
+    if (subject == CSUB_CONTINUITY_ENTERPRISE &&
+        (m.authorisation_suspension || m.authorisation_withdrawal)) {
+        m.continuity_assumption_required = true;
+    }
+
+    return m;
 }
 
 // ---------------------------------------------------------------------------

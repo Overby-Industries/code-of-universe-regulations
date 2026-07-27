@@ -527,6 +527,27 @@ from `CUR-E.DEBRIS` to `CUR-E.7.1` and its citation is no longer `PENDING`.
 `titles/README.md` records the drafting convention and the remaining dangling
 references.
 
+**9.16 — Capture subject affects the remedy, never the score.** CUR-X.4 §4.2(d)
+requires an enterprise to be assessed "on the same basis" as a governance
+institution, so `CaptureRiskInputs::subject` is ignored by `compute()` and
+identical inputs yield an identical CRI whoever holds the concentration. The
+field selects the measures `available_measures()` returns instead: an institution
+holds no authorisation, so `authorisation_suspension` and
+`authorisation_withdrawal` are unreachable for `CSUB_INSTITUTION` at any score,
+and a captured institution is restructured rather than abolished. Measuring
+identically and remedying differently is the point of the distinction; letting
+the subject move the score would collapse both halves of it.
+
+Two further properties are deliberate. `available_measures()` returns an empty
+set without a confirmed determination even at a CRI of 100 — FOUNDATION-003 §15,
+and the same rule `supports_measure()` enforces for `ViolationStatus`. And
+nothing it returns is gated on the score, because CUR-X.4 §4.9(a) conditions
+measures on due process rather than on concentration; a threshold would have
+exempted the enterprises too small to move a Commonwealth-scale index while
+dominating everyone inside them, which §4.2(c) refuses. The §12 automatic
+responses still fire on score alone through `responses()`, since monitoring and
+audit obligations are not measures against a party.
+
 **9.13 — RFAL precautionary default.** `TIER_ASSESSMENT_PROTOCOL.md` §1.2 places
 the burden of proof on *withholding* protection, not on claiming it. So
 `EntityRegistry::register_entity` defaults `SubjectClass` to

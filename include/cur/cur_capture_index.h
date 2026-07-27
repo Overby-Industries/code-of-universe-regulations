@@ -44,6 +44,30 @@ enum CaptureRiskBand : uint8_t {
 
 const char* to_string(CaptureRiskBand b);
 
+// Who holds the concentration being measured — CUR-X.4 §4.2(d).
+//
+// This does NOT change the score. §4.2(d) is explicit that concentration within
+// an enterprise is assessed "on the same basis as concentration within a
+// governance institution", so `compute()` ignores this field entirely. What it
+// changes is which measures §4.9(b) makes available afterwards, because an
+// institution is restructured while an enterprise's authorisation is suspended
+// or withdrawn. Measuring identically and remedying differently is the whole
+// point of the distinction; folding it into the score would collapse both.
+//
+// There is deliberately no value here for a being. Concentration is never
+// measured against one, and CUR-X.4 §4.9(c)(3) forbids any measure attaching to
+// a being by reason of association with an enterprise. The omission is the
+// enforcement, in the same way guard::LICENSE_SUBJECT_ONLY keeps sanctions off
+// beings by leaving them unreachable rather than by testing for them.
+enum CaptureSubject : uint8_t {
+    CSUB_INSTITUTION = 0,        // a Commonwealth governance institution
+    CSUB_ENTERPRISE,             // CUR-X.4 §4.1 enterprise
+    CSUB_CONTINUITY_ENTERPRISE,  // §4.4 — supplies a Vital Continuity Service
+    CSUB_COUNT
+};
+
+const char* to_string(CaptureSubject s);
+
 // Component indices, each on 0-100. FOUNDATION-003 §5-§10.
 struct CaptureRiskInputs {
     double eci = 0.0;  // §5  Economic Concentration    — higher is worse
@@ -52,6 +76,10 @@ struct CaptureRiskInputs {
     double dpi = 100.0;  // §8  Democratic Participation— higher is BETTER
     double thi = 100.0;  // §9  Transparency Health     — higher is BETTER
     double rdi = 0.0;  // §10 Resource Dependency       — higher is worse
+
+    // CUR-X.4 §4.2(d). Defaults to the institutional reading, so every existing
+    // caller keeps the behaviour it had before this field existed.
+    CaptureSubject subject = CSUB_INSTITUTION;
 };
 
 // Weights from FOUNDATION-003 §11. Sum to 1.00.
@@ -104,6 +132,42 @@ private:
 // Escalation requires a critical score AND a confirmed constitutional
 // violation. §15: "High CRI values do not constitute guilt."
 bool cri_escalates_to_protected_mode(double cri, bool constitutional_violation_confirmed);
+
+// CUR-X.4 §4.9(b) measures, selected by subject.
+//
+// Every field is false until a determination has been made with due process
+// (§4.9(a), CREF §14, CUR-N.4 §4.3). A score is a diagnostic and never a
+// finding — FOUNDATION-003 §15, and the same rule ViolationStatus enforces
+// through supports_measure(): only VS_CONFIRMED carries a measure.
+struct CaptureMeasures {
+    // §4.9(b), available against either subject.
+    bool publication_of_findings = false;
+    bool mandatory_audit = false;
+    bool restitution = false;
+
+    // Restructuring to comply with §4.3 or §4.7. This is the institutional
+    // remedy and also reaches an enterprise, which §4.2(a) treats as a
+    // governance structure in fact.
+    bool restructuring = false;
+
+    // Authorisation measures. An institution holds no authorisation to suspend
+    // or withdraw, so these stay false for CSUB_INSTITUTION however high the
+    // score runs; a captured institution is restructured, not abolished.
+    bool authorisation_suspension = false;
+    bool authorisation_withdrawal = false;
+
+    // §4.9(d). Not an option — a precondition. Where withdrawal would leave
+    // beings without a Vital Continuity Service, the Commonwealth assumes
+    // continuity BEFORE the withdrawal takes effect. An enterprise may be
+    // dissolved; a service may not be interrupted.
+    bool continuity_assumption_required = false;
+};
+
+// Returns the measures §4.9(b) makes available at this score against this
+// subject. `determination_confirmed` reflects a completed §4.9(a) proceeding;
+// passing false returns an empty set regardless of score.
+CaptureMeasures available_measures(double cri, CaptureSubject subject,
+                                   bool determination_confirmed);
 
 // ---------------------------------------------------------------------------
 // Vital Continuity Index (FOUNDATION-003 §11, FOUNDATION-013)

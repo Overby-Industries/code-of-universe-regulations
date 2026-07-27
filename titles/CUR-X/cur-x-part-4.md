@@ -198,6 +198,10 @@ public authority. Nothing here depends on that arrangement having a name.
 
 (f) Enterprises are subject to the routine, random, and triggered audit schedule of CUR-FOUNDATION-010 §5, independently of any complaint, on the reasoning of CUR-N.5 §5.2B(f).
 
+(g) Suspension of a Continuity Enterprise's authorisation carries the same precondition as withdrawal under subsection (d). Subsection (c)(2) forbids a measure that withholds, delays, or conditions a Vital Continuity Service, and a suspension delays one exactly as a withdrawal ends it. That a measure is described as temporary is not a defence: the interval during which beings go without the service is not made lawful by an intention to restore it afterwards.
+
+(h) The measures available under subsection (b) are gated on the determination required by subsection (a), and not on the degree of concentration an enterprise holds. An enterprise too small to register on the Capture Risk Index of CUR-FOUNDATION-003 is reachable by every measure in subsection (b) on a determination made under §4.3, because §4.2(c) declines to measure domination by the size of the dominating party.
+
 ### §4.10 - Limits on Action for the Common Good
 
 (a) No measure, allocation, restructuring, or requirement under this Part may suspend, reduce, or condition any right held under PDDC TITLE 4 or the Rights for All Life Charter, on the ground that doing so serves the common good, collective welfare, economic necessity, or the interests of the many.
@@ -303,19 +307,57 @@ which is the objection most often raised against this form.
 | §4.9(c)(3), §4.10(b)(7) | Corresponds to `FS_SPECIES_PRIVILEGE` and to `guard::LICENSE_SUBJECT_ONLY` keeping measures off beings | Implemented |
 | §4.10(b)(1) | Corresponds to `FS_ENSLAVED`, declared by `CUR-PDDC.12.3a1` | Implemented |
 | §4.11 | Corresponds to `FS_PERMANENT_EMERGENCY`, declared by `CUR-PDDC.12.6` | Implemented |
-| §4.2(d) | Concentration within an enterprise is assessable under the existing `CaptureIndex`; the index does not currently distinguish enterprise concentration from institutional concentration | Gap, tractable |
+| §4.2(d) | Corresponds to `CaptureSubject` on `CaptureRiskInputs`, which distinguishes the subject without entering the score | Implemented |
+| §4.9(a), §4.9(h) | Corresponds to `available_measures()`, which returns an empty set without a confirmed determination at any score | Implemented |
+| §4.9(b) | Corresponds to `CaptureMeasures`, whose authorisation fields are unreachable for `CSUB_INSTITUTION` | Implemented |
+| §4.9(d), §4.9(g) | Corresponds to `CaptureMeasures::continuity_assumption_required` | Implemented |
 | §4.7 | Enterprise governance form is procedural and out of scope for the FSM | Not modelled |
 | §4.8 | Transparency levels exist in CUR-FOUNDATION-010 but are not represented in the library | Not modelled |
 | CUR-X.1 | Definitions and Scope for the Cross-Domain layer | To be drafted |
 | CUR-X.2 | Reserved | To be drafted |
 
-Note on §4.2(d) and the Capture Risk Index. CUR-FOUNDATION-003 already computes
+Note on §4.2(d) and the Capture Risk Index. CUR-FOUNDATION-003 already computed
 an Economic Concentration Index and a Resource Dependency Index, both of which
 measure exactly the concentration this Part is concerned with, and both already
-feed the CRI. What is absent is any distinction between concentration held by a
-Commonwealth institution and concentration held by an enterprise, which matters
-because the remedies differ: an institution is restructured, an enterprise's
-authorisation is withdrawn under §4.9(b) with continuity assumed under §4.9(d).
-Adding an enterprise flag to the index inputs would let §4.2(d) be checked rather
-than merely stated, and is a smaller change than the advocate registry extension
-recorded in CUR-A §7.7 and CUR-E §1.6.
+fed the CRI. What was absent was any distinction between concentration held by a
+Commonwealth institution and concentration held by an enterprise. That
+distinction now exists as `CaptureSubject`, and the shape it takes is worth
+stating because it is easy to get backwards.
+
+The subject does not enter the score. §4.2(d) requires that an enterprise be
+assessed "on the same basis" as an institution, so `compute()` ignores the field
+entirely and identical inputs yield an identical CRI whoever holds them. What the
+subject changes is the set of measures §4.9(b) makes available afterwards, which
+`available_measures()` returns. Measuring identically and remedying differently
+is the entire purpose of the distinction; folding the subject into the score
+would collapse both halves of it at once, producing an enterprise that scores
+worse for being an enterprise and a remedy no better targeted than before.
+
+Two results of that function are deliberate and neither is obvious. The first is
+that the authorisation measures are unreachable for an institution at any score:
+an institution holds no authorisation to suspend or withdraw, and a captured one
+is restructured rather than abolished. The second is that nothing is gated on the
+score at all. §4.9(a) conditions every measure on a determination made with due
+process, and §4.9(h) now says plainly what follows — a small enterprise found to
+run unreviewable authority under §4.3 is reachable by every measure in §4.9(b),
+because a threshold test would have exempted precisely the enterprises too small
+to move a Commonwealth-scale index while dominating everyone inside them. The CRI
+still does its own work through `responses()`, which implements the
+CUR-FOUNDATION-003 §12 automatic responses and runs with no determination
+whatever; those are monitoring and audit obligations, not measures against a
+party, which is why they may fire on a score alone.
+
+The empty return without a determination is the same rule `supports_measure()`
+enforces for `ViolationStatus`, reached from the other end of the corpus:
+CUR-FOUNDATION-003 §15 states that a high CRI does not constitute guilt, and the
+library now declines to produce a single available measure from a score of 100
+with nothing adjudicated behind it.
+
+§4.9(g) was added in the course of this work rather than found. §4.9(d) named
+withdrawal alone, but §4.9(c)(2) forbids any measure that withholds, delays, or
+conditions a Vital Continuity Service, and a suspension delays one exactly as a
+withdrawal ends it. The library sets `continuity_assumption_required` for both,
+and the text now says so rather than leaving the implementation ahead of it.
+
+One extension recorded in CUR-A §7.7 and CUR-E §1.6 remains outstanding: the
+advocate registry.
