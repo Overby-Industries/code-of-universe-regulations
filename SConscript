@@ -24,6 +24,7 @@ cur_sources = [
     File("src/cur_violation.cpp"),
     File("src/cur_event_log.cpp"),
     File("src/cur_capture_index.cpp"),
+    File("src/cur_advocate.cpp"),
     File("src/cur_state_machine.cpp"),
 ]
 

@@ -257,17 +257,43 @@ about something true.
 | §1.8(c) | Corresponds to `GS_VITAL_CONTINUITY_RESPONSE` (STATE-010) and `update_vital_continuity` | Implemented |
 | §1.9 | Corresponds to `FS_PERMANENT_EMERGENCY`, declared by `CUR-PDDC.12.6` | Implemented |
 | §1.4 | ES classification has no representation in the library; `TransitionContext` carries debris measures but no standing classification | Not modelled |
-| §1.5, §1.6 | Standing and advocate appointment are procedural and out of scope for the FSM | Not modelled |
-| §1.6(c) | Conflict-of-interest disqualification is observable at the event level, as in CUR-A §7.7(c); the same registry extension would serve both | Gap, tractable |
+| §1.6(a) | Corresponds to `AdvocateRegistry::appoint()` with `ADOM_ENVIRONMENTAL` and to regulation `CUR-E.1.6` on `EV_REPRESENTED_DETERMINATION` | Implemented |
+| §1.6(b) | Corresponds to `expertise_demonstrated` and, where a stewardship relationship exists, to `stewards_consulted` | Implemented |
+| §1.6(c), §1.6(d) | Corresponds to `appoint()` refusing rather than recording; §1.6(c)(3) is checked against the register | Implemented |
+| §1.6(f) | Corresponds to `EV_ADVOCATE_ACCESS_DENIED` and regulation `CUR-X.ADV` at Class II | Implemented |
+| §1.6(g) | Corresponds to `EV_ADVOCATE_APPOINTED` and to `to_string(AdvocateResult)` naming the failed subsection | Implemented |
+| §1.7(a) | Corresponds to `AdvocateRegistry::confers_authority()`, which returns false unconditionally | Implemented |
+| §1.5 | Standing is procedural and out of scope for the FSM | Not modelled |
+| §1.6(e) | The advocate's duty is substantive and has no structural expression | Not modelled |
 | CUR-E.2 | Extraction and ISRU environmental standards | To be drafted |
 | CUR-E.3 through CUR-E.6 | Reserved | To be drafted |
 | RFAL Ecosystem Bill of Rights | The upstream instrument this domain implements | Outstanding upstream |
 
-Note on §1.6(c) and CUR-A §7.7(c). Both Parts now require an advocate to be
-declared free of dependency on any party to the proceeding, and both note the
-same tractable library extension: an advocate relation on the entity registry
-plus an appointment event type, after which a guard could require a cleared
-advocate on any determination affecting a represented interest. Implementing it
-once would satisfy both, which is an argument for doing it as a single change
-rather than per domain. It remains recorded rather than acted on because the
-registry is part of the interface the Aevoria Simulator builds against.
+Note on §1.6 and CUR-A §7.7. Both Parts require an advocate to be free of
+dependency on any party to the proceeding, and both are now implemented by one
+`AdvocateRegistry` rather than two. §1.6(d) is the reason: it states expressly
+that CUR-A §7.7(c) is the same rule for the same reason, and two registries would
+let it drift apart in one domain and not the other. CUR-A §7.7 records the shape
+the implementation took and why §7.7(d) determined it; that discussion is not
+repeated here.
+
+Two things are specific to this section. The first is §1.6(b)'s consultation of a
+stewarding people, which applies to `ADOM_ENVIRONMENTAL` alone and refuses an
+appointment rather than noting its absence — §1.7(d) is why, and it is worth
+restating: conservation has historically been a vehicle for displacing exactly
+the peoples this consults, so an appointment made over their heads is not a
+lesser appointment but a void one. Where no stewardship relationship exists there
+is nobody to consult, and the requirement does not manufacture one.
+
+The second is §1.7(a), which is implemented as an absence. There is no method on
+`AdvocateRegistry` producing a measure, a sanction, a state change, or a
+permission, because a registry that could do any of those would be the route by
+which speaking for a voiceless system became authority over a being — the failure
+mode §1.7 exists to foreclose. `confers_authority()` returns false
+unconditionally so the prohibition can be found by searching rather than by
+trusting a comment, in the same style as `may_gate_service_access()`. The absence
+does the work; the function only makes it legible.
+
+What remains unmodelled is §1.6(e), the content of the advocate's duty. The
+library represents that an eligible advocate was appointed and had access, not
+what they concluded.

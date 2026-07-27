@@ -1153,6 +1153,279 @@ static void test_continuity_assumed_before_withdrawal() {
     CHECK(std::string(cur::to_string(cur::CSUB_INSTITUTION)) == "Institution");
 }
 
+// ---------------------------------------------------------------------------
+// Advocates — CUR-A §7.7, CUR-E §1.6
+// ---------------------------------------------------------------------------
+
+namespace {
+
+// A declaration that clears everything, so each test can spoil exactly one
+// thing and see that one thing refuse.
+cur::AdvocateDeclaration clean_declaration(cur::EntityHandle advocate,
+                                           cur::EntityHandle represented) {
+    cur::AdvocateDeclaration d;
+    d.advocate = advocate;
+    d.represented = represented;
+    d.domain = cur::ADOM_ANIMAL;
+    d.proceeding_id = "PROC-1";
+    d.expertise_demonstrated = true;
+    return d;
+}
+
+}  // namespace
+
+static void test_advocate_disqualification_refuses() {
+    TEST("a disqualification is not a factor to be weighed "
+         "(CUR-A §7.7(c)-(d), CUR-E §1.6(c)-(d))");
+
+    cur::EntityRegistry entities;
+    auto advocate = entities.register_entity("ethologist-11", cur::EC_CIVIC);
+    auto animal = entities.register_entity("orca-pod-3", cur::EC_CIVIC);
+
+    cur::AdvocateRegistry adv;
+
+    // §7.7(c)(1) — dependent on a party whose conduct is in question.
+    auto dep = clean_declaration(advocate, animal);
+    dep.dependent_on_party = true;
+    CHECK_EQ(static_cast<int>(adv.appoint(dep, entities, 1)),
+             static_cast<int>(cur::ADV_REFUSED_DEPENDENT_ON_PARTY));
+
+    // §7.7(c)(2) — an interest in the outcome.
+    auto interest = clean_declaration(advocate, animal);
+    interest.interest_in_outcome = true;
+    CHECK_EQ(static_cast<int>(adv.appoint(interest, entities, 1)),
+             static_cast<int>(cur::ADV_REFUSED_INTEREST_IN_OUTCOME));
+
+    // §7.7(b) — expertise. Undeclared is not demonstrated, the same reading an
+    // undeclared life-support floor gets.
+    auto unqualified = clean_declaration(advocate, animal);
+    unqualified.expertise_demonstrated = false;
+    CHECK_EQ(static_cast<int>(adv.appoint(unqualified, entities, 1)),
+             static_cast<int>(cur::ADV_REFUSED_NO_EXPERTISE));
+
+    // Refusal means no record was created. A void appointment is one that never
+    // existed, so nothing accumulated across those three attempts.
+    CHECK(adv.appointments().empty());
+    CHECK_EQ(adv.advocate_for("PROC-1", animal), cur::INVALID_ENTITY);
+    CHECK(!adv.determination_permitted("PROC-1", animal));
+
+    // A clean declaration is appointed.
+    CHECK_EQ(static_cast<int>(adv.appoint(clean_declaration(advocate, animal),
+                                          entities, 2)),
+             static_cast<int>(cur::ADV_APPOINTED));
+    CHECK_EQ(adv.advocate_for("PROC-1", animal), advocate);
+    CHECK(adv.determination_permitted("PROC-1", animal));
+
+    // FOUNDATION-004 §19 — no governance action outside the entity model.
+    cur::AdvocateDeclaration unknown = clean_declaration(advocate, animal);
+    unknown.represented = 9999;
+    unknown.proceeding_id = "PROC-2";
+    CHECK_EQ(static_cast<int>(adv.appoint(unknown, entities, 3)),
+             static_cast<int>(cur::ADV_REFUSED_UNKNOWN_PARTY));
+}
+
+static void test_advocate_cannot_represent_both_sides() {
+    TEST("an advocate cannot represent both an interest and a party adverse "
+         "to it (CUR-A §7.7(c)(3), CUR-E §1.6(c)(3))");
+
+    cur::EntityRegistry entities;
+    auto lawyer = entities.register_entity("counsel-4", cur::EC_CIVIC);
+    auto animal = entities.register_entity("elephant-herd-2", cur::EC_CIVIC);
+    auto operator_ = entities.register_entity(
+        "charter-safari-1", cur::EC_ECONOMIC, cur::SUBJ_OPERATIONAL_LICENSE);
+
+    cur::AdvocateRegistry adv;
+    adv.declare_party("PROC-9", operator_);
+    adv.record_party_representation("PROC-9", lawyer, operator_);
+
+    // This is the disqualification the register can establish for itself, so it
+    // is not declared on the form — it is checked.
+    auto d = clean_declaration(lawyer, animal);
+    d.proceeding_id = "PROC-9";
+    CHECK_EQ(static_cast<int>(adv.appoint(d, entities, 1)),
+             static_cast<int>(cur::ADV_REFUSED_ADVERSE_REPRESENTATION));
+
+    // The conflict is per proceeding. The same being may advocate for the
+    // animal in a proceeding the operator is not party to.
+    auto other = clean_declaration(lawyer, animal);
+    other.proceeding_id = "PROC-10";
+    CHECK_EQ(static_cast<int>(adv.appoint(other, entities, 2)),
+             static_cast<int>(cur::ADV_APPOINTED));
+
+    // And nobody advocates for themselves.
+    auto self = clean_declaration(animal, animal);
+    self.proceeding_id = "PROC-11";
+    CHECK_EQ(static_cast<int>(adv.appoint(self, entities, 3)),
+             static_cast<int>(cur::ADV_REFUSED_SELF_REPRESENTATION));
+}
+
+static void test_stewards_consulted_before_appointment() {
+    TEST("environmental appointment consults the stewarding people "
+         "(CUR-E §1.6(b), §1.7(d))");
+
+    cur::EntityRegistry entities;
+    auto ecologist = entities.register_entity("ecologist-7", cur::EC_CIVIC);
+    auto watershed = entities.register_entity("watershed-north", cur::EC_CIVIC);
+
+    cur::AdvocateRegistry adv;
+
+    cur::AdvocateDeclaration d;
+    d.advocate = ecologist;
+    d.represented = watershed;
+    d.domain = cur::ADOM_ENVIRONMENTAL;
+    d.proceeding_id = "PROC-ENV-1";
+    d.expertise_demonstrated = true;
+    d.stewardship_relationship = true;
+    d.stewards_consulted = false;
+
+    // §1.7(d) is why this refuses rather than notes: conservation has
+    // historically been a vehicle for displacing exactly these peoples.
+    CHECK_EQ(static_cast<int>(adv.appoint(d, entities, 1)),
+             static_cast<int>(cur::ADV_REFUSED_STEWARDS_NOT_CONSULTED));
+
+    d.stewards_consulted = true;
+    CHECK_EQ(static_cast<int>(adv.appoint(d, entities, 2)),
+             static_cast<int>(cur::ADV_APPOINTED));
+
+    // Where no stewardship relationship exists there is nobody to consult, and
+    // the requirement does not manufacture one.
+    cur::AdvocateDeclaration open = d;
+    open.proceeding_id = "PROC-ENV-2";
+    open.stewardship_relationship = false;
+    open.stewards_consulted = false;
+    CHECK_EQ(static_cast<int>(adv.appoint(open, entities, 3)),
+             static_cast<int>(cur::ADV_APPOINTED));
+
+    // The registry confers no authority over any being — CUR-E §1.7(a).
+    CHECK(!cur::AdvocateRegistry::confers_authority());
+}
+
+static void test_voided_appointment_is_marked_not_erased() {
+    TEST("an appointment found in breach is voided and kept on the record "
+         "(CUR-A §7.7(d), CREF §15)");
+
+    cur::EntityRegistry entities;
+    auto advocate = entities.register_entity("vet-2", cur::EC_CIVIC);
+    auto animal = entities.register_entity("wolf-pack-5", cur::EC_CIVIC);
+
+    cur::AdvocateRegistry adv;
+    CHECK_EQ(static_cast<int>(adv.appoint(clean_declaration(advocate, animal),
+                                          entities, 1)),
+             static_cast<int>(cur::ADV_APPOINTED));
+    CHECK(adv.determination_permitted("PROC-1", animal));
+
+    // A funding relationship surfaces afterwards.
+    CHECK(adv.void_appointment("PROC-1", animal,
+                               cur::ADV_REFUSED_DEPENDENT_ON_PARTY, 5));
+
+    // The appointment no longer answers, so no determination proceeds on it.
+    CHECK_EQ(adv.advocate_for("PROC-1", animal), cur::INVALID_ENTITY);
+    CHECK(!adv.determination_permitted("PROC-1", animal));
+
+    // But the record survives, marked. Determinations reached with this
+    // advocate are voidable under §7.6(e), and identifying them later requires
+    // the appointment still be findable — the same reason VS_OVERTURNED exists
+    // rather than deleting a violation record.
+    CHECK_EQ(adv.appointments().size(), size_t{1});
+    CHECK(adv.appointments()[0].voided);
+    CHECK_EQ(adv.appointments()[0].voided_tick, uint64_t{5});
+    CHECK_EQ(static_cast<int>(adv.appointments()[0].void_reason),
+             static_cast<int>(cur::ADV_REFUSED_DEPENDENT_ON_PARTY));
+
+    // Voiding twice finds nothing live to void.
+    CHECK(!adv.void_appointment("PROC-1", animal,
+                                cur::ADV_REFUSED_DEPENDENT_ON_PARTY, 6));
+
+    // With the slot free, a replacement may be appointed.
+    auto replacement = entities.register_entity("vet-9", cur::EC_CIVIC);
+    CHECK_EQ(static_cast<int>(adv.appoint(clean_declaration(replacement, animal),
+                                          entities, 7)),
+             static_cast<int>(cur::ADV_APPOINTED));
+    CHECK_EQ(adv.advocate_for("PROC-1", animal), replacement);
+}
+
+static void test_determination_needs_a_named_advocate() {
+    TEST("an unnamed advocate is not an advocate (CUR-A §7.7, CUR-E §1.6)");
+
+    // The naming half is load-bearing, exactly as the declared floor is for
+    // LIFE_SUPPORT_MARGIN. Asserting cleared without naming anyone leaves the
+    // guard unsatisfied.
+    cur::TransitionContext ctx;
+    CHECK((cur::resolve_guard_mask(ctx) & cur::guard::ADVOCATE_CLEARED) == 0);
+
+    ctx.advocate_cleared = true;
+    CHECK((cur::resolve_guard_mask(ctx) & cur::guard::ADVOCATE_CLEARED) == 0);
+
+    // Naming someone without clearing them does not help either.
+    ctx.advocate_cleared = false;
+    ctx.advocate_ref = 3;
+    CHECK((cur::resolve_guard_mask(ctx) & cur::guard::ADVOCATE_CLEARED) == 0);
+
+    ctx.advocate_cleared = true;
+    CHECK((cur::resolve_guard_mask(ctx) & cur::guard::ADVOCATE_CLEARED) != 0);
+
+    // End to end. A determination without an advocate is not merely refused —
+    // §7.7(d) and §1.6(d) make it voidable, so the fallback row records a
+    // Class II violation rather than letting it pass unnoticed.
+    cur::CURStateMachine m;
+    m.log().set_clock(fixed_clock);
+    auto body = m.entities().register_entity("review-board-2", cur::EC_CIVIC,
+                                             cur::SUBJ_OPERATIONAL_LICENSE);
+
+    cur::TransitionContext bare;
+    auto r1 = m.submit_operational(body, cur::EV_REPRESENTED_DETERMINATION,
+                                   bare, 1);
+    CHECK(r1.accepted);
+    CHECK_EQ(m.compliance_of(body), cur::KS_VIOLATION);
+    CHECK_EQ(r1.fault, cur::FC_CLASS_II);
+
+    // The guard names itself, so the reason is legible without reading the
+    // table — §7.7(h) and §1.6(g) require the record to be publishable.
+    char names[256];
+    cur::describe_guards(cur::guard::ADVOCATE_CLEARED, names, sizeof(names));
+    CHECK(std::string(names).find("ADVOCATE_CLEARED") != std::string::npos);
+
+    // Both sections attach to the event, and both are cited.
+    auto regs = cur::RegulationSet::baseline();
+    CHECK((regs.required_guards_for(cur::EV_REPRESENTED_DETERMINATION) &
+           cur::guard::ADVOCATE_CLEARED) != 0);
+    CHECK(regs.find("CUR-A.7.7") != nullptr);
+    CHECK(regs.find("CUR-E.1.6") != nullptr);
+    CHECK(regs.find("CUR-X.ADV") != nullptr);
+}
+
+static void test_advocate_access_denial_is_a_fault() {
+    TEST("denying an advocate access is a Class II fault "
+         "(CUR-A §7.7(g), CUR-E §1.6(f))");
+
+    cur::CURStateMachine m;
+    m.log().set_clock(fixed_clock);
+    auto holder = m.entities().register_entity("facility-14", cur::EC_ECONOMIC,
+                                               cur::SUBJ_OPERATIONAL_LICENSE);
+
+    // Certification is no shelter, for the same reason it is none for a
+    // continuity failure: an advocate who cannot see the animal is a formality,
+    // and a formality is what §7.7 exists to prevent.
+    cur::TransitionContext ctx;
+    ctx.rights_certified = true;
+    auto cert = m.submit_operational(holder, cur::EV_CERTIFICATION_GRANTED,
+                                     ctx, 1);
+    CHECK(cert.accepted);
+    CHECK_EQ(m.compliance_of(holder), cur::KS_CERTIFIED);
+
+    cur::TransitionContext denial;
+    auto r = m.submit_operational(holder, cur::EV_ADVOCATE_ACCESS_DENIED,
+                                  denial, 2);
+    CHECK(r.accepted);
+    CHECK_EQ(m.compliance_of(holder), cur::KS_VIOLATION);
+    CHECK_EQ(r.fault, cur::FC_CLASS_II);
+    CHECK_EQ(m.ledger().violations().size(), size_t{1});
+
+    // Grounds for adverse inference means the denial has to be findable
+    // afterwards, so it is on the record as its own event.
+    CHECK(m.ledger().violations()[0].appealable);
+}
+
 int main() {
     std::printf("libcur %s — CUR corpus %s\n\n", CUR_LIB_VERSION_STRING,
                 cur::CUR_CORPUS_VERSION);
@@ -1184,6 +1457,12 @@ int main() {
     test_capture_measures_need_a_determination();
     test_institution_is_restructured_not_dissolved();
     test_continuity_assumed_before_withdrawal();
+    test_advocate_disqualification_refuses();
+    test_advocate_cannot_represent_both_sides();
+    test_stewards_consulted_before_appointment();
+    test_voided_appointment_is_marked_not_erased();
+    test_determination_needs_a_named_advocate();
+    test_advocate_access_denial_is_a_fault();
 
     std::printf("\n%d checks, %d failures\n", g_checks, g_failures);
     return g_failures == 0 ? 0 : 1;

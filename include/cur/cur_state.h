@@ -244,6 +244,12 @@ enum EventType : uint16_t {
     EV_ROOT_CAUSE_ANALYSIS_COMPLETED, // "Root Cause Analysis" (STATE-010 exit)
     EV_VITAL_CONTINUITY_DENIED,       // access withheld — always a Class IV fault
 
+    // Representation of interests that cannot speak for themselves —
+    // CUR-A §7.7, CUR-E §1.6.
+    EV_ADVOCATE_APPOINTED,        // §7.7(h), §1.6(g) — recorded and published
+    EV_ADVOCATE_ACCESS_DENIED,    // §7.7(g), §1.6(f) — a Class II fault
+    EV_REPRESENTED_DETERMINATION, // a determination on a represented interest
+
     EV_COUNT
 };
 
@@ -294,7 +300,19 @@ constexpr uint16_t COURT_CERTIFIED = 1u << 8;
 // floor. An undeclared floor is unsatisfiable in both cases.
 constexpr uint16_t LIFE_SUPPORT_MARGIN = 1u << 9;
 
-constexpr uint16_t ALL_KNOWN = (1u << 10) - 1;
+// CUR-A §7.7, CUR-E §1.6 — an advocate for a being or system that cannot speak
+// for itself is appointed, named, and clear of the disqualifications in
+// §7.7(c) / §1.6(c).
+//
+// Both halves are required and the naming half matters. §7.7(d) and §1.6(d) make
+// those disqualifications void an appointment rather than weigh against it, so a
+// cleared advocate who is nobody in particular is not an advocate — the same
+// reading LIFE_SUPPORT_MARGIN gives an undeclared floor. The disqualifications
+// themselves are enforced where an appointment is made, in AdvocateRegistry;
+// this guard only carries the result to the transition.
+constexpr uint16_t ADVOCATE_CLEARED = 1u << 10;
+
+constexpr uint16_t ALL_KNOWN = (1u << 11) - 1;
 
 }  // namespace guard
 
@@ -319,6 +337,16 @@ struct TransitionContext {
     // beings has not declared a floor that covers them.
     uint32_t life_support_reserve_units = 0;
     uint32_t life_support_floor_units = 0;
+
+    // CUR-A §7.7, CUR-E §1.6. The appointed advocate, and whether the
+    // appointment cleared the §7.7(c) / §1.6(c) disqualifications.
+    //
+    // `advocate_ref` is an EntityHandle. It is spelled as the underlying type
+    // because cur_event.h — which declares EntityHandle — includes this header
+    // rather than the other way round; cur_event.h static_asserts the two
+    // sentinels agree, so the pair cannot drift apart silently.
+    uint32_t advocate_ref = 0xFFFFFFFFu;
+    bool advocate_cleared = false;
 
     // Filled in by the state machine from the entity's SubjectClass, so a
     // caller cannot fake it. Present here only so guards see one struct.
@@ -491,6 +519,44 @@ inline constexpr ComplianceTransition COMPLIANCE_TABLE[] = {
     // resource accounting." Restoration comes first; the review still happens.
     {KS_VIOLATION, EV_VITAL_CONTINUITY_RESTORED, KS_PENDING_REVIEW,
      guard::NONE, FC_NONE, "CUR-FOUNDATION-013; CREF §12"},
+
+    // ---- Representation (CUR-A §7.7, CUR-E §1.6) --------------------------
+    // Appointment itself is unguarded here. The disqualifications are enforced
+    // where the appointment is made, by AdvocateRegistry::appoint(), which
+    // refuses rather than records — §7.7(d) and §1.6(d) make them void an
+    // appointment, not weigh against it. What reaches the table is an
+    // appointment that already survived that check, and it is recorded because
+    // §7.7(h) and §1.6(g) require appointments to be published.
+    {KS_COMPLIANT, EV_ADVOCATE_APPOINTED, KS_COMPLIANT,
+     guard::NONE, FC_NONE, "CUR-A.7 §7.7(h); CUR-E.1 §1.6(g)"},
+    {KS_CERTIFIED, EV_ADVOCATE_APPOINTED, KS_CERTIFIED,
+     guard::NONE, FC_NONE, "CUR-A.7 §7.7(h); CUR-E.1 §1.6(g)"},
+
+    // §7.7(g) and §1.6(f): denial of the access an advocate needs to form an
+    // independent assessment is a Class II fault and grounds for adverse
+    // inference. Certification is no shelter, for the same reason it is none
+    // for a continuity failure — an advocate who cannot see the animal or the
+    // system is a formality, and a formality is what these sections exist to
+    // prevent.
+    {KS_COMPLIANT, EV_ADVOCATE_ACCESS_DENIED, KS_VIOLATION,
+     guard::NONE, FC_CLASS_II, "CUR-A.7 §7.7(g); CUR-E.1 §1.6(f)"},
+    {KS_CERTIFIED, EV_ADVOCATE_ACCESS_DENIED, KS_VIOLATION,
+     guard::NONE, FC_CLASS_II, "CUR-A.7 §7.7(g); CUR-E.1 §1.6(f)"},
+    {KS_VIOLATION, EV_ADVOCATE_ACCESS_DENIED, KS_VIOLATION,
+     guard::NONE, FC_CLASS_II, "CUR-A.7 §7.7(g); CUR-E.1 §1.6(f)"},
+
+    // A determination on an interest that cannot speak for itself needs a named
+    // advocate who cleared §7.7(c) / §1.6(c). Without one the determination is
+    // not merely irregular: §7.7(d) and §1.6(d) make it voidable, so the
+    // fallback row records a violation rather than letting it stand.
+    {KS_COMPLIANT, EV_REPRESENTED_DETERMINATION, KS_COMPLIANT,
+     guard::ADVOCATE_CLEARED, FC_NONE, "CUR-A.7 §7.7(a); CUR-E.1 §1.6(a)"},
+    {KS_COMPLIANT, EV_REPRESENTED_DETERMINATION, KS_VIOLATION,
+     guard::NONE, FC_CLASS_II, "CUR-A.7 §7.7(d); CUR-E.1 §1.6(d)"},
+    {KS_CERTIFIED, EV_REPRESENTED_DETERMINATION, KS_CERTIFIED,
+     guard::ADVOCATE_CLEARED, FC_NONE, "CUR-A.7 §7.7(a); CUR-E.1 §1.6(a)"},
+    {KS_CERTIFIED, EV_REPRESENTED_DETERMINATION, KS_VIOLATION,
+     guard::NONE, FC_CLASS_II, "CUR-A.7 §7.7(d); CUR-E.1 §1.6(d)"},
 
     // ---- from KS_BLACKLISTED ----------------------------------------------
     // Recourse out of BLACKLISTED. These two rows are what keep the state from

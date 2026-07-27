@@ -32,6 +32,16 @@ enum EventPriority : uint8_t {
 using EntityHandle = uint32_t;
 constexpr EntityHandle INVALID_ENTITY = 0xFFFFFFFFu;
 
+// TransitionContext::advocate_ref is an EntityHandle, but cur_state.h is
+// included by this header and so cannot name the type. It spells out the
+// underlying representation and repeats the sentinel; this keeps the two in
+// lockstep, so a change to either is a compile error rather than a guard that
+// silently reads an appointed advocate as an absent one.
+static_assert(TransitionContext{}.advocate_ref == INVALID_ENTITY,
+              "TransitionContext::advocate_ref must default to INVALID_ENTITY");
+static_assert(sizeof(TransitionContext{}.advocate_ref) == sizeof(EntityHandle),
+              "TransitionContext::advocate_ref must be an EntityHandle");
+
 // A constitutional event — FOUNDATION-005 §3.
 //
 // On determinism: `tick` and `sequence` are supplied by the caller and are the

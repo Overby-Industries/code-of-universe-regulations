@@ -34,6 +34,7 @@
 #ifndef CUR_H
 #define CUR_H
 
+#include "cur_advocate.h"
 #include "cur_capture_index.h"
 #include "cur_entity.h"
 #include "cur_event.h"

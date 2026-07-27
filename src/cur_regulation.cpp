@@ -375,6 +375,50 @@ RegulationSet RegulationSet::baseline() {
               .requires_guards(guard::LIFE_SUPPORT_MARGIN)
               .breach_class(FC_CLASS_III));
 
+    // --- Representation of voiceless interests ------------------------------
+    // titles/CUR-A/cur-a-part-7.md §7.7 and titles/CUR-E/cur-e-part-1.md §1.6.
+    //
+    // Two regulations rather than one, because they belong to different domains
+    // and a published finding should cite the section that governs it. They
+    // compose by union onto the same event, which is the behaviour
+    // RegulationSet documents: a determination on a represented interest has to
+    // satisfy both, and neither can loosen the other.
+    //
+    // The guard carries the result of the disqualification check, not the check
+    // itself. AdvocateRegistry::appoint() is where §7.7(c) and §1.6(c) bite,
+    // and it refuses rather than records — §7.7(d) and §1.6(d) make those
+    // disqualifications void an appointment rather than weigh against it.
+    s.add(Regulation("CUR-A.7.7", DOMAIN_ANIMAL,
+                     "A determination affecting an animal with standing "
+                     "requires a named advocate clear of the §7.7(c) "
+                     "disqualifications")
+              .with_citation("CUR-A.7 §7.7(a), §7.7(c)-(d)")
+              .applies_to(EV_REPRESENTED_DETERMINATION)
+              .requires_guards(guard::ADVOCATE_CLEARED)
+              .breach_class(FC_CLASS_II));
+
+    s.add(Regulation("CUR-E.1.6", DOMAIN_ECOSYSTEM,
+                     "A determination affecting an environmental interest with "
+                     "standing requires a named advocate clear of the §1.6(c) "
+                     "disqualifications")
+              .with_citation("CUR-E.1 §1.6(a), §1.6(c)-(d)")
+              .applies_to(EV_REPRESENTED_DETERMINATION)
+              .requires_guards(guard::ADVOCATE_CLEARED)
+              .breach_class(FC_CLASS_II));
+
+    // §7.7(g) and §1.6(f): denial of the access an advocate needs to form an
+    // independent assessment is a Class II fault and grounds for adverse
+    // inference. Cross-domain because the rule is identical in both sections
+    // and the entity denying access may belong to neither.
+    s.add(Regulation("CUR-X.ADV", DOMAIN_CROSS_DOMAIN,
+                     "An advocate shall have access to the animal or system, "
+                     "to the conditions in which it is held, and to records "
+                     "concerning it, sufficient to form an independent "
+                     "assessment")
+              .with_citation("CUR-A.7 §7.7(g); CUR-E.1 §1.6(f)")
+              .applies_to(EV_ADVOCATE_ACCESS_DENIED)
+              .breach_class(FC_CLASS_II));
+
     return s;
 }
 

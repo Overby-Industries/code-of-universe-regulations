@@ -256,15 +256,22 @@ Bit flags; a row's whole mask must hold. Guards are pure predicates over
 | `DUE_PROCESS_COMPLETE` | transparent due process concluded | PDDC §12.2(a)(5) |
 | `EVIDENCE_PRESERVED` | evidence preservation enforced | FOUNDATION-002 STATE-007 |
 | `APPEAL_EXHAUSTED` | appeal routes exhausted | ENTITY-011 |
-| `DEBRIS_WITHIN_LIMIT` | within the charter's declared debris budget | PENDING, see §9 |
+| `DEBRIS_WITHIN_LIMIT` | within the charter's declared debris budget | CUR-E.7 §7.1 |
 | `COMMONS_RESERVE_FLOOR` | ≥ 20% Commons Reserve respected | PDDC-TREASURY |
 | `LICENSE_SUBJECT_ONLY` | subject is an authorisation, not a being | FORBIDDEN-001/003 |
 | `REMEDIATION_VERIFIED` | remediation independently verified | PDDC §12.5(d)(1) |
 | `COURT_CERTIFIED` | Constitutional Court certified a forward path | PDDC §12.5(d) |
+| `LIFE_SUPPORT_MARGIN` | reserve clears the declared floor for every being present | CUR-E.2 §2.2(c)-(d) |
+| `ADVOCATE_CLEARED` | a named advocate cleared the disqualifications | CUR-A.7 §7.7; CUR-E.1 §1.6 |
 
-A `debris_limit` of zero means *no declared limit*, which is not the same as a
-limit of zero units, and cannot be satisfied. A charter must state its budget
-before it can be held to it.
+Three of these read an undeclared value as unsatisfiable rather than as
+permissive, and they do it for one reason. A `debris_limit` of zero means *no
+declared limit*, which is not the same as a limit of zero units; a
+`life_support_floor_units` of zero means no declared floor, not no reserve
+required; and an `advocate_ref` of `INVALID_ENTITY` means nobody was appointed,
+however firmly `advocate_cleared` is asserted alongside it. In each case the
+party has to state the thing before it can be held to it, and in each case the
+opposite reading would make the guard satisfiable by saying nothing.
 
 ---
 
@@ -548,6 +555,26 @@ dominating everyone inside them, which §4.2(c) refuses. The §12 automatic
 responses still fire on score alone through `responses()`, since monitoring and
 audit obligations are not measures against a party.
 
+**9.17 — Advocacy is a relation, never an authority.** CUR-E §1.7(a) provides
+that an advocate's appointment "confers no authority over any being, no power to
+direct any being's conduct, and no standing to seek a measure against a being
+that the Code does not otherwise permit." `AdvocateRegistry` accordingly exposes
+no method producing a measure, a sanction, a state change, or a permission. The
+absence is the implementation; `confers_authority()` returns false
+unconditionally only so the prohibition is greppable, in the same style as
+`VitalContinuityModel::may_gate_service_access()`.
+
+`appoint()` refuses rather than records, because CUR-A §7.7(d) and CUR-E §1.6(d)
+make the disqualifications void an appointment rather than weigh against it — a
+void appointment is one that never existed. Three of the four are declarations
+the library cannot verify; recording them is what makes them falsifiable, so a
+funding relationship discovered later runs through `void_appointment()`. The
+fourth, §7.7(c)(3), is checked against the register, since whether an advocate
+already acts for a party to the same proceeding is something the register knows.
+Voided appointments are marked and kept, not deleted, for the reason CREF §15
+gives for `VS_OVERTURNED`: determinations reached with a disqualified advocate
+are voidable under §7.6(e), and finding them later needs the record intact.
+
 **9.13 — RFAL precautionary default.** `TIER_ASSESSMENT_PROTOCOL.md` §1.2 places
 the burden of proof on *withholding* protection, not on claiming it. So
 `EntityRegistry::register_entity` defaults `SubjectClass` to
@@ -570,9 +597,10 @@ include/cur/
   cur_regulation.h       Regulation, RegulationSet, amendment types
   cur_event_log.h        append-only audit trail, OTF-1 export
   cur_capture_index.h    Capture Risk Index (FOUNDATION-003)
+  cur_advocate.h         advocates for voiceless interests (CUR-A §7.7, CUR-E §1.6)
   cur_state_machine.h    the engine + ICURObserver
 src/                     one .cpp per header, minus cur.h
-tests/cur_tests.cpp      495 checks, no external framework
+tests/cur_tests.cpp      803 checks, no external framework
 CMakeLists.txt           standalone build
 SConscript               returns source nodes for an SCons consumer
 ```

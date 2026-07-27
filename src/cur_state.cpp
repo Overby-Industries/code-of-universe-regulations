@@ -160,6 +160,10 @@ const char* to_string(EventType e) {
             return "root_cause_analysis_completed";
         case EV_VITAL_CONTINUITY_DENIED: return "vital_continuity_denied";
 
+        case EV_ADVOCATE_APPOINTED: return "advocate_appointed";
+        case EV_ADVOCATE_ACCESS_DENIED: return "advocate_access_denied";
+        case EV_REPRESENTED_DETERMINATION: return "represented_determination";
+
         case EV_COUNT: break;
     }
     return "unknown";
@@ -198,6 +202,17 @@ uint16_t resolve_guard_mask(const TransitionContext& ctx) {
         ctx.life_support_reserve_units >= ctx.life_support_floor_units) {
         m |= guard::LIFE_SUPPORT_MARGIN;
     }
+
+    // CUR-A §7.7, CUR-E §1.6. Both halves, and the naming half is not a
+    // formality: an advocate who is nobody in particular cannot be checked
+    // against §7.7(c)(1)-(3) afterwards, cannot be published under §7.7(h), and
+    // cannot be held to the duty §7.7(e) places on them personally. The
+    // disqualifications are enforced at appointment by AdvocateRegistry, which
+    // refuses rather than records; a caller asserting `advocate_cleared` here
+    // is reporting the outcome of that check, not substituting for it.
+    if (ctx.advocate_ref != 0xFFFFFFFFu && ctx.advocate_cleared) {
+        m |= guard::ADVOCATE_CLEARED;
+    }
     return m;
 }
 
@@ -219,6 +234,7 @@ constexpr GuardName kGuardNames[] = {
     {guard::REMEDIATION_VERIFIED, "REMEDIATION_VERIFIED"},
     {guard::COURT_CERTIFIED, "COURT_CERTIFIED"},
     {guard::LIFE_SUPPORT_MARGIN, "LIFE_SUPPORT_MARGIN"},
+    {guard::ADVOCATE_CLEARED, "ADVOCATE_CLEARED"},
 };
 
 }  // namespace

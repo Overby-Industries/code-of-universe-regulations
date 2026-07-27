@@ -266,19 +266,58 @@ and rarely examined, and PDDC §12.6 admits no exception for it.
 | §7.11 | Corresponds to `FS_PERMANENT_EMERGENCY`, declared by `CUR-PDDC.12.6` | Implemented |
 | §7.12(a) | Corresponds to `LogRecord` with `actor`, `actor_id`, and post-transition state columns | Implemented |
 | §7.3 | No corresponding regulation. `DOMAIN_ANIMAL` carries no rules in the baseline set | Not modelled |
-| §7.6, §7.7 | Standing and advocate appointment are procedural and out of scope for the FSM | Not modelled |
-| §7.7(c) | Conflict-of-interest disqualification is observable at the event level and is tractable; see below | Gap, tractable |
+| §7.7(a) | Corresponds to `AdvocateRegistry::appoint()` and to regulation `CUR-A.7.7` on `EV_REPRESENTED_DETERMINATION` | Implemented |
+| §7.7(b) | Corresponds to `AdvocateDeclaration::expertise_demonstrated`, which defaults false | Implemented |
+| §7.7(c), §7.7(d) | Corresponds to `appoint()` returning a refusal rather than a record; §7.7(c)(3) is checked against the register rather than declared | Implemented |
+| §7.7(d) | Corresponds to `void_appointment()`, which marks and keeps the record | Implemented |
+| §7.7(g) | Corresponds to `EV_ADVOCATE_ACCESS_DENIED` and regulation `CUR-X.ADV` at Class II | Implemented |
+| §7.7(h) | Corresponds to `EV_ADVOCATE_APPOINTED` and to `to_string(AdvocateResult)` naming the failed subsection | Implemented |
+| §7.6 | Standing is procedural and out of scope for the FSM | Not modelled |
+| §7.7(e), §7.7(f) | The advocate's duty is substantive and has no structural expression | Not modelled |
 | CUR-A.1 | Definitions and Scope for the Animal domain, including the tier model in full | To be drafted |
 | CUR-A.2 through CUR-A.6 | RFAL Animal Bill Articles 1 through 6 | To be drafted |
 | CUR-A.8, CUR-A.9 | Developmental Fulfillment and Natural Death, if given their own Parts | To be drafted |
 
-Note on `DOMAIN_ANIMAL` and §7.7(c). The baseline regulation set carries no
+Note on `DOMAIN_ANIMAL` and §7.7. The baseline regulation set carries no other
 animal-domain rules, and most of this Part is not FSM-shaped: cognitive harm is
 assessed from conditions over time, which the library has no representation of.
-§7.7(c) is the exception. Whether an advocate is dependent on a party to the
-proceeding is a property of the appointment event, not of an interior state, so a
-guard requiring a declared and cleared advocate on any determination affecting an
-animal is implementable in the same way `guard::LICENSE_SUBJECT_ONLY` is. It
-would need an advocate relation on the entity registry and an appointment event
-type. That is the clearest extension this Part suggests, and it is recorded
-rather than acted on because the registry is part of the published interface.
+§7.7 was the exception, and it is now implemented. Whether an advocate is
+dependent on a party to the proceeding is a property of the appointment, not of
+an interior state, so it can be checked where the appointment is made.
+
+The shape it took is worth recording, because §7.7(d) determined it. Since the
+disqualifications in §7.7(c) void an appointment rather than weigh against it,
+`AdvocateRegistry::appoint()` refuses. It returns no warning, no score, and no
+appointment flagged for review — a void appointment is one that never existed,
+and declining to create the record is the closest a library can come to that.
+Three of the four disqualifications are declarations the library cannot verify
+and does not pretend to; recording them is what makes them falsifiable, so that a
+funding relationship surfacing later becomes grounds for `void_appointment()`
+rather than merely an embarrassment. The fourth, §7.7(c)(3), is checked against
+the register, because whether an advocate already acts for a party to the same
+proceeding is something the register knows.
+
+A voided appointment is marked and kept rather than deleted. §7.7(d) makes
+determinations reached with a disqualified advocate voidable under §7.6(e), and
+finding those determinations afterwards requires the appointment still be on the
+record — the same reasoning CREF §15 gives for `VS_OVERTURNED` existing instead
+of a violation record simply being removed.
+
+`guard::ADVOCATE_CLEARED` requires the advocate to be named as well as cleared.
+That is not ceremony. An advocate who is nobody in particular cannot be checked
+against §7.7(c) afterwards, cannot be published under §7.7(h), and cannot be held
+to the duty §7.7(e) places on them personally — so an unnamed advocate leaves the
+guard unsatisfied, on the same reading that makes an undeclared life-support
+floor unsatisfiable under CUR-E.2 §2.2(c).
+
+CUR-E §1.6 is implemented by the same registry rather than a parallel one,
+because §1.6(d) states expressly that it is the same rule for the same reason.
+Two registries would let it drift apart in one domain and not the other. The one
+provision that differs is §1.6(b)'s consultation of a stewarding people, which
+applies to `ADOM_ENVIRONMENTAL` alone.
+
+What remains unmodelled is §7.7(e) and §7.7(f) — the content of the advocate's
+duty, and its independence from the preference of the party holding the animal.
+Those are substantive rather than structural, and the library does not represent
+what an advocate concluded, only that an eligible one was appointed and had
+access.
