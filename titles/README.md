@@ -135,6 +135,8 @@ Current status:
 | CUR-N.5 | CUR-N.2 §2.8(d), §2.9(a)(1), CUR-N.4 §4.9(e) | Drafted |
 | CUR-A.7 | CUR-N.2 §2.7, CUR-X §3.7(b)(1), CUR-H.2 §2.10, CUR-H.4 §4.12, CUR-N.4 §4.13, CUR-N.5 §5.11, CUR-D.6 §6.10, RFAL Plant Bill §5 | Drafted |
 | CUR-E.1 | CUR-X §3.7(b)(3), CUR-E.7 Implementation Notes | Drafted |
+| CUR-X.4 | Anticipated — enterprise accountability and ownership | Drafted |
+| CUR-E.2 | Anticipated — habitat, Earth, extraterrestrial environments | Drafted |
 
 No dangling references remain. Every provision cited by a published title, an
 operational manual, or shipping code now resolves to drafted text. Subsequent
