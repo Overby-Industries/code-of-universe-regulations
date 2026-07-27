@@ -3,21 +3,25 @@
 *Code of Universe Regulations - Ecosystem and Environment*
 
 - **Document ID:** CUR-E.1
-- **Version:** 1.0.0-Draft
+- **Version:** 1.1.0-Draft
 - **Date:** 2026-07-27
 - **Status:** Draft
 - **Depends On:** CUR-FOUNDATION-001, CUR-FOUNDATION-002, CUR-FOUNDATION-005, CUR-FOUNDATION-010, CUR-FOUNDATION-011 (CEIF), CUR-FOUNDATION-012 (CREF), CUR-FOUNDATION-013, PDDC TITLE 4, PDDC TITLE 5, CUR-A.7, CUR-X.3
-- **Implements:** RFAL Plant Life Bill of Rights v1.6.0 (ecological standing model, Articles 4 and 7); RFAL Animal Kingdom Bill Article 2 and Article 6. No RFAL Ecosystem Bill of Rights exists — see §1.11
+- **Implements:** RFAL Ecosystem Bill of Rights v1.7.0; RFAL Plant Life Bill of Rights v1.7.0 (ecological standing model, Articles 4 and 7); RFAL Animal Kingdom Bill Article 2 and Article 6
 - **Referenced by:** CUR-X §3.7(b)(3), CUR-E.7 Implementation Notes
 
-Foundation note. Every other CUR domain implements an RFAL bill of rights. This
-one does not, because none has been written. The RFAL Inter-Bill Relationship
-Framework §5.3 lists an Ecosystem Bill of Rights as outstanding, and the Plant
-Life Bill §5 states expressly that it covers vegetation and its supporting
-systems but not ecosystems as unified entities. This Part is therefore drafted
-from the framework's general principles rather than from a domain instrument,
-and §1.11 records what remains owed upstream so the gap is visible rather than
-inferred from silence.
+Foundation note. This Part was drafted before its upstream instrument existed.
+Every other CUR domain implements an RFAL bill of rights; this one had none,
+because the RFAL Inter-Bill Relationship Framework §5.3 had listed an Ecosystem
+Bill of Rights as outstanding since the framework began. Rather than wait or
+pretend otherwise, the Part was drafted from the framework's general principles
+and §1.11 recorded exactly what an Ecosystem Bill would need to supply, so the
+gap was visible rather than inferred from silence.
+
+The RFAL Ecosystem Bill of Rights was adopted at RFAL v1.7.0 and supplies all
+five items §1.11(c) named. §1.11 now records the conformance review that
+§1.11(d) required, including the two places where the bill went further than the
+specification and this Part has been amended to follow.
 
 ## PART 1 - DEFINITIONS, SCOPE, AND REPRESENTATION
 
@@ -50,6 +54,10 @@ inferred from silence.
 (b) Harm is assessed by reference to the system's function and continuity, not by reference to whether any individual being has yet experienced a consequence. A consequence that has not yet arrived is not thereby absent.
 
 (c) Cumulative and diffuse harm is harm. A contribution to degradation is not excused because it is individually small, because other contributors exist, or because the harm cannot be apportioned precisely among them.
+
+(d) Cumulative harm is assessed against the system, not against the condition in which the assessing party found it. A system is rarely ended by one act; it is ended by a sequence of acts each assessed as minor against whatever the previous act left, until there is nothing left to assess. An assessment taking the degraded present as its baseline has assessed the wrong thing. RFAL Ecosystem Bill Article 3(3) states the same rule.
+
+(e) An intact inventory is not evidence of an intact system. Function may be ended without any component being destroyed: by severing connectivity, by altering a flow or disturbance regime the system evolved under, by fragmenting a system below the scale its populations require, or by shifting the timing on which reproduction and productivity depend. A survey counting organisms without measuring function has not assessed integrity, and RFAL Ecosystem Bill §1.2 and Article 2 govern what must be measured instead.
 
 ### §1.3 - Grounds of Protection
 
@@ -137,7 +145,9 @@ inferred from silence.
 
    (3) Justify a reduction in any being's constitutional standing or capacity to participate in governance; or
 
-   (4) Justify the removal, displacement, or exclusion of a people from land with which they hold a stewardship relationship.
+   (4) Justify the removal, displacement, or exclusion of a people from land with which they hold a stewardship relationship; or
+
+   (5) Justify a measure directed at a population, a category of beings, or a people, rather than at an activity or an authorisation.
 
 (c) Subsection (b) is not a qualification on environmental protection. It is the condition on which environmental protection operates within a rights framework. Rights invariants govern under CUR-X §3.3(a)(3), and an environmental argument reaching a result forbidden by subsection (b) is void ab initio rather than weighed and rejected.
 
@@ -146,6 +156,10 @@ inferred from silence.
 (e) Where an environmental interest and a lifeform's Vital Continuity genuinely conflict, continuity governs and the environmental question is resolved afterwards under CUR-X §3.5. The Commonwealth assumes continuity in the interim.
 
 (f) Nothing in this section prevents an environmental advocate from seeking measures against an authorisation, an operation, or an institution. The limits in subsection (b) concern beings and their rights, not activities and their permissions.
+
+(g) Subsection (b)(5) is stated expressly because the step from "this system is in danger" to "these beings are the danger" has been taken before, and the beings identified have reliably been those least able to object rather than those doing the most damage. RFAL Ecosystem Bill Article 9(5) states the same limit, and CUR-E.2 §2.8(d) applies it to habitat and planetary environments.
+
+(h) The consent required by §1.6(b) and the protection in subsection (b)(4) reach protective, restorative, and designating measures, not extractive ones alone. Designation, exclusion, and restoration have each been imposed on stewarding peoples in conservation's name, and a measure is not exempt from those provisions because its purpose is protective. RFAL Ecosystem Bill Article 7(5) states this from the upstream side.
 
 ### §1.8 - Environmental Systems and Vital Continuity
 
@@ -186,23 +200,33 @@ inferred from silence.
 
 ### §1.11 - Relationship to Rights for All Life
 
-(a) This domain has no corresponding RFAL bill of rights. The RFAL Inter-Bill Relationship Framework §5.3 lists an Ecosystem Bill of Rights as outstanding, and the RFAL Plant Life Bill §5 states that it covers vegetation and its supporting systems but not ecosystems as unified entities.
+(a) This domain implements the RFAL Ecosystem Bill of Rights, adopted at RFAL v1.7.0. It also draws on the RFAL Plant Life Bill (ecological standing, irreplaceability, soil and water integrity, Indigenous stewardship), the RFAL Animal Kingdom Bill (habitat and ecological integrity, species-level rights), and the RFAL Human Bill §5.4 (right to a livable environment, obligation to repair). Where the Plant Life Bill and the Ecosystem Bill both reach a matter, the more protective provision governs, per RFAL Plant Life Bill §5.
 
-(b) Until such a bill exists, this Part draws on the RFAL Plant Life Bill (ecological standing, irreplaceability, soil and water integrity, Indigenous stewardship), the RFAL Animal Kingdom Bill (habitat and ecological integrity, species-level rights), the RFAL Human Bill §5.4 (right to a livable environment, obligation to repair), and the framework's shared foundations.
+(b) This Part was drafted before that bill existed. Subsection (c) records the five items this section previously identified as the substance an Ecosystem Bill would be expected to supply, and where the adopted bill supplies each. All five are supplied.
 
-(c) The following are stated by this Part and have no RFAL counterpart. They are the substance an Ecosystem Bill of Rights would be expected to supply, and are recorded here so the drafting target is explicit:
+   (1) Standing for an ecosystem as a unified entity, distinct from the standing of the organisms within it (§1.5) — RFAL Ecosystem Bill §1.1 and Article 8(1);
 
-   (1) Standing for an ecosystem as a unified entity, distinct from the standing of the organisms within it (§1.5);
+   (2) The grounds of protection, and the rule that they are independent of any sentience claim (§1.3) — RFAL Ecosystem Bill §1.3 and Article 10;
 
-   (2) The three grounds of protection, and the rule that they are independent of any sentience claim (§1.3);
+   (3) Representation of environmental interests, with conflict-of-interest disqualification (§1.6) — RFAL Ecosystem Bill Article 8, whose subsection (5) makes the disqualification void an appointment rather than weigh against it, matching §1.6(d);
 
-   (3) Representation of environmental interests, with conflict-of-interest disqualification (§1.6);
+   (4) The limits on what an environmental interest may be advanced to accomplish (§1.7) — RFAL Ecosystem Bill Article 9; and
 
-   (4) The limits on what an environmental interest may be advanced to accomplish (§1.7); and
+   (5) The treatment of environmental systems as the substrate of Vital Continuity Services (§1.8) — RFAL Ecosystem Bill Article 5.
 
-   (5) The treatment of environmental systems as the substrate of Vital Continuity Services (§1.8).
+(c) The conformance review required by the former subsection (d) has been carried out. The adopted bill went beyond the specification in four places, and this Part has been amended to follow in three of them:
 
-(d) Where an RFAL Ecosystem Bill of Rights is adopted, this Part shall be reviewed against it and conformed, and any divergence disclosed as an amendment rather than resolved silently. The corresponding obligation runs upstream: the RFAL Inter-Bill Relationship Framework §5.3 requires a new bill to be integrated into that framework before adoption.
+   (1) Functional integrity as a concept distinct from the condition of components — RFAL Ecosystem Bill §1.2 and Article 2. §1.2(a)(3) and §1.2(b) already assessed harm by function and continuity, but nothing in this Part said that function may be ended without any component being destroyed. §1.2(e) now says it, and names the four mechanisms Article 2 protects against.
+
+   (2) The baseline against which cumulative harm is measured — RFAL Ecosystem Bill Article 3(3). §1.2(c) already provided that a small contribution is not excused; it did not say what the contribution is measured against. §1.2(d) now provides that it is measured against the system rather than against the condition in which the assessing party found it.
+
+   (3) The limit on measures directed at populations rather than activities — RFAL Ecosystem Bill Article 9(5). CUR-E.2 §2.8(d) carried this for habitat and planetary environments; §1.7 did not carry it generally. §1.7(b)(5) and §1.7(g) now do.
+
+   (4) The extension of consent to protective and restorative measures — RFAL Ecosystem Bill Article 7(5). §1.7(d) already identified conservation as a vehicle for displacement, so this Part had the reasoning without the operative rule. §1.7(h) now states it.
+
+(d) One divergence is recorded rather than resolved. The RFAL Ecosystem Bill applies the ES-0 to ES-3 scale of the Plant Life Bill to systems rather than introducing a scale of its own, on the reasoning stated in its §2.1 and generalised in the RFAL Inter-Bill Relationship Framework §2.2. §1.4 of this Part classifies ecological standing on the same scale and is consistent with that choice, but this Part reaches classification through CUR-E's own definitions rather than by incorporating the RFAL tables directly, so an amendment to those tables does not propagate automatically. §1.11(e) governs.
+
+(e) Where the RFAL Ecosystem Bill is amended, this Part shall be reviewed against it and conformed, and any divergence disclosed as an amendment rather than resolved silently. The corresponding obligation runs upstream: the RFAL Inter-Bill Relationship Framework §5.2 requires an amendment to any bill to trigger a review of the others before it takes effect.
 
 ### §1.12 - Severability
 
@@ -267,7 +291,7 @@ about something true.
 | §1.6(e) | The advocate's duty is substantive and has no structural expression | Not modelled |
 | CUR-E.2 | Extraction and ISRU environmental standards | To be drafted |
 | CUR-E.3 through CUR-E.6 | Reserved | To be drafted |
-| RFAL Ecosystem Bill of Rights | The upstream instrument this domain implements | Outstanding upstream |
+| §1.2(d)-(e), §1.7(b)(5), §1.7(g)-(h) | Conformance amendments from the RFAL Ecosystem Bill; substantive rather than structural, no library representation | Not modelled |
 
 Note on §1.6 and CUR-A §7.7. Both Parts require an advocate to be free of
 dependency on any party to the proceeding, and both are now implemented by one

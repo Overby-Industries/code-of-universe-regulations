@@ -2,7 +2,7 @@
 ### Constitutional API & Protocol Specification (CAPS)
 
 - **Document ID:** CUR-FOUNDATION-006
-- **Version:** 1.1.0-Official-Evergreen
+- **Version:** 1.2.0-Official-Evergreen
 - **Status:** Draft-Official-Evergreen
 - **Authority Level:** Foundation Document
 - **Depends On:** CUR-FOUNDATION-001, CUR-FOUNDATION-002, CUR-FOUNDATION-003, CUR-FOUNDATION-004, CUR-FOUNDATION-005

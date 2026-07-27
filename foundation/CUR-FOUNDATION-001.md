@@ -2,7 +2,7 @@
 
 - **Code of Universe Regulations (CUR)**  
 - **Foundation Document 001: Anti-Capture and Resilience**
-- **Version:** 1.1.0-Official-Evergreen
+- **Version:** 1.2.0-Official-Evergreen
 - **Date:** May 15, 2026  
 - **Project:** Overby Industries – Rights for All Life / Code of Universe Regulations  
 - **Status:** Draft - Official-Evergreen

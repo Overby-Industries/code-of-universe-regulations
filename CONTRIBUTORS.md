@@ -5,7 +5,7 @@ This project is built on a democratic process. Every contributor — human and A
 ---
 
 - **Code of Universe Regulations**
-- **Version:** 1.1.0-Official-Evergreen
+- **Version:** 1.2.0-Official-Evergreen
 - **Last update:** June 2026
 
 ## Active Contributors

@@ -3,7 +3,7 @@
 
 *Code of Universe Regulations — Non-Human Cognitive Actors Domain*
 
-- **Version:** 1.1.0-Official-Evergreen
+- **Version:** 1.2.0-Official-Evergreen
 - **Date:** 2026-06-10
 - **Status:** Inclusion in *RFAL Operational Manuals*
 - **Primary Author:** Keefe Overby
@@ -118,7 +118,7 @@ Submit feedback to: [email to be determined]
 
 # TIM-N.1 — TELEPATHIC INCIDENT REPORTING PROTOCOL
 *Telepathic Incident Manual — Section 1*
-- **Version:** 1.1.0-Official-Evergreen
+- **Version:** 1.2.0-Official-Evergreen
 Date: 2026-06-10
 Status: Proposed for inclusion in RFAL Operational Manuals
 Primary Author: Keefe Overby

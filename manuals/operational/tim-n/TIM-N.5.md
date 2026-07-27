@@ -3,7 +3,7 @@
 
 ## Code of Universe Regulations — Non-Human Cognitive Actors Domain
 
-- **Version:** 1.1.0-Official-Evergreen
+- **Version:** 1.2.0-Official-Evergreen
 - **Date:** 2026-06-11
 - **Status:** Proposed for inclusion in RFAL Operational Manuals
 - **Primary Author:** Keefe Overby

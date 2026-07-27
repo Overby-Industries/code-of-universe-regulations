@@ -143,10 +143,19 @@ operational manual, or shipping code now resolves to drafted text. Subsequent
 drafting is against anticipated need rather than against demand, and the priority
 rule above no longer selects between candidates on its own.
 
-One reference now runs upstream rather than within the corpus: CUR-E has no RFAL
-bill of rights behind it, and `CUR-E.1 §1.11` records what an RFAL Ecosystem Bill
-of Rights would be expected to supply. That is a drafting target for the Rights
-for All Life repository, not for this one.
+The one reference that ran upstream is closed. CUR-E was drafted with no RFAL
+bill of rights behind it, and `CUR-E.1 §1.11` recorded what an RFAL Ecosystem
+Bill of Rights would be expected to supply. That bill was adopted at RFAL v1.7.0
+and supplies all five items; §1.11 now records the conformance review instead,
+including the four places the bill went further than the specification. Every CUR
+domain again implements an RFAL instrument.
+
+The episode is worth keeping as a pattern rather than an anecdote. Drafting a
+Part against a specification for an instrument that does not yet exist is
+preferable to waiting for it, provided the specification is written down where
+the gap is visible. It made the upstream drafting concrete, and it made the
+conformance review a comparison against a stated target rather than an
+open-ended re-reading.
 
 A provision cited as `CUR-H.2.5` resolves to §2.5 of CUR-H PART 2, not to a
 separate Part. Section numbers within a Part are aligned with the RFAL article

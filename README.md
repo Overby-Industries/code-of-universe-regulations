@@ -1,7 +1,7 @@
 # Code of Universe Regulations (CUR)
 
 [![License: CC0-1.0](https://img.shields.io/badge/License-CC0_1.0-lightgrey.svg)](https://creativecommons.org/publicdomain/zero/1.0/)
-[![Version](https://img.shields.io/badge/Version-1.0.0--Official--Evergreen-blue)](./VERSION.md)
+[![Version](https://img.shields.io/badge/Version-1.2.0--Official--Evergreen-blue)](./VERSION.md)
 [![GitHub Discussions](https://img.shields.io/badge/GitHub-Discussions-brightgreen)](https://github.com/Overby-Industries/code-of-universe-regulations/discussions)
 [![Contributions Welcome](https://img.shields.io/badge/Contributions-Welcome-orange)](./CONTRIBUTING.md)
 

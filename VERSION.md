@@ -1,7 +1,6 @@
 # VERSION.md
 
-**Current corpus version: 1.1.0-Official-Evergreen**
-
+**Current corpus version: 1.2.0-Official-Evergreen**
 ## Versioning Convention for the CUR Project
 
 - **Major.Minor.Patch-Status**
@@ -45,10 +44,28 @@ applied manually. Use the script:
 ./scripts/bump-version.ps1 -Version 1.2.0
 ```
 
-It rewrites `-Official-Evergreen` version headers, the README badge, and any
-document index version column, then reports every document it did not touch so
-that nothing is silently left behind. It does not touch `-Draft` documents,
-`build/`, or `CHANGELOG.md`. The changelog is written by hand.
+It rewrites `-Official-Evergreen` version headers, the README badge, the corpus
+version line at the top of this file, and any document index version column,
+then reports every document it did not touch so that nothing is silently left
+behind. It does not touch `-Draft` documents, `build/`, or `CHANGELOG.md`. The
+changelog is written by hand.
+
+One thing the script cannot reach is `CUR_CORPUS_VERSION` in
+`include/cur/cur.h`, which records the corpus version the library's tables were
+transcribed from. It is deliberately not swept: it should move when the tables
+are re-checked against the corpus, not merely when the corpus is released, and a
+sweep would quietly assert a verification that had not happened.
+
+Two bugs in this script were found the first time it was run against both
+repositories at once, and both were the failure mode it exists to prevent. Its
+badge pattern was case-sensitive while the two READMEs spell the label
+differently (`version-` in RFAL, `Version-` in CUR), so it updated one and
+silently skipped the other; and it did not touch the corpus version line above,
+leaving the document that defines the versioning convention as the one document
+out of date. Both are fixed. The lesson is the one that motivated the script:
+a rule applied by a tool that quietly does nothing is no better enforced than a
+rule applied by hand, so the report of what was *not* touched matters as much as
+the list of what was.
 
 The same script is maintained in the Rights for All Life repository at
 `process/bump-version.ps1`. Either copy accepts `-Root` and will operate on
@@ -66,6 +83,7 @@ RFAL version a given CUR version was built against.
 |---|---|---|---|
 | 1.0.1 | 1.5.1 | 2026-05 | Foundation documents 001-013; PDDC |
 | 1.1.0 | 1.6.0 | 2026-07-27 | Titles CUR-S.4, CUR-E.7, CUR-N.2, CUR-X.3, CUR-H.2, CUR-H.4, CUR-D.6; `libcur`; RFAL adds Plant Life Bill and five-bill integration |
+| 1.2.0 | 1.7.0 | 2026-07-27 | Titles CUR-N.4, CUR-N.5, CUR-A.7, CUR-E.1, CUR-E.2, CUR-X.4; `libcur` gains violation adjudication, life-support margin, capture subject, and the advocate registry; RFAL adds the Ecosystem Bill and six-bill integration, closing the last upstream gap |
 
 When citing an RFAL provision from a CUR title, cite the RFAL version the
 provision was read at — for example `CUR-S §4.7(f)` cites "RFAL v1.5.2" because

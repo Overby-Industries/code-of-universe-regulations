@@ -2,7 +2,7 @@
 ### Constitutional Rights Enforcement Framework (CREF)
 
 - **Document ID:** CUR-FOUNDATION-012
-- **Version:** 1.1.0-Official-Evergreen
+- **Version:** 1.2.0-Official-Evergreen
 - **Status:** Draft-Official-Evergreen
 - **Authority Level:** Foundation Document
 - **Depends On:** CUR-FOUNDATION-001 through CUR-FOUNDATION-011

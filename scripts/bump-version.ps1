@@ -114,15 +114,36 @@ Get-ChildItem -Path $Root -Filter *.md -Recurse -File |
 # --- 2. README badge -------------------------------------------------------
 # shields.io escapes a literal hyphen as "--", so 1.5.2-Official-Evergreen is
 # written version-1.5.2--Official--Evergreen.
+#
+# Matched case-insensitively, and the label's own case is preserved through the
+# capture group. The two repositories spell it differently — RFAL's README uses
+# "version-", CUR's uses "Version-" — and a case-sensitive pattern updated one
+# and silently skipped the other. That is exactly the failure this script exists
+# to prevent, so it is matched loosely and rewritten faithfully.
 $readme = Join-Path $Root 'README.md'
 if (Test-Path $readme) {
     $text = [System.IO.File]::ReadAllText($readme)
-    $badge = 'version-' + $Version + '--' + ($status -replace '-', '--')
-    $new = [regex]::Replace($text, 'version-\d+\.\d+\.\d+--Official--Evergreen', $badge)
+    $badge = '${1}' + $Version + '--' + ($status -replace '-', '--')
+    $new = [regex]::Replace($text,
+        '(?i)(version-)\d+\.\d+\.\d+--Official--Evergreen', $badge)
     [void](Write-IfChanged -Path $readme -Original $text -New $new -What "README badge -> $Version")
 }
 
-# --- 3. DOCUMENT_INDEX version column -------------------------------------
+# --- 3. VERSION.md corpus line ---------------------------------------------
+# CUR's VERSION.md opens by stating the current corpus version in prose. It is
+# the authoritative statement of that number, so leaving it behind would mean
+# the file documenting the versioning convention was the one document out of
+# date. Harmless where the line does not exist.
+$versionFile = Join-Path $Root 'VERSION.md'
+if (Test-Path $versionFile) {
+    $text = [System.IO.File]::ReadAllText($versionFile)
+    $new = [regex]::Replace($text,
+        '(?im)^(\*\*Current corpus version:\s*)\d+\.\d+\.\d+-\S+?(\*\*)\s*$',
+        ('${1}' + $target + '${2}'))
+    [void](Write-IfChanged -Path $versionFile -Original $text -New $new -What "corpus version line -> $target")
+}
+
+# --- 4. DOCUMENT_INDEX version column -------------------------------------
 # Table cells holding a bare version, e.g. "| 1.5.1 |".
 Get-ChildItem -Path $Root -Filter 'DOCUMENT_INDEX.md' -Recurse -File | ForEach-Object {
     $path = $_.FullName

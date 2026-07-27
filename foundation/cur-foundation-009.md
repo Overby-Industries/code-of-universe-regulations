@@ -3,7 +3,7 @@
 ### Constitutional Identity & Trust Framework (CITF)
 
 - **Document ID:** CUR-FOUNDATION-009
-- **Version:** 1.1.0-Official-Evergreen
+- **Version:** 1.2.0-Official-Evergreen
 - **Status:** Draft-Official-Evergreen
 - **Authority Level:** Foundation Document
 - **Depends On:** CUR-FOUNDATION-001 through CUR-FOUNDATION-008

@@ -53,7 +53,7 @@
 namespace cur {
 
 // Version of the CUR corpus these tables were transcribed from.
-constexpr const char* CUR_CORPUS_VERSION = "1.0.1-Official-Evergreen";
+constexpr const char* CUR_CORPUS_VERSION = "1.2.0-Official-Evergreen";
 
 }  // namespace cur
 

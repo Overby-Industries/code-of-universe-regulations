@@ -3,7 +3,7 @@
 ### Capture Risk Index (CRI) Specification
 
 - **Document ID:** CUR-FOUNDATION-003
-- **Version:** 1.1.0-Official-Evergreen
+- **Version:** 1.2.0-Official-Evergreen
 - **Authority Level:** Foundation Document
 - **Depends On:** CUR-FOUNDATION-001, CUR-FOUNDATION-002, RIGHTS-FOR-ALL-LIFE.md
 - **Status:** Draft Official-Evergreen
