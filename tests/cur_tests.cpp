@@ -869,6 +869,125 @@ static void test_audit_trail_has_actor() {
     CHECK(json.find("\"fsmState\"") != std::string::npos);
 }
 
+// CUR-N.5 §5.8(b): a being named in a report is not thereby accountable, and
+// no record may characterise them as accountable before a determination.
+// CUR-N.4 §4.3(a): no measure is available except following a determination.
+static void test_allegation_is_not_a_finding() {
+    TEST("an allegation is not a finding (CUR-N.5 §5.8(b), CUR-N.4 §4.3(a))");
+
+    cur::ViolationLedger ledger;
+
+    cur::ViolationRecord v;
+    v.entity_id = "accused-1";
+    v.severity = cur::FC_CLASS_II;
+    v.status = cur::VS_OPEN;
+    const std::string vid = ledger.open_violation(v).violation_id;
+
+    // An open record is an allegation and carries no measure.
+    CHECK(!cur::is_adjudicated(cur::VS_OPEN));
+    CHECK(!cur::is_adjudicated(cur::VS_UNDER_REVIEW));
+    CHECK(!cur::supports_measure(cur::VS_OPEN));
+    CHECK(!cur::supports_measure(cur::VS_UNDER_REVIEW));
+
+    cur::SanctionRecord s;
+    s.entity_id = "accused-1";
+    s.violation_id = vid;
+    s.status = cur::SANC_PROPOSED;
+    const std::string sid = ledger.impose_sanction(s).sanction_id;
+
+    // Cannot activate against an allegation.
+    CHECK(!ledger.activate_sanction(sid));
+    CHECK_EQ(ledger.find_sanction(sid)->status, cur::SANC_PROPOSED);
+
+    // Review is still not a determination.
+    CHECK(ledger.adjudicate(vid, cur::VS_UNDER_REVIEW));
+    CHECK(!ledger.activate_sanction(sid));
+
+    // A determination makes the measure available.
+    CHECK(ledger.adjudicate(vid, cur::VS_CONFIRMED));
+    CHECK(cur::supports_measure(cur::VS_CONFIRMED));
+    CHECK(ledger.activate_sanction(sid));
+    CHECK_EQ(ledger.find_sanction(sid)->status, cur::SANC_ACTIVE);
+
+    // A measure answering nothing can never be activated.
+    cur::SanctionRecord orphan;
+    orphan.entity_id = "accused-1";
+    orphan.status = cur::SANC_PROPOSED;
+    const std::string oid = ledger.impose_sanction(orphan).sanction_id;
+    CHECK(!ledger.activate_sanction(oid));
+}
+
+// CUR-N.4 §4.12(d), CUR-N.5 §5.10(e): a determination overturned on appeal is
+// corrected in the record to show that outcome, not erased.
+static void test_overturned_is_recorded_not_erased() {
+    TEST("an overturned determination is corrected, not erased (CREF §15)");
+
+    cur::ViolationLedger ledger;
+    cur::ViolationRecord v;
+    v.entity_id = "cleared-1";
+    v.status = cur::VS_OPEN;
+    const std::string vid = ledger.open_violation(v).violation_id;
+
+    CHECK(ledger.adjudicate(vid, cur::VS_CONFIRMED));
+    CHECK(ledger.adjudicate(vid, cur::VS_OVERTURNED));
+    CHECK_EQ(ledger.find_violation(vid)->status, cur::VS_OVERTURNED);
+
+    // The record survives with its history legible: it is not dismissed, which
+    // would lose that it was ever confirmed, and not deleted.
+    CHECK_EQ(ledger.violations().size(), static_cast<size_t>(1));
+    CHECK(std::string(cur::to_string(cur::VS_OVERTURNED)) == "OVERTURNED");
+    CHECK(cur::is_adjudicated(cur::VS_OVERTURNED));
+    CHECK(!cur::supports_measure(cur::VS_OVERTURNED));
+
+    // Overturned is terminal. Nothing re-confirms it, and nothing returns a
+    // reviewed record to the undetermined state.
+    CHECK(!ledger.adjudicate(vid, cur::VS_CONFIRMED));
+    CHECK(!cur::adjudication_permitted(cur::VS_OVERTURNED, cur::VS_CONFIRMED));
+    CHECK(!cur::adjudication_permitted(cur::VS_CONFIRMED, cur::VS_OPEN));
+    CHECK(!cur::adjudication_permitted(cur::VS_DISMISSED, cur::VS_OPEN));
+
+    // A dismissed record reopens to review on new evidence, CUR-N.4 §4.10(d).
+    CHECK(cur::adjudication_permitted(cur::VS_DISMISSED, cur::VS_UNDER_REVIEW));
+
+    // Compliance does not extinguish the right of appeal.
+    CHECK(cur::adjudication_permitted(cur::VS_REMEDIED, cur::VS_OVERTURNED));
+}
+
+// The state machine's own sanction path must observe the same rule.
+static void test_state_machine_sanction_needs_determination() {
+    TEST("the FSM will not activate a measure on an undetermined violation");
+
+    cur::CURStateMachine m;
+    m.log().set_clock(fixed_clock);
+    auto lic = m.entities().register_entity("permit-77", cur::EC_ECONOMIC,
+                                            cur::SUBJ_OPERATIONAL_LICENSE);
+
+    cur::Event bad;
+    bad.type = cur::EV_VIOLATION_DETECTED;
+    bad.tick = 1;
+    bad.target = lic;
+    m.submit(bad);
+
+    // The violation minted by that transition is an allegation, not a finding.
+    auto vs = m.ledger().violations_for("permit-77");
+    CHECK(vs.size() >= static_cast<size_t>(1));
+    CHECK(!cur::supports_measure(vs.back().status));
+
+    cur::Event sanc;
+    sanc.type = cur::EV_SANCTION_APPLIED;
+    sanc.tick = 2;
+    sanc.target = lic;
+    sanc.context.due_process_complete = true;
+    m.submit(sanc);
+
+    // A sanction was recorded — the attempt belongs in the audit trail — but it
+    // is proposed, not active, because nothing has been determined yet.
+    auto ss = m.ledger().sanctions_for("permit-77");
+    CHECK(ss.size() >= static_cast<size_t>(1));
+    CHECK_EQ(ss.back().status, cur::SANC_PROPOSED);
+    CHECK(ss.back().violation_id.empty());
+}
+
 int main() {
     std::printf("libcur %s — CUR corpus %s\n\n", CUR_LIB_VERSION_STRING,
                 cur::CUR_CORPUS_VERSION);
@@ -892,6 +1011,9 @@ int main() {
     test_rfal_precautionary_default();
     test_no_emergency_vocabulary();
     test_audit_trail_has_actor();
+    test_allegation_is_not_a_finding();
+    test_overturned_is_recorded_not_erased();
+    test_state_machine_sanction_needs_determination();
 
     std::printf("\n%d checks, %d failures\n", g_checks, g_failures);
     return g_failures == 0 ? 0 : 1;

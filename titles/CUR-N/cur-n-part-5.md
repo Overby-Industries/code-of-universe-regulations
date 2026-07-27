@@ -3,7 +3,7 @@
 *Code of Universe Regulations - Non-Human Cognitive Actors*
 
 - **Document ID:** CUR-N.5
-- **Version:** 1.0.0-Draft
+- **Version:** 1.1.0-Draft
 - **Date:** 2026-07-27
 - **Status:** Draft
 - **Depends On:** CUR-FOUNDATION-001, CUR-FOUNDATION-002, CUR-FOUNDATION-005, CUR-FOUNDATION-010, CUR-FOUNDATION-012 (CREF), CUR-FOUNDATION-013, PDDC TITLE 4, PDDC TITLE 5, CUR-N.2, CUR-N.4
@@ -54,6 +54,59 @@ manual not yet written. Where this Part and a manual differ, this Part governs.
 (d) A pattern of harm may support a finding of a coalition. It does not by itself identify who belongs to it, and a determination shall not name a being that the evidence does not reach.
 
 (e) This section exists because a Part addressing concealed conspiracy is the most readily abused instrument in the Code. The protections it states are not qualifications on the Part's purpose; they are what makes the Part usable without becoming the harm it addresses.
+
+### §5.2A - Coercive Practice Tiers
+
+(a) This section states where coercive practice becomes a violation, and where inference from a practice to a person becomes guilt by association. It applies to conduct governed by this Part and by CUR-D.6 §6.3.
+
+(b) The tiers grade **practices**, not beings, communities, traditions, or beliefs. They are written CP-0 through CP-3 to keep them distinct from the moral-status tiers of the RFAL Tier Assessment Protocol, the engagement tiers of RFAL Deity Bill §1.2, and the ecological standing tiers of the RFAL Plant Life Bill §2.2.
+
+| Tier | Practice | Status |
+|---|---|---|
+| **CP-0** | Voluntary participation. Teaching, worship, ritual, instruction, and persuasion offered to a willing listener who may decline without consequence | Protected absolutely under CUR-H.2 §2.2 and CUR-D.6 §6.3(e). Not a subject of this Part |
+| **CP-1** | Normative pressure inside a consenting community. Expectation, disapproval, informal exclusion from optional activity, social cost of dissent | Not a violation. Observable in aggregate under §5.2B; no measure attaches to any being |
+| **CP-2** | Coercive practice. Any conduct in CUR-D.6 §6.3(b)(1) through (3) or (b)(5) through (10) directed at an identified being — threat of consequence beyond death, expulsion used as penalty, exploitation of grief, illness, dependency, or childhood | Violation. Accountability attaches to the beings who perform, direct, or enforce it |
+| **CP-3** | Coercion conditioning survival or standing. Conditioning a Vital Continuity Service, shelter, employment, education, healthcare, or legal standing on worship or profession; formation of a child with no available exit at majority | Class IV fault. CUR-D.6 §6.6 and CUR-FOUNDATION-013 apply, and §5.7(e) applies to institutions |
+
+(c) The hard line. A being's tier is determined by that being's own conduct. It is never inferred from the tier of a practice within a community, tradition, institution, or coalition the being belongs to.
+
+(d) Accordingly, and without exception:
+
+   (1) A member, adherent, congregant, employee, or descendant of a community in which CP-2 or CP-3 practices occur is at CP-0 unless that being personally performed, directed, enforced, or knowingly concealed the practice;
+
+   (2) Holding a belief that a CP-2 or CP-3 practice is correct is at CP-0. Belief is protected absolutely under CUR-H.2 §2.2, and this Part reaches conduct only;
+
+   (3) Benefiting from a practice without knowledge of it is at CP-0. Knowing retention of a benefit is facilitation under CUR-N.4 §4.1(b)(4) and requires evidence of the knowledge; and
+
+   (4) A finding at CP-2 or CP-3 against an institution does not place any member at any tier. §5.7(d) and §5.5(e) apply.
+
+(e) The transition from CP-1 to CP-2 is the operative boundary of this Part, and it is crossed by **direction at an identified being combined with a consequence that being cannot decline without loss**. Disapproval is CP-1; disapproval enforced by expulsion from housing is CP-2. Teaching that the unrepentant suffer is CP-0; telling a named person that they will suffer unless they comply is CP-2.
+
+(f) Where a practice sits genuinely between tiers, it is assessed at the lower tier for the purpose of accountability and at the higher tier for the purpose of monitoring under §5.2B. Uncertainty resolves toward protecting the being accused and toward observing the practice, which are not in tension.
+
+(g) Subsection (f) is available because it resolves upward only toward observation and downward toward protection, and confers no authority in either direction. The rule limiting precautionary tie-breakers, stated in the RFAL Inter-Bill Relationship Framework §2.2, is satisfied.
+
+### §5.2B - Duty to Investigate and Routine Monitoring
+
+(a) Every report under this Part shall be investigated. A report is not triaged out on the ground that it is anomalous, that the reporter cannot produce evidence, that the conduct is hard to detect, or that the being named is well regarded.
+
+(b) Investigation is owed to the reporter regardless of outcome, and support under TIM-N.1 and TIM-N.3 is available whether or not a violation is ultimately found.
+
+(c) The duty in subsection (a) is a duty to look. It creates no authority over any being, and no measure follows from the opening of an investigation. §5.8(b) governs throughout.
+
+(d) Routine monitoring. Concealed conduct is not detected by waiting for reports, and a Part that responds only to complaints leaves undetected harm running. The Commonwealth shall therefore monitor for coalition activity on a scheduled basis, independently of any report, using the audit types already established by CUR-FOUNDATION-010 §5:
+
+   (1) **Routine Audit** — scheduled review of institutions and systems at published intervals;
+
+   (2) **Random Audit** — unannounced review selected by constitutional procedure, at intervals that are deliberately irregular so that the schedule cannot be anticipated or worked around; and
+
+   (3) **Triggered Audit** — review on a CRI threshold under CUR-FOUNDATION-003, a citizen complaint, an FSM alert, or a pattern identified under subsection (e).
+
+(e) Monitoring under subsection (d) is directed at systems, institutions, and aggregate patterns. It is not surveillance of beings, and it shall not be used to compile records on individuals who are not the subject of a determination. Aggregate observation of CP-1 practice under §5.2A(b) informs where to audit; it never names a person.
+
+(f) This is a built-in test regime and not an investigation of suspects. It runs whether or not anything is wrong, which is what makes it neither an accusation nor a burden on any particular being, and what makes irregular scheduling under subsection (d)(2) legitimate rather than arbitrary: an audit that cannot be predicted cannot be prepared for, and one that runs continuously singles out nobody.
+
+(g) The results of routine monitoring are published in aggregate to the Public Transparency Registry under CUR-FOUNDATION-010 §9, in a form identifying no being.
 
 ### §5.3 - Prohibition
 
@@ -145,9 +198,11 @@ manual not yet written. Where this Part and a manual differ, this Part governs.
 
 (b) No characterisation of a coalition as widespread, entrenched, infiltrating, or existential creates authority that did not otherwise exist, and none narrows §5.2, §5.5(d), or CUR-N.4 §4.3.
 
-(c) Subsection (b) is stated in specific terms because the assertion that a concealed threat is too pervasive for ordinary process is the standard argument for suspending ordinary process, and it is the argument this Code exists to refuse. A coalition that is genuinely widespread is answered by ordinary process applied more often, not by less process applied faster.
+(c) Subsection (b) is stated in specific terms because the assertion that a concealed threat is too pervasive for ordinary process is the standard argument for suspending ordinary process, and it is the argument this Code exists to refuse.
 
-(d) Where a coalition's activity is in progress, the available instruments are protective actions under CREF §10 and the immediate measures of TIM-N.5, both provisional and both reviewable within seventy-two (72) hours under CUR-N.4 §4.11(d).
+(d) The answer to a concealed and widespread threat is not less process applied faster. It is the scheduled monitoring regime of §5.2B, running continuously and at irregular intervals whether or not anything has been reported, in the manner of a built-in test in a fault-tolerant control system. A system that checks itself on a schedule detects a fault sooner than one that waits to be told, and it does so without granting anyone new authority, because a check that runs on everything singles out no one. Emergency powers are not a faster version of this. They are the absence of it, arriving after the harm.
+
+(e) Where a coalition's activity is in progress, the available instruments are protective actions under CREF §10 and the immediate measures of TIM-N.5, both provisional and both reviewable within seventy-two (72) hours under CUR-N.4 §4.11(d).
 
 ### §5.10 - Records and Audit
 
@@ -176,7 +231,7 @@ manual not yet written. Where this Part and a manual differ, this Part governs.
 
 (a) If any provision of this Part is held unenforceable or invalid, the remaining provisions remain in full force.
 
-(b) §5.2 (standard of proof and the limits on inference), §5.5(d) and §5.5(e) (limits on measures and non-transitivity), and §5.8 (protection of the publicly accused) are fundamental and shall be construed broadly to achieve their protective purpose.
+(b) §5.2 (standard of proof and the limits on inference), §5.2A(c) and §5.2A(d) (the hard line against inferring a being's tier from a practice), §5.5(d) and §5.5(e) (limits on measures and non-transitivity), and §5.8 (protection of the publicly accused) are fundamental and shall be construed broadly to achieve their protective purpose.
 
 (c) If §5.2 or §5.8 is held unenforceable, §5.3 and §5.5 are inoperative until restored. A prohibition on concealed conspiracy, operating without a standard of proof and without protection for the accused, is not a partial version of this Part.
 
@@ -221,20 +276,38 @@ that keeps amnesty from operating at the Target's expense.
 | §5.2 | Standards of proof are adjudicative and out of scope for the FSM | Not modelled |
 | §5.4(b), (c) | Coercion analysis is adjudicative | Not modelled |
 | §5.6 | Amnesty has no representation in the library; a disclosure is an event the FSM does not currently define | Not modelled |
-| §5.8(b) | The distinction between "named in a report" and "determined accountable" is not represented; `ViolationRecord` has no pre-determination state | Gap, see below |
+| §5.8(b) | Corresponds to `is_adjudicated` / `supports_measure` and to `latest_sanctionable_violation`; a measure cannot become active against an allegation | Implemented |
+| §5.10(e) | Corresponds to `VS_OVERTURNED` and the one-way `adjudication_permitted` table | Implemented |
 | CHIM.1 | Amnesty and Disclosure procedure referenced by §5.6 and by CUR-N.2 §2.8(d) | RFAL operational scope, not yet written |
 | CUR-N.1 | Definitions and Scope for the domain | To be drafted |
 | CUR-N.3 | Reserved | To be drafted |
 
-Gap identified in `libcur`. §5.8(b) provides that a being named in a report is
-not thereby accountable, and that no record may characterise them as such before
-a determination. `ViolationRecord` in `include/cur/cur_violation.h` has no state
-distinguishing an allegation from a finding: a record exists or it does not, and
-its existence reads as a finding. Modelling §5.8(b) requires either a status
-field on `ViolationRecord` (alleged, determined, dismissed, overturned) or a
-separate allegation type that a determination converts. The first is smaller and
-preserves the existing identity of a record through its lifecycle, which
-§5.10(e) requires — a determination overturned on appeal is corrected rather than
-erased. This is the most concrete library change the titles have identified so
-far and is recorded here rather than acted on, since it changes a published
-header.
+Gap closed in `libcur`, and a correction. The first draft of this Part recorded
+that `ViolationRecord` had "no state distinguishing an allegation from a
+finding." That overstated the problem: `ViolationStatus` already existed, and
+`VS_OPEN` already meant "detected, not yet adjudicated." The real defects were
+narrower and worse.
+
+First, nothing enforced the distinction. `record_sanction` attached measures via
+`latest_open_violation`, which returns records in `VS_OPEN` and
+`VS_UNDER_REVIEW` as readily as `VS_CONFIRMED`, and set every sanction
+`SANC_ACTIVE` on creation. A measure could therefore become active against an
+allegation that had never been adjudicated — precisely what §5.8(b) and CUR-N.4
+§4.3(a) forbid.
+
+Second, there was no way to record an overturned determination. `AppealStatus`
+had `APPEAL_OVERTURNED` and `SanctionStatus` had `SANC_VACATED`, but the
+violation record itself had nowhere to go: reverting it to `VS_DISMISSED` would
+lose that it was ever confirmed, and leaving it `VS_CONFIRMED` would state
+something false. §5.10(e) requires correction rather than erasure and neither
+option provides it.
+
+Both are now fixed. `VS_OVERTURNED` was added; `is_adjudicated` and
+`supports_measure` make the allegation/finding line explicit and greppable;
+`adjudication_permitted` is a flat one-way table in the style of the transition
+tables, so nothing un-confirms a record or returns a reviewed one to
+undetermined; `latest_sanctionable_violation` returns only records that can
+carry a measure; and `activate_sanction` re-checks before any measure becomes
+active. `record_sanction` now records a measure with no determination behind it
+as `SANC_PROPOSED` rather than dropping it — the attempt belongs in the audit
+trail, and "proposed" is exactly what a measure is before there is a finding.
