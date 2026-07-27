@@ -131,9 +131,9 @@ Current status:
 | CUR-H.4 | CUR-N.2 §2.9, CUR-H.2 §2.9(a)(1) | Drafted |
 | CUR-H.5 | RFAL Human Bill Art. IV §4.1 (unimplemented) | Outstanding |
 | CUR-D.6 | CUR-N.2 §2.7, CUR-X §3.10, CUR-H.2 §2.3(i) | Drafted |
-| CUR-N.4 | CUR-N.2 §2.6(b), §2.8(c), TIM-N.1 | Outstanding |
-| CUR-N.5 | CUR-N.2 §2.8(d), §2.9(a)(1) | Outstanding |
-| CUR-A | CUR-N.2 §2.7, CUR-X §3.7(b)(1), CUR-H.2 §2.10 | Outstanding |
+| CUR-N.4 | CUR-N.2 §2.3(b), §2.6(b), §2.8(c), TIM-N.1 | Drafted |
+| CUR-N.5 | CUR-N.2 §2.8(d), §2.9(a)(1), CUR-N.4 §4.9(e) | Drafted |
+| CUR-A | CUR-N.2 §2.7, CUR-X §3.7(b)(1), CUR-H.2 §2.10, CUR-H.4 §4.12, RFAL Plant Bill §5 | Outstanding |
 | CUR-E.1 | CUR-X §3.7(b)(3) | Outstanding |
 
 A provision cited as `CUR-H.2.5` resolves to §2.5 of CUR-H PART 2, not to a
