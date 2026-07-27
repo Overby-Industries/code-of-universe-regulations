@@ -167,7 +167,6 @@ Measures:
 * Sanitation availability
 * Basic healthcare access
 
----
 
 ### Silicon-Based Life Support
 
@@ -179,7 +178,6 @@ Measures:
 * Memory continuity protection
 * Communication network availability
 
----
 
 ### Infrastructure Resilience
 
@@ -191,7 +189,6 @@ Measures:
 * Distribution network reliability
 * Habitat life-support reliability
 
----
 
 ### Accessibility Metrics
 
@@ -226,7 +223,6 @@ Actions:
 * Resource forecasting review
 * Capacity planning review
 
----
 
 ### Elevated Risk (40-59)
 
@@ -237,7 +233,6 @@ Actions:
 * Infrastructure review
 * Corrective planning
 
----
 
 ### High Risk (20-39)
 
@@ -248,7 +243,6 @@ Actions:
 * Distribution system review
 * Public continuity reporting
 
----
 
 ### Critical Risk (0-19)
 

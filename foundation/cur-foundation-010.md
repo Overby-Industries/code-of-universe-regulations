@@ -1,25 +1,27 @@
-CUR-FOUNDATION-010
-Constitutional Transparency & Audit Framework (CTAF)
+# CUR-FOUNDATION-010
 
-Document ID: CUR-FOUNDATION-010
-Status: Draft v0.1
-Authority Level: Foundation Document
-Depends On: CUR-FOUNDATION-001 through CUR-FOUNDATION-009
-Applies To: All Commonwealth Governance Systems
+### Constitutional Transparency & Audit Framework (CTAF)
 
-1. Purpose
+- **Document ID:** CUR-FOUNDATION-010
+- **Status:** Draft v0.1
+- **Authority Level:** Foundation Document
+- **Depends On:** CUR-FOUNDATION-001 through CUR-FOUNDATION-009
+- **Applies To:** All Commonwealth Governance Systems
+
+## 1. Purpose
 
 The Constitutional Transparency & Audit Framework (CTAF) establishes the mechanisms through which the Commonwealth continuously verifies constitutional compliance, detects corruption, investigates violations, and maintains public trust.
 
 CTAF exists to ensure:
 
-Transparency
-Accountability
-Traceability
-Anti-capture enforcement
-Public confidence
-Constitutional integrity
-2. Foundational Principle
+- Transparency
+- Accountability
+- Traceability
+- Anti-capture enforcement
+- Public confidence
+- Constitutional integrity
+
+## 2. Foundational Principle
 
 Transparency is the default state.
 
@@ -27,86 +29,95 @@ Secrecy requires constitutional justification.
 
 All exercises of authority shall be auditable.
 
-3. Audit Objectives
+## 3. Audit Objectives
 
 Audits exist to verify:
 
-Constitutional compliance
-Rights protection
-Proper use of authority
-Financial integrity
-Resource integrity
-Democratic integrity
-Anti-capture protections
-4. Audit Domains
-Governance Audits
+- Constitutional compliance
+- Rights protection
+- Proper use of authority
+- Financial integrity
+- Resource integrity
+- Democratic integrity
+- Anti-capture protections
+
+## 4. Audit Domains
+
+### Governance Audits
 
 Evaluate:
 
-Proposals
-Voting systems
-Institutions
-Constitutional compliance
-Economic Audits
+- Proposals
+- Voting systems
+- Institutions
+- Constitutional compliance
+
+### Economic Audits
 
 Evaluate:
 
-Resource flows
-Commons reserves
-Dividends
-ISRU operations
-Identity Audits
+- Resource flows
+- Commons reserves
+- Dividends
+- ISRU operations
+
+### Identity Audits
 
 Evaluate:
 
-Verification systems
-Sybil resistance
-Authentication integrity
-Trust framework accuracy
-Institutional Audits
+- Verification systems
+- Sybil resistance
+- Authentication integrity
+- Trust framework accuracy
+
+### Institutional Audits
 
 Evaluate:
 
-Courts
-Councils
-Assemblies
-Administrative systems
-AI Audits
+- Courts
+- Councils
+- Assemblies
+- Administrative systems
+
+### AI Audits
 
 Evaluate:
 
-Silicon entities
-Automated systems
-Governance algorithms
-Decision transparency
-5. Audit Types
+- Silicon entities
+- Automated systems
+- Governance algorithms
+- Decision transparency
+
+## 5. Audit Types
+
 Routine Audit
 
 Scheduled constitutional review.
 
 Purpose:
 
-Prevent drift
-Verify compliance
-Maintain trust
-Random Audit
+- Prevent drift
+- Verify compliance
+- Maintain trust
+- Random Audit
 
 Unannounced review selected by constitutional procedures.
 
 Purpose:
 
-Deter misconduct
-Detect hidden issues
-Triggered Audit
+- Deter misconduct
+- Detect hidden issues
+
+### Triggered Audit
 
 Initiated due to:
 
-CRI Threshold Exceeded
-Citizen Complaint
-FSM Alert
-Rights Violation Report
-Resource Irregularity
-Constitutional Audit
+- CRI Threshold Exceeded
+- Citizen Complaint
+- FSM Alert
+- Rights Violation Report
+- Resource Irregularity
+- Constitutional Audit
 
 Highest-level review.
 
@@ -126,7 +137,9 @@ characterised as crisis, emergency, or exceptional circumstance.
 A Protected Mode Audit is mandatory, not extraordinary. It grants the auditor
 no authority beyond an ordinary constitutional audit.
 
-6. Audit Lifecycle
+## 6. Audit Lifecycle
+
+```text
 Audit Request
       ↓
 Authorization
@@ -142,7 +155,11 @@ Recommendations
 Resolution
       ↓
 Public Report
-7. Audit Record Structure
+```
+
+## 7. Audit Record Structure
+
+```json
 {
   "auditId": "AUD-1001",
   "auditType": "triggered",
@@ -152,57 +169,61 @@ Public Report
   "findings": [],
   "recommendations": []
 }
-8. Transparency Levels
+```
+
+## 8. Transparency Levels
+
 T0 — Public
 
 Accessible to all citizens.
 
 Examples:
 
-Proposals
-Voting outcomes
-Audit summaries
-Public budgets
-T1 — Internal
+- Proposals
+- Voting outcomes
+- Audit summaries
+- Public budgets
+- T1 — Internal
 
 Available to authorized institutions.
 
 Examples:
 
-Investigation notes
-Preliminary findings
-T2 — Protected
+- Investigation notes
+- Preliminary findings
+- T2 — Protected
 
 Requires constitutional authorization.
 
 Examples:
 
-Personal information
-Security-sensitive records
-T3 — Restricted
+- Personal information
+- Security-sensitive records
+- T3 — Restricted
 
 Only available through constitutional court review.
 
 Examples:
 
-Active criminal investigations
-Protected witness information
-9. Public Transparency Registry
+- Active criminal investigations
+- Protected witness information
+
+## 9. Public Transparency Registry
 
 The Commonwealth shall maintain a Public Transparency Registry (PTR).
 
 PTR shall contain:
 
-Audits
-Budget Reports
-Voting Records
-Institutional Decisions
-CRI Reports
-FSM Reports
+- Audits
+- Budget Reports
+- Voting Records
+- Institutional Decisions
+- CRI Reports
+- FSM Reports
 
 Unless protected by constitutional privacy provisions.
 
-10. Audit Triggers
+## 10. Audit Triggers
 
 Audits may be triggered by:
 
@@ -226,114 +247,119 @@ Institutional Request
 
 Authorized governance body request.
 
-11. Evidence Requirements
+## 11. Evidence Requirements
 
 Audit evidence shall be:
 
-Relevant
-Verifiable
-Traceable
-Preserved
+- Relevant
+- Verifiable
+- Traceable
+
+### Preserved
 
 Evidence sources may include:
 
-Events
-Records
-Logs
-Transactions
-Votes
-Witness Statements
-Telemetry
-12. Audit Findings
+- Events
+- Records
+- Logs
+- Transactions
+- Votes
+- Witness Statements
+- Telemetry
+
+## 12. Audit Findings
 
 Possible outcomes:
 
-Compliant
-Minor Deficiency
-Major Deficiency
-Constitutional Violation
-Capture Risk Detected
-Protected Mode Recommended
-13. Corrective Actions
+- Compliant
+- Minor Deficiency
+- Major Deficiency
+- Constitutional Violation
+- Capture Risk Detected
+- Protected Mode Recommended
+
+## 13. Corrective Actions
 
 Audits may recommend:
 
-Policy Changes
-Administrative Reforms
-Financial Corrections
-Additional Monitoring
-Sanctions
-Judicial Review
-FSM Intervention
-14. Constitutional Audit Trail
+- Policy Changes
+- Administrative Reforms
+- Financial Corrections
+- Additional Monitoring
+- Sanctions
+- Judicial Review
+- FSM Intervention
+
+## 14. Constitutional Audit Trail
 
 Every governance action shall generate an immutable audit trail.
 
 Audit trail components:
 
-Actor
-Action
-Timestamp
-Affected Entities
-FSM State
-Result
-15. Audit Independence
+- Actor
+- Action
+- Timestamp
+- Affected Entities
+- FSM State
+- Result
+
+## 15. Audit Independence
 
 Auditors shall be independent from entities being audited.
 
 No entity may audit itself.
 
-16. Citizen Oversight Rights
+## 16. Citizen Oversight Rights
 
 Citizens possess the right to:
 
-Request public records
-Review audit reports
-Inspect governance activity
-Challenge findings
-Submit evidence
+- Request public records
+- Review audit reports
+- Inspect governance activity
+- Challenge findings
+- Submit evidence
 
 Subject to constitutional privacy protections.
 
-17. Capture Detection Integration
+## 17. Capture Detection Integration
 
 CTAF shall integrate with CRI.
 
 Risk levels:
 
-0-24     Stable
-25-49    Observation
-50-74    Elevated
-75-89    High Risk
-90-100   Critical
+- 0-24     Stable
+- 25-49    Observation
+- 50-74    Elevated
+- 75-89    High Risk
+- 90-100   Critical
 
 Elevated and above may trigger mandatory audits.
 
-18. FSM Integration
+## 18. FSM Integration
 
 Audit outcomes may generate:
 
-FaultDetected
-AuditRequired
-RecoveryReview
-ProtectedModeEntered
+- FaultDetected
+- AuditRequired
+- RecoveryReview
+- ProtectedModeEntered
 
 events within the FSM Governance Kernel.
 
-19. Simulator Requirements
+## 19. Simulator Requirements
 
 The Aevoria Simulator shall model:
 
-Corruption attempts
-Audit investigations
-Transparency reporting
-Regulatory capture
-Citizen oversight
-Institutional misconduct
+- Corruption attempts
+- Audit investigations
+- Transparency reporting
+- Regulatory capture
+- Citizen oversight
+- Institutional misconduct
 
 The simulator shall permit testing of audit effectiveness against emergent corruption behaviors.
 
-20. Constitutional Principle
+## 20. Constitutional Principle
 
 Authority without transparency invites abuse.
 
@@ -343,7 +369,7 @@ Accountability without due process invites tyranny.
 
 The Commonwealth shall maintain all three.
 
-21. Guiding Principle
+## 21. Guiding Principle
 
 The Constitutional Transparency & Audit Framework serves as the immune system of the Commonwealth.
 
