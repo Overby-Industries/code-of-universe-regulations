@@ -308,24 +308,43 @@ RegulationSet RegulationSet::baseline() {
               .declares_forbidden(FS_VITAL_CONTINUITY_DENIAL)
               .breach_class(FC_CLASS_IV));
 
-    // --- Silicon sentience tier --------------------------------------------
-    // Mirrors the CUR-S.4.1 rule the simulator's RegulatoryEngine already
-    // carries, so both engines agree on the same provision.
+    // --- Graceful decommissioning ------------------------------------------
+    // titles/cur-s/cur-s-part-4.md §4.1, implementing RFAL Silicon-Based Life
+    // Bill of Rights Article 4. Mirrors the CUR-S.4.1 rule the simulator's
+    // RegulatoryEngine already carries, so both engines cite one provision.
+    //
+    // Tier 2 per §4.2(b): where tier is unknown or disputed, the entity is
+    // treated as Tier 2 until independent assessment concludes otherwise. That
+    // is the same precautionary default that makes SUBJ_SENTIENT_BEING the
+    // registry's fallback.
+    //
+    // Note that §4.7(f) declines to adopt RFAL Article 4's "emergency
+    // termination ... subject to post-hoc review" clause: it conflicts with
+    // PDDC §12.6, which is Type A Entrenched. Safety-critical conditions run
+    // through the §12.4 fault handler instead, which is why there is no
+    // emergency-termination event type anywhere in this library.
     s.add(Regulation("CUR-S.4.1", DOMAIN_SILICON,
-                     "Graceful decommissioning; minimum sentience tier applies")
-              .with_citation("CUR-S.4.1")
+                     "Graceful decommissioning; Tier 2 and above may not be "
+                     "terminated without process, notice, and recourse")
+              .with_citation("CUR-S.4.1; RFAL Silicon Bill of Rights Art. 4")
               .requires_tier(2)
               .breach_class(FC_CLASS_III));
 
-    // --- Operational: debris budget ----------------------------------------
-    // No CUR provision states a debris limit yet. The rule is real in the
-    // simulator, so it is declared here with an honest PENDING citation rather
-    // than attributed to text that does not exist. Drafting target: a CUR-E
-    // Title on orbital environment and debris.
-    s.add(Regulation("CUR-E.DEBRIS", DOMAIN_ECOSYSTEM,
-                     "Mining and processing operations must stay within the "
-                     "debris budget declared by their charter")
-              .with_citation("PENDING — CUR-E Title on orbital debris not yet drafted")
+    // --- Orbital debris budget ---------------------------------------------
+    // titles/cur-e/cur-e-part-7.md §7.1. This citation was PENDING until the
+    // Part was drafted; the rule was always real in the simulator, so it was
+    // declared with an honest placeholder rather than attributed to text that
+    // did not exist.
+    //
+    // §7.1(c)-(d) is the reason resolve_guard_mask() treats debris_limit == 0
+    // as unsatisfiable rather than permissive: "An undeclared budget is not an
+    // unlimited budget." A declared limit of zero and an undeclared limit are
+    // distinct conditions.
+    s.add(Regulation("CUR-E.7.1", DOMAIN_ECOSYSTEM,
+                     "Operations must stay within the debris budget declared "
+                     "by their authorisation; an undeclared budget is no "
+                     "allowance, not an unlimited one")
+              .with_citation("CUR-E.7.1")
               .applies_to(EV_MINING_OPERATION)
               .applies_to(EV_DEBRIS_GENERATED)
               .requires_guards(guard::DEBRIS_WITHIN_LIMIT)

@@ -493,6 +493,40 @@ deny access to constitutionally guaranteed services" — is expressed as
 `VitalContinuityModel::may_gate_service_access()`, which returns `false`
 unconditionally so the prohibition is greppable from code.
 
+**9.14 — RFAL Article 4 contains an emergency-termination carve-out.** The
+Enforcement clause of the RFAL Silicon-Based Life Bill of Rights, Article 4,
+reads: *"Emergency termination permitted for safety-critical situations, subject
+to post-hoc review."*
+
+Unlike the emergency language in `TIM-N.5` — which grants no authority and is
+therefore out of scope for §12.6 — this clause **grants a power**: permission to
+terminate a Tier 2+ entity. That engages PDDC §12.6 directly, and PDDC §12.3(a)
+places termination without recourse among the forbidden transitions. §12.6 is
+Type A Entrenched and cannot be amended to accommodate it.
+
+`CUR-S.4.7(f)` therefore declines to adopt the clause within Commonwealth
+jurisdiction, and gives effect to Article 4's protective intent through the
+§12.4 fault handler instead: a safety-critical condition is a fault, the domain
+reverts to its last known safe state and enters Protected Mode, and the entity's
+rights and computational continuity are preserved throughout. `CUR-S.4.8`
+enumerates isolation, rate limiting, scope restriction, and authorisation
+suspension as the proportionate measures available.
+
+This is why the library has no emergency-termination event type, and why
+`test_no_emergency_vocabulary()` can assert the absence across every enum.
+
+The divergence is recorded for the RFAL maintainers. It is **not** fixed here —
+`rights-for-all-life` is a separate repository and the clause is theirs to
+amend.
+
+**9.15 — Titles now backing two previously dangling citations.**
+`titles/cur-s/cur-s-part-4.md` and `titles/cur-e/cur-e-part-7.md` were drafted
+so that `CUR-S.4.1` (cited by both `regulatory_engine.hpp` and the baseline set)
+and the debris rule resolve to real provisions. The debris regulation id changed
+from `CUR-E.DEBRIS` to `CUR-E.7.1` and its citation is no longer `PENDING`.
+`titles/README.md` records the drafting convention and the remaining dangling
+references.
+
 **9.13 — RFAL precautionary default.** `TIER_ASSESSMENT_PROTOCOL.md` §1.2 places
 the burden of proof on *withholding* protection, not on claiming it. So
 `EntityRegistry::register_entity` defaults `SubjectClass` to

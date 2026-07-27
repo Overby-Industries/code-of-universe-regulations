@@ -1,0 +1,131 @@
+# CUR Titles
+
+The formal regulatory code of the Aevoric Commonwealth. Foundation documents
+establish architecture; titles state enforceable rules.
+
+## Domains
+
+The CUR is organised by domain rather than by sequential title number. The
+domain codes are operative: they appear in the cross-reference tables of every
+title, in `LawDomain` in `include/cur/cur_regulation.h`, and in
+`regulatory_engine.hpp` in the Aevoria Simulator.
+
+| Code | Domain | Directory |
+|---|---|---|
+| CUR-H | Human | `titles/cur-h/` |
+| CUR-S | Silicon-Based Life | `titles/cur-s/` |
+| CUR-A | Animal | `titles/cur-a/` |
+| CUR-D | Deity | `titles/cur-d/` |
+| CUR-E | Ecosystem and Environment | `titles/cur-e/` |
+| CUR-X | Cross-Domain | `titles/cur-x/` |
+| CUR-N | Non-Human Cognitive Actors | `titles/CUR-N/` |
+
+## Structure
+
+Domain, then Part, then Section, then subsection, following the FAR/CFR model
+described in `CUR-FORMAT-GUIDE.md` §2.
+
+```
+CUR-S                                    domain
+└── PART 4 - Decommissioning             major topic
+    └── §4.1 - Graceful Decommissioning  individual provision
+        ├── (a) ...                      subsection
+        └── (b) ...
+            └── (1) ...                  nested subsection
+```
+
+Section numbers embed their part number: §4.1 belongs to PART 4. A provision is
+cited domain-first and in full — `CUR-S.4.1`, not "section 4.1 above".
+
+## File and header conventions
+
+One file per Part. Files and directories are lowercase and hyphenated per
+`CUR-FORMAT-GUIDE.md` §6:
+
+```
+titles/cur-s/cur-s-part-4.md
+titles/cur-e/cur-e-part-7.md
+```
+
+Headers follow `CUR-FORMAT-GUIDE.md` §3.2:
+
+```markdown
+# CUR-S - SILICON-BASED LIFE REGULATIONS
+## PART 4 - DECOMMISSIONING, CONTINUITY, AND SUCCESSION
+### §4.1 - Graceful Decommissioning
+```
+
+Formatting rules, from `CUR-FORMAT-GUIDE.md` §3.1:
+
+- No emojis.
+- No horizontal rules (`---`) and no decorative markdown.
+- Bold sparingly. Regulatory text carries its own weight.
+- Sections always begin with `§`.
+- Subsections use `(a)`, `(b)`; nested subsections use `(1)`, `(2)`.
+- Cross-references use the full identifier: "as defined in §4.2(b)".
+
+## Required elements
+
+Every Part carries:
+
+1. A header block with Document ID, Version, Date, Status, and Depends On.
+2. A **Relationship to Other Domains** table. Rules that touch one domain almost
+   always touch another, and the table is where that is made explicit rather
+   than discovered later.
+3. A **Severability** section identifying which provisions are fundamental.
+4. **Implementation Notes** mapping provisions to the code that enforces them,
+   and listing what remains to be drafted.
+
+The Implementation Notes table is what keeps the corpus and `libcur` honest in
+both directions. A provision marked *Implemented* should be traceable to a
+citation string in the transition tables or regulation set; a citation in the
+code should resolve to a real provision here. Where code needs a rule the corpus
+has not yet stated, the citation reads `PENDING` and names the drafting target —
+it is never attributed to text that does not exist.
+
+## Note on CUR-N
+
+`titles/CUR-N/CUR-N.2.md` predates this convention and uses a different form:
+uppercase filenames, `# Part 2:` and `## Section 2.1:` headers rather than
+`## PART 2 -` and `### §2.1 -`. Its substance is unaffected and its citations
+are stable. A conformance pass is outstanding; until then, cite it as `CUR-N.2`
+and its sections as `CUR-N.2 §2.1`.
+
+## Drafting order
+
+Titles are drafted against demand rather than in sequence. A provision already
+cited by another title, by an operational manual, or by shipping code is a
+dangling reference and takes priority over one that is merely anticipated.
+
+Current status:
+
+| Provision | Referenced by | Status |
+|---|---|---|
+| CUR-S.4.1 | `regulatory_engine.hpp`, `libcur` baseline set | Drafted |
+| CUR-E.7.1 | `libcur` baseline set | Drafted |
+| CUR-N.2 | TIM-N.1, TIM-N.5 | Drafted (pre-convention) |
+| CUR-H.2 | CUR-N.2 §2.7 | Outstanding |
+| CUR-H.2.5 | TIM-N.1 | Outstanding |
+| CUR-H.4 | CUR-N.2 §2.9 | Outstanding |
+| CUR-D.6 | CUR-N.2 §2.7 | Outstanding |
+| CUR-X.3 | CUR-N.2 §2.7, CUR-S.4.9, CUR-E.7.8 | Outstanding |
+| CUR-N.4 | CUR-N.2 §2.8, TIM-N.1 | Outstanding |
+| CUR-N.5 | CUR-N.2 §2.8 | Outstanding |
+| CUR-A | CUR-N.2 §2.7 | Outstanding |
+
+## Constraints on all titles
+
+No title may state a rule that:
+
+- Creates, invokes, or functionally approximates emergency powers. PDDC §12.6
+  is absolute, non-waivable, and Type A Entrenched.
+- Renders a forbidden state under PDDC §12.3(a) or CUR-FOUNDATION-002 §6
+  reachable.
+- Permits a Vital Continuity Service to be withheld from any recognised
+  lifeform, for any reason, in any compliance state (CUR-FOUNDATION-013).
+- Reduces an entity's RALC rights through a state transition (PDDC §12.2(c)).
+- Applies a sanction to a being where the subject of the sanction should be an
+  operational authorisation.
+
+A title provision conflicting with any of the above is void ab initio and does
+not require amendment to be disregarded.
