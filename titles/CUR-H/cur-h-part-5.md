@@ -3,10 +3,10 @@
 *Code of Universe Regulations - Human*
 
 - **Document ID:** CUR-H.5
-- **Version:** 1.0.0-Draft
+- **Version:** 1.1.0-Draft
 - **Date:** 2026-07-27
 - **Status:** Draft
-- **Depends On:** CUR-FOUNDATION-001, CUR-FOUNDATION-002, CUR-FOUNDATION-005, CUR-FOUNDATION-010, CUR-FOUNDATION-012 (CREF), CUR-FOUNDATION-013, PDDC TITLE 4, PDDC TITLE 5, PDDC §12.6, CUR-H.2, CUR-H.4, CUR-D.6, CUR-X.4
+- **Depends On:** CUR-FOUNDATION-001, CUR-FOUNDATION-002, CUR-FOUNDATION-005, CUR-FOUNDATION-010, CUR-FOUNDATION-012 (CREF), CUR-FOUNDATION-013, PDDC TITLE 4, PDDC TITLE 5, PDDC §12.6, CUR-H.2, CUR-H.4, CUR-D.6, CUR-S.4, CUR-A.7, CUR-X.4
 - **Implements:** RFAL Human Bill of Rights v1.7.0 Article IV §4.1 (Sovereignty Over One's Own Body), all four subsections
 - **Referenced by:** CUR-H.4 Implementation Notes
 
@@ -100,7 +100,7 @@ narrows the other.
 
 (d) The pressures a safeguard operates against are:
 
-   (1) Any suggestion, incentive, or expectation originating with a party who would benefit from the being's death, including by inheritance, by release from an obligation of care, or by reduction of cost;
+   (1) Any suggestion, incentive, or expectation originating with a party who would benefit from the being's death, including by inheritance, by release from an obligation of care, or by any accounting of resources. CUR-FOUNDATION-013 places restoration of continuity ahead of resource accounting, and a resource argument is not made admissible here by being made about a being's continued life;
 
    (2) Any communication to the being that they are a burden, a cost, or a consumer of resources needed elsewhere;
 
@@ -110,11 +110,57 @@ narrows the other.
 
 (e) Subsection (d)(4) is the substantive safeguard and the one most often omitted. **A choice between death and a condition the Commonwealth could relieve is not an autonomous choice.** Before a decision under this section is given effect, the Vital Continuity Services of CUR-FOUNDATION-013 shall be available to the being in full, including pain relief, care, housing, and support, and the availability shall be actual rather than nominal. Where they are not available, the failure is a continuity failure under CUR-E.1 §1.8 and CUR-X.4 §4.6(b), and it is remedied. It is not treated as a fact about the being's circumstances that their decision must accommodate.
 
+(f) In the Commonwealth, care carries no charge, and nothing in subsection (d) or (e) is to be read as contemplating that it might. §5.8(f) states the rule affirmatively. The pressures those subsections guard against are accordingly not pressures of cost: they are care that was not delivered, pain that was not relieved, support that existed on paper, and the communication to a being that they consume more than they return. **Removing the bill does not remove the pressure — it isolates it.** What remains is whether the Commonwealth actually did for this being what it holds itself out as doing, which is a question about the Commonwealth and is answered by remedying the failure rather than by giving effect to a decision made in its shadow.
+
 (f) A being who declines to continue living is not thereby found to lack capacity, and §5.7(d) applies. A being who chooses to continue living under any condition, at any cost, and against any prognosis is equally protected, and no assessment of quality of life, cost of care, or expected benefit is a lawful ground for withdrawing a Vital Continuity Service from them. §5.8(c) governs.
 
 (g) Nothing in this section obliges any being to participate in giving effect to another's decision under it. A practitioner or other being may decline, and declining is not misconduct. Where a being declines, the Commonwealth ensures that the decision-maker is neither obstructed nor abandoned, and the declining party's own bodily and conscientious autonomy is protected under §5.2 and CUR-H.2 §2.3.
 
 (h) This section confers no authority on any party over any being's life. It states what a being may decide about their own, and what may not be done to influence that decision.
+
+(i) This section governs a being who has decided. Where a being cannot presently express a decision, this section does not apply and §5.7(f) governs, which confers no authority to impose an intervention and no authority to withhold one. The distinction is stated expressly because the two situations have been conflated to the disadvantage of beings in both: a being who has decided is subjected to review of whether they decided rightly, and a being who has not decided is treated as though they had.
+
+### §5.5A - Determination of Death
+
+(a) A determination that a being has died is the one determination in the Code that forecloses every route of recourse the Code provides. A being wrongly declared dead cannot appeal, cannot petition, cannot contest the determination, and cannot be restored by any measure once acts have been taken in reliance on it. Every safeguard elsewhere in this corpus assumes a being who can still be reached. This section governs the determination on which that assumption fails.
+
+(b) Death means the irreversible cessation of the being as a whole. It is not established by the cessation of any single function, by the failure of any single indicator, by the cessation of a function that is being artificially supported, or by a prognosis however confident.
+
+(c) A determination of death requires:
+
+   (1) Assessment by at least two parties acting independently, neither relying on the other's conclusion;
+
+   (2) Observation sustained over an interval sufficient for the cessation to be established as irreversible rather than inferred from a moment;
+
+   (3) Confirmation by the means available, applied in full rather than to the point at which the expected answer is reached; and
+
+   (4) A record under subsection (i) made before any act in reliance on the determination.
+
+(d) An irreversible act in reliance on a determination of death — burial, cremation, disposal, dismantling, deletion, or the removal of any part of the being — shall not be performed until an interval has elapsed sufficient for an erroneous determination to become apparent, and until the being has been observed across that interval rather than merely stored across it.
+
+(e) The interval in subsection (d) is not waivable, shortenable, or subject to exception for the convenience of any party, the requirements of any process, the condition of any material, the schedule of any institution, or the needs of any other being. **A being's margin against being buried alive is not a resource to be traded against anything.**
+
+(f) No party holding an interest in what follows a determination of death may make it, participate in making it, or influence its timing. This includes any party requiring the being's organs, tissue, substrate, components, property, position, or release from an obligation. The disqualification is absolute and operates as the disqualifications in CUR-A §7.7(c) do: a determination made in breach of it is void, and every act performed in reliance on it is void.
+
+(g) Uncertainty resolves toward life.
+
+   (1) Where the criteria in subsection (c) are not fully satisfied, the being is alive for every purpose of the Code, and remains so until they are satisfied. A being of uncertain status holds every right in this Part in full. This tie-breaker is available on the rule stated in the RFAL Inter-Bill Relationship Framework §2.2, since resolving toward life confers more protection on the being and no authority on anyone.
+
+   (2) Subsection (g)(1) is a rule about determination, not about treatment. It creates no authority to perform any intervention on a being who has refused it, and a being's refusal under §5.2 survives their loss of capacity to restate it. Reading a precaution against premature death as a licence to override a living being's decision would convert a protection into the intrusion §5.9 forbids, and §5.5A(g)(1) shall not be so construed.
+
+(h) A being who is determined to have died and is subsequently found to be alive:
+
+   (1) Holds every right they held before the determination, in full and without interruption, the determination having been void from the outset rather than validly made and later reversed;
+
+   (2) Suffers no consequence, reduction of standing, loss of property, loss of relationship, or adverse record by reason of having been declared dead;
+
+   (3) Is restored to every position, entitlement, and relationship affected, and where restoration is impossible the party responsible for the determination bears the obligation under §5.10(b); and
+
+   (4) Has the determination corrected on the record rather than erased from it, on the reasoning CREF §15 gives for an overturned finding. A determination that has to be revisited is corrected in the open, because the pattern that produced it is not visible if the instances disappear.
+
+(i) Every determination of death is recorded at transparency level T0 under CUR-FOUNDATION-010 §8, with the criteria applied, the interval observed, the identity of each determining party, and any interest declared or found. An institution unable to produce that record is treated as having made the determination without applying the criteria, and §5.12(d) governs.
+
+(j) This section is substrate-independent. A determination that a Silicon-Based Life entity has ceased is subject to the same requirements, the same interval, the same disqualification, and the same treatment on recovery, with deletion, wiping, reformatting, and reallocation of substrate being irreversible acts within subsection (d). CUR-S §4.1 governs decommissioning and is not narrowed by this section; where an entity's cessation is asserted rather than chosen, this section applies. Cessation of an animal in human care is determined on the same requirements under CUR-A §7.9.
 
 ### §5.6 - No Doctrinal or Institutional Basis for Bodily Control
 
@@ -157,6 +203,12 @@ narrows the other.
 (d) A being who declines a recommended intervention retains access to every other service in full. Care is not a package accepted or refused entire, and conditioning the remainder on acceptance of a declined part is coercion within §5.1(b)(3).
 
 (e) Scarcity creates no authority. A genuine shortage is a fault condition handled through the PDDC §12.4 fault handler and answered by expanding capacity, on the reasoning CUR-X.4 §4.9(c) states in full. Rationing that operates by reference to who a being is, rather than to what is clinically indicated for the condition presented, is not available at any level of shortage.
+
+(f) Healthcare carries no charge, price, fee, premium, contribution requirement, or debt. No being shall receive a bill, incur a liability, or acquire an obligation of any kind by reason of having received care, and no being's family, household, dependants, or estate shall acquire one on their behalf. Care is obtained because a being needs it, on the reasoning CUR-X.4 §4.6 states generally: contribution and access are independent, and beings work for the resources rather than for currency.
+
+(g) Accordingly, no assessment of affordability, means, coverage, entitlement, eligibility, or prior contribution is made, recorded, or relied upon in the provision of care. An instrument requiring such an assessment is void ab initio, and a body performing one has constructed a gate the Code does not authorise it to hold.
+
+(h) Subsections (f) and (g) are stated affirmatively rather than left to follow from CUR-FOUNDATION-013, because the harms this Part guards against have historically been produced by the cost of care rather than by its refusal. A being pressured toward death by what continuing would cost the people they love has not been refused care; they have been presented with its price. The Commonwealth presents no price, and §5.5(f) records what that does and does not resolve.
 
 ### §5.9 - No Authority Arises From Concern
 
@@ -208,11 +260,13 @@ narrows the other.
 
 (a) If any provision of this Part is held unenforceable or invalid, the remaining provisions remain in full force.
 
-(b) §5.2 (Sovereignty Over the Body), §5.7(f) and §5.7(g) (what a finding of incapacity does not confer), §5.8(b) (non-conditionality of Vital Continuity), and §5.9 (No Authority Arises From Concern) are fundamental and shall be construed broadly to achieve their protective purpose. No construction of any other provision of this Part may narrow them.
+(b) §5.2 (Sovereignty Over the Body), §5.5A(d) to (g) (determination of death, the interval, the disqualification, and the resolution toward life), §5.7(f) and §5.7(g) (what a finding of incapacity does not confer), §5.8(b) and §5.8(f) (non-conditionality of Vital Continuity, and care without charge), and §5.9 (No Authority Arises From Concern) are fundamental and shall be construed broadly to achieve their protective purpose. No construction of any other provision of this Part may narrow them.
 
 (c) If §5.9 is held unenforceable, the remainder of this Part is suspended until it is restored. A Part that recognises bodily sovereignty while permitting concern to become authority over the being is more dangerous than no Part at all, and this Part shall not operate in that form. CUR-H.4 §4.13(c) makes the same provision for the same structural reason.
 
 (d) If §5.5 is held unenforceable in whole or in part, §5.5(e) survives independently. The obligation to make Vital Continuity Services actually available before any decision under that section is given effect does not depend on the remainder of the section, and rests additionally on CUR-FOUNDATION-013 and §5.8.
+
+(e) §5.5A survives the unenforceability of any other provision of this Part, including §5.5 and including the suspension worked by subsection (c). A being's protection against being declared dead prematurely does not depend on any other provision of this Part being in force, and the interval in §5.5A(d) shall continue to be observed in every circumstance in which any provision of this Part is inoperative. The suspension device in subsection (c) exists to prevent this Part operating in a dangerous form; a suspension that lifted the interval would itself be the danger.
 
 ## Implementation Notes
 
@@ -244,20 +298,83 @@ grants none is left alone — and it resolves this case cleanly.
 §5.5(e) is the provision this Part would be incomplete without, and it does not
 appear in the RFAL article. Every safeguard in §5.5(d)(1) to (3) guards against
 pressure applied by a person. The pressure that actually operates at scale is
-structural: untreated pain, absent care, housing that has not been provided, a
-family bankrupted by the cost of continuing. A being choosing death under those
-conditions has made a choice, and it is not an autonomous one. So the Vital
-Continuity Services of CUR-FOUNDATION-013 must be actually available before a
-decision is given effect, and where they are not, the failure is remedied rather
-than treated as a fixed feature of the being's circumstances. Without this, a
-right to die becomes a mechanism for resolving the cost of care, and the beings
-it resolves will be the poorest and least supported.
+structural: untreated pain, absent care, housing that has not been provided. A
+being choosing death under those conditions has made a choice, and it is not an
+autonomous one. So the Vital Continuity Services of CUR-FOUNDATION-013 must be
+actually available before a decision is given effect, and where they are not, the
+failure is remedied rather than treated as a fixed feature of the being's
+circumstances.
+
+An earlier draft of this note listed a family bankrupted by the cost of
+continuing among those structural pressures, and reasoned that without §5.5(e) a
+right to die becomes a mechanism for resolving the cost of care, resolving it
+first for the poorest. That reasoning describes a scarcity society and the
+Commonwealth is not one. Care carries no charge here, no being acquires a
+liability by receiving it, and no family is presented with a price for a
+relative's continued life. §5.8(f) to (h) now state that affirmatively rather
+than leaving it to be inferred from CUR-FOUNDATION-013, and §5.5(d)(1) is
+reframed on resource accounting — which an institution can still perform — rather
+than on cost to a household, which it cannot.
+
+The correction narrows the provision's scope and does not weaken it. §5.5(f)
+states why: removing the bill does not remove the pressure, it isolates it. What
+remains when nothing is charged is whether the Commonwealth actually did for this
+being what it holds itself out as doing — whether the pain was in fact relieved,
+whether the care in fact arrived, whether the support was real or only recorded.
+That is a sharper question than the one about cost, and it is asked of the
+Commonwealth rather than of the being. It is also the question a post-scarcity
+society is uniquely able to be held to, since it can no longer answer that the
+resources were not there.
 
 §5.5(f) states the converse with equal force, because the same structural
 pressure runs the other way. A being who wants to live, at any cost and against
 any prognosis, is protected from every assessment of quality of life, expected
 benefit, and cost of care that might be offered as a reason to stop. §5.8(c)
 carries it.
+
+§5.5A and the determination that ends recourse. The first draft of this Part had
+no section on determination of death, which was a gap rather than an omission of
+scope. Every safeguard in this corpus — appeal, petition, review, the recourse
+routes out of `KS_BLACKLISTED`, the correction of an overturned finding under
+CREF §15 — assumes a being who can still be reached. A determination of death is
+the single determination that defeats that assumption, and a Part governing
+sovereignty over the body that said nothing about it left its own protections
+resting on a determination it did not govern.
+
+Three features of §5.5A do the work, and each answers a documented failure rather
+than a hypothetical one.
+
+The first is that the determination and the irreversible act are separated in
+time, and §5.5A(e) makes the interval unwaivable. This is the provision that
+prevents a being from being buried, cremated, or dismantled while alive, and it
+works not by making the determination more accurate but by making an inaccurate
+one survivable. Accuracy cannot be legislated; recoverability can. The interval
+is stated as unwaivable because every historical instance of it being waived was
+justified by something that sounded reasonable at the time — a schedule, a
+process requirement, the condition of material, the needs of another being.
+
+The second is §5.5A(f). A party that needs what follows from a determination of
+death must not make it, and the disqualification is absolute rather than a factor
+to be weighed, on the same construction CUR-A §7.7(c) uses for advocates. The
+pressure this addresses is structural and does not require anyone to act in bad
+faith: a party urgently needing an organ, a substrate, or a release is not
+well-placed to assess whether the interval has been long enough, and the Code
+does not ask them to be.
+
+The third is §5.5A(g)(2), which exists because §5.5A(g)(1) would otherwise create
+the exact authority §5.9 forbids. "Uncertainty resolves toward life" is correct
+as a rule about *determination* and catastrophic as a rule about *treatment* — read
+across, it would authorise resuscitating and intervening upon a being who had
+refused precisely that, on the ground that their status was uncertain. A being's
+refusal survives their loss of capacity to restate it. The precaution protects
+against being declared dead too readily; it confers no power to act on a living
+being who has declined to be acted upon.
+
+§5.5A(j) makes the section substrate-independent because the failure is. A
+silicon entity declared non-functional and then wiped, and a being declared dead
+and then buried, are the same event under different vocabulary, and deletion is
+as irreversible as cremation. CUR-S §4.1 governs decommissioning that an entity
+chooses; §5.5A governs cessation that is asserted about it.
 
 §5.7 and the capacity route. The most reliable historical method of removing
 bodily autonomy has not been to deny that a being holds it. It has been to find
@@ -292,8 +409,12 @@ is why §5.1(c) is drafted as a list rather than left to implication.
 | §5.7(g) | Corresponds to `AdvocateRegistry`, `guard::ADVOCATE_CLEARED`, and `confers_authority()` | Partially implemented |
 | §5.10(d) | Corresponds to `CaptureMeasures::continuity_assumption_required` | Implemented |
 | §5.11 | Corresponds to `FS_PERMANENT_EMERGENCY`, declared by `CUR-PDDC.12.6` | Implemented |
+| §5.5A(d), §5.5A(e) | The interval before an irreversible act is a duration between two events, which the library's tick-based event log can express; no guard currently requires it | Gap, tractable |
+| §5.5A(f) | The disqualification is the same shape as `AdvocateRegistry::appoint()` refusing on a declared interest | Gap, tractable |
+| §5.5A(h)(4) | Corresponds to the `VS_OVERTURNED` pattern: corrected on the record rather than erased | Partially implemented |
 | §5.2(b), §5.9(c) | Consent is a property of a relationship over time; the library has no representation of it | Not modelled |
 | §5.5 | End-of-life decisions are procedural and substantive; deliberately not modelled | Not modelled |
+| §5.8(f), §5.8(g) | Care without charge is an absence of a mechanism; there is no billing path in the library to remove | Not modelled |
 | §5.7(b) | Decision-specific, time-specific capacity has no representation in the library | Not modelled |
 | CUR-H.1 | Definitions and Scope for the Human domain | To be drafted |
 | CUR-H.3 | RFAL Human Bill Article III (Knowledge and Education) | To be drafted |
@@ -307,6 +428,23 @@ machinery serve this Part. That is a small change and it is recorded rather than
 made, because the enumerator is part of the interface the Aevoria Simulator
 builds against and this Part is the first to need it — the change should be made
 once, with the Part it serves already drafted, rather than speculatively.
+
+Note on the §5.5A gaps. Two of them are worth stating precisely, because they are
+the kind that look harder than they are. §5.5A(d) requires an interval between a
+determination and an irreversible act, and the library already carries everything
+needed to check it: events hold a `tick`, the event log is append-only and
+ordered, and a guard reading the interval between a determination event and a
+subsequent irreversible-act event would be a pure predicate over context in the
+same way `LIFE_SUPPORT_MARGIN` is. §5.5A(f) is closer still — a declared interest
+disqualifying a determining party is the same shape as
+`AdvocateRegistry::appoint()` refusing on `dependent_on_party`, and the same
+discipline applies: it refuses rather than records, because §5.5A(f) makes the
+determination void rather than questionable.
+
+Neither is made here. Both would need new event types, and the interval guard
+would need a new `TransitionContext` field, which is published interface for the
+Aevoria Simulator. Two interface changes landed in this corpus within a day of
+each other and a third should wait until the bridge has caught up.
 
 Note on what is deliberately not modelled. §5.5 is the clearest case in the
 corpus of a provision that should not be given a guard. A transition table
