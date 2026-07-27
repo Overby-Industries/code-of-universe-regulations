@@ -214,20 +214,36 @@ the fault occurred earlier, at the point the margin was not provided.
 | §2.5(f) | Corresponds to `guard::COMMONS_RESERVE_FLOOR` at 2000 basis points | Implemented |
 | §2.8(d) | Corresponds to `FS_RIGHTS_SUSPENSION` and `FS_SPECIES_PRIVILEGE` | Implemented |
 | §2.9(c) | Corresponds to `run_fault_handler` implementing PDDC §12.4 | Implemented |
-| §2.2(c) | Reserve and redundancy obligations are not modelled; the library has no representation of margin | Gap, see below |
+| §2.2(c), §2.2(d) | Corresponds to `guard::LIFE_SUPPORT_MARGIN` and regulation `CUR-E.2.2`, applied to `EV_DOCKING` | Implemented |
 | §2.4(b) | Pre-operation life assessment is procedural | Not modelled |
 | §2.6(c) | The irreversibility stopping rule is adjudicative | Not modelled |
 | CUR-E.3 through CUR-E.6 | Reserved | To be drafted |
 
-Note on §2.2(c) and the library. The reserve capacity obligation is the most
-checkable provision in this Part and the least represented. `TransitionContext`
-carries operational measurements — `debris_units`, `debris_limit`,
-`commons_reserve_basis_points` — and a life-support margin is the same shape: a
-measured value compared against a declared floor, with the guard unsatisfiable
-when the floor is undeclared, exactly as CUR-E §7.1(d) treats an undeclared
-debris budget. Adding a life-support margin measurement and a corresponding guard
-would let §2.2(c) be enforced rather than stated, and would reuse the pattern
-already proven by the debris budget rather than introducing a new one. This is
-the third library extension the titles have identified, alongside the advocate
+Note on §2.2(c) and the library. The reserve obligation is now enforced rather
+than stated. `TransitionContext` carries `life_support_reserve_units` and
+`life_support_floor_units`, and `guard::LIFE_SUPPORT_MARGIN` resolves only where
+the floor is declared and the reserve clears it. The shape is the debris budget's,
+inverted in the way it should be: debris must sit at or below a ceiling, reserve
+at or above a floor, and in both cases an undeclared value is unsatisfiable
+rather than permissive. CUR-E §7.1(d) states that reading for debris and §2.2(c)
+inherits it — a habitat must state the margin it needs before it can be held to
+it.
+
+Regulation `CUR-E.2.2` attaches the guard to `EV_DOCKING`, which is the moment
+the calculation changes: a docking adds beings the reserve must already cover,
+and §2.2(d) excludes no one from the count on grounds of status, membership,
+role, or expected duration of stay. A habitat that has counted only its own
+complement has not declared a floor covering an arrival.
+
+The enforcement is that the docking is refused. That is a hard result and it is
+the intended one. §2.2(b) is that a closed volume has no outside to absorb the
+error, and admitting beings a habitat cannot sustain is precisely how the choice
+between honouring rights and keeping beings alive — which §2.9(e) says must never
+arise — gets created. The margin is checked before the beings arrive, because
+afterwards there is no version of the decision that respects everyone aboard.
+Both refusals and admissions are logged, so a habitat turning beings away is
+reviewable under §2.7.
+
+Two library extensions identified by the titles remain outstanding: the advocate
 registry (CUR-A §7.7, CUR-E §1.6) and the enterprise concentration flag
 (CUR-X §4.2).

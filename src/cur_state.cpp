@@ -186,6 +186,18 @@ uint16_t resolve_guard_mask(const TransitionContext& ctx) {
     if (ctx.commons_reserve_basis_points >= 2000) {
         m |= guard::COMMONS_RESERVE_FLOOR;
     }
+
+    // CUR-E.2 §2.2(c). A floor of zero means "no declared floor", not "no
+    // reserve required", and cannot be satisfied — the same reading given to
+    // an undeclared debris limit above, for the same reason. A habitat has to
+    // state the margin it needs before it can be held to it, and CUR-E.2
+    // §2.2(b) is why the margin is a constitutional obligation rather than an
+    // engineering preference: in a closed volume there is no outside to
+    // absorb the error.
+    if (ctx.life_support_floor_units > 0 &&
+        ctx.life_support_reserve_units >= ctx.life_support_floor_units) {
+        m |= guard::LIFE_SUPPORT_MARGIN;
+    }
     return m;
 }
 
@@ -206,6 +218,7 @@ constexpr GuardName kGuardNames[] = {
     {guard::LICENSE_SUBJECT_ONLY, "LICENSE_SUBJECT_ONLY"},
     {guard::REMEDIATION_VERIFIED, "REMEDIATION_VERIFIED"},
     {guard::COURT_CERTIFIED, "COURT_CERTIFIED"},
+    {guard::LIFE_SUPPORT_MARGIN, "LIFE_SUPPORT_MARGIN"},
 };
 
 }  // namespace

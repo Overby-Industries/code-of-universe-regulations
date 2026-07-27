@@ -350,6 +350,31 @@ RegulationSet RegulationSet::baseline() {
               .requires_guards(guard::DEBRIS_WITHIN_LIMIT)
               .breach_class(FC_CLASS_II));
 
+    // --- Habitat life-support margin ---------------------------------------
+    // titles/CUR-E/cur-e-part-2.md §2.2(c)-(d). A habitat maintains reserve
+    // capacity in every life-supporting system, calculated for every being
+    // present — complement, visitors, and beings in transit alike.
+    //
+    // Attached to EV_DOCKING because that is the moment the calculation
+    // changes: a docking adds beings the reserve must already cover. §2.2(d)
+    // excludes no one from the count on grounds of status, membership, role,
+    // or expected duration of stay, so a habitat that has counted only its
+    // own complement has not declared a floor that covers an arrival.
+    //
+    // Refusing the docking is the enforcement. That is a hard result and it is
+    // the intended one: §2.2(b) is that a closed volume has no outside to
+    // absorb the error, and admitting beings a habitat cannot sustain is how
+    // the choice between rights and survival that §2.9(e) forbids gets
+    // created. The margin is checked before the beings arrive, not after.
+    s.add(Regulation("CUR-E.2.2", DOMAIN_ECOSYSTEM,
+                     "A habitat shall hold life-support reserve clearing its "
+                     "declared floor for every being present; an undeclared "
+                     "floor is not an unlimited one")
+              .with_citation("CUR-E.2 §2.2(c)-(d)")
+              .applies_to(EV_DOCKING)
+              .requires_guards(guard::LIFE_SUPPORT_MARGIN)
+              .breach_class(FC_CLASS_III));
+
     return s;
 }
 

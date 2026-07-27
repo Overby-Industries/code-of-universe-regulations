@@ -988,6 +988,68 @@ static void test_state_machine_sanction_needs_determination() {
     CHECK(ss.back().violation_id.empty());
 }
 
+// CUR-E.2 §2.2(c)-(d): a habitat holds reserve clearing its declared floor for
+// every being present, and an undeclared floor is not an unlimited one.
+static void test_life_support_margin() {
+    TEST("habitat life-support margin, undeclared floor is not unlimited "
+         "(CUR-E.2 §2.2)");
+
+    // The guard resolves the same way the debris guard does, inverted: debris
+    // must sit at or below a ceiling, reserve at or above a floor.
+    cur::TransitionContext ctx;
+    CHECK((cur::resolve_guard_mask(ctx) & cur::guard::LIFE_SUPPORT_MARGIN) == 0);
+
+    ctx.life_support_reserve_units = 500;
+    ctx.life_support_floor_units = 0;   // undeclared
+    CHECK((cur::resolve_guard_mask(ctx) & cur::guard::LIFE_SUPPORT_MARGIN) == 0);
+
+    ctx.life_support_floor_units = 400;  // declared and cleared
+    CHECK((cur::resolve_guard_mask(ctx) & cur::guard::LIFE_SUPPORT_MARGIN) != 0);
+
+    ctx.life_support_floor_units = 500;  // exactly at the floor
+    CHECK((cur::resolve_guard_mask(ctx) & cur::guard::LIFE_SUPPORT_MARGIN) != 0);
+
+    ctx.life_support_floor_units = 501;  // one unit short
+    CHECK((cur::resolve_guard_mask(ctx) & cur::guard::LIFE_SUPPORT_MARGIN) == 0);
+
+    // End to end: a docking is refused where the margin does not hold.
+    cur::CURStateMachine m;
+    m.log().set_clock(fixed_clock);
+    auto hab = m.entities().register_entity("habitat-3", cur::EC_ECONOMIC,
+                                            cur::SUBJ_OPERATIONAL_LICENSE);
+
+    cur::Event dock;
+    dock.type = cur::EV_DOCKING;
+    dock.tick = 1;
+    dock.target = hab;
+    dock.context.life_support_reserve_units = 300;
+    dock.context.life_support_floor_units = 0;  // never counted the arrivals
+    auto r1 = m.submit(dock);
+    CHECK(!r1.accepted);
+
+    // Declaring a floor the reserve cannot clear does not help.
+    dock.tick = 2;
+    dock.context.life_support_floor_units = 800;
+    auto r2 = m.submit(dock);
+    CHECK(!r2.accepted);
+
+    // Reserve sufficient for everyone aboard, arrivals included.
+    dock.tick = 3;
+    dock.context.life_support_reserve_units = 900;
+    auto r3 = m.submit(dock);
+    CHECK(r3.accepted);
+
+    // Both refusals are in the audit trail. A habitat turning beings away is
+    // exactly the decision that must be reviewable afterwards.
+    CHECK(m.log().records().size() >= static_cast<size_t>(3));
+
+    // The guard names itself in a refusal record, so the reason a docking was
+    // turned away is legible without reading the table.
+    char names[256];
+    cur::describe_guards(cur::guard::LIFE_SUPPORT_MARGIN, names, sizeof(names));
+    CHECK(std::string(names).find("LIFE_SUPPORT_MARGIN") != std::string::npos);
+}
+
 int main() {
     std::printf("libcur %s — CUR corpus %s\n\n", CUR_LIB_VERSION_STRING,
                 cur::CUR_CORPUS_VERSION);
@@ -1014,6 +1076,7 @@ int main() {
     test_allegation_is_not_a_finding();
     test_overturned_is_recorded_not_erased();
     test_state_machine_sanction_needs_determination();
+    test_life_support_margin();
 
     std::printf("\n%d checks, %d failures\n", g_checks, g_failures);
     return g_failures == 0 ? 0 : 1;

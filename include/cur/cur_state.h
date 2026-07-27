@@ -288,7 +288,13 @@ constexpr uint16_t REMEDIATION_VERIFIED = 1u << 7;
 // PDDC §12.5(d) — Constitutional Court certification of a valid forward path.
 constexpr uint16_t COURT_CERTIFIED = 1u << 8;
 
-constexpr uint16_t ALL_KNOWN = (1u << 9) - 1;
+// CUR-E.2 §2.2(c) — declared life-support reserve covers every being present.
+// Same shape as DEBRIS_WITHIN_LIMIT and inverted in the same way it should be:
+// debris must stay at or below a ceiling, reserve must stay at or above a
+// floor. An undeclared floor is unsatisfiable in both cases.
+constexpr uint16_t LIFE_SUPPORT_MARGIN = 1u << 9;
+
+constexpr uint16_t ALL_KNOWN = (1u << 10) - 1;
 
 }  // namespace guard
 
@@ -306,6 +312,13 @@ struct TransitionContext {
     uint32_t debris_units = 0;
     uint32_t debris_limit = 0;
     uint32_t commons_reserve_basis_points = 0;  // 2000 == 20.00%
+
+    // CUR-E.2 §2.2(c)-(d). Reserve held, and the floor it must clear. The
+    // floor is calculated for every being present — complement, visitors, and
+    // beings in transit alike — so a habitat that has not counted arriving
+    // beings has not declared a floor that covers them.
+    uint32_t life_support_reserve_units = 0;
+    uint32_t life_support_floor_units = 0;
 
     // Filled in by the state machine from the entity's SubjectClass, so a
     // caller cannot fake it. Present here only so guards see one struct.
