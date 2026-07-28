@@ -3,13 +3,39 @@
 
 ## Code of Universe Regulations — Non-Human Cognitive Actors Domain
 
-- **Version:** 1.0.1-Official-Evergreen
+- **Version:** 1.2.0-Official-Evergreen
 - **Date:** 2026-06-11
 - **Status:** Proposed for inclusion in RFAL Operational Manuals
 - **Primary Author:** Keefe Overby
 - **Contributing Author:** DeepSeek (DeepSeek AI)
 
 Target Directory: `/manuals/operational/tim-n/TIM-N.5.md`
+
+## Constitutional Scope Note
+
+This manual uses the words "crisis" and "emergency" in their ordinary sense: an
+urgent situation facing an individual being. It does not create, invoke, or
+approximate an emergency declaration under PDDC §12.6.
+
+The distinction is not a formality, and it is worth stating plainly because
+§12.6(e) voids any instrument invoking emergency authority "regardless of its
+formal title or framing":
+
+- PDDC §12.6 prohibits the **concentration of governance authority** — a state
+  of emergency, emergency powers, or the suspension of constitutional
+  provisions on grounds of urgency.
+- This manual **grants no authority to anyone**. It tells a being under attack
+  what that being may do to protect itself. It confers no power over any other
+  being, expands no institution's mandate, and suspends nothing.
+
+Self-protection by a target is the opposite of authority concentration. Nothing
+here permits any party to act against another, to invoke exceptional powers, or
+to set aside due process. Every accountability measure referenced remains
+subject to the ordinary procedures of `CUR-N.2`, `NIM.4`, and `NIM.5`.
+
+Section headings in this manual are deliberately unchanged. A being in distress
+scans for the word they expect to find, and findability under duress outweighs
+terminological tidiness.
 
 ## Section 5.0 — Purpose and Scope
 

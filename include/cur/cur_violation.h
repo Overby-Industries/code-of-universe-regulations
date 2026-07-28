@@ -44,14 +44,48 @@ enum ViolationCategory : uint8_t {
     VC_COUNT
 };
 
+// The lifecycle of a violation record, and the line between an allegation and
+// a finding.
+//
+// CUR-N.5 §5.8(b) provides that a being named in a report is not thereby
+// accountable, and that no record may characterise them as accountable before a
+// determination. CUR-N.4 §4.3(a) provides that no measure is available except
+// following a determination. Both rules depend on the record itself
+// distinguishing "alleged" from "found", which is what these statuses do:
+// VS_OPEN and VS_UNDER_REVIEW are allegations, the rest are determinations.
+//
+// VS_OVERTURNED exists because CUR-N.4 §4.12(d) and CUR-N.5 §5.10(e) require a
+// determination overturned on appeal to be corrected in the record rather than
+// erased. Reverting such a record to VS_DISMISSED would lose the fact that it
+// was ever confirmed; leaving it VS_CONFIRMED would state something false.
 enum ViolationStatus : uint8_t {
-    VS_OPEN = 0,       // detected, not yet adjudicated
-    VS_UNDER_REVIEW,   // STATE-007 Audit Investigation
+    VS_OPEN = 0,       // detected, not yet adjudicated — an allegation
+    VS_UNDER_REVIEW,   // STATE-007 Audit Investigation — still an allegation
     VS_CONFIRMED,      // "Violation Confirmed" exit from STATE-007
     VS_DISMISSED,      // "Violation Dismissed" exit from STATE-007
     VS_REMEDIED,       // corrective action verified, PDDC §12.5(d)(1)
+    VS_OVERTURNED,     // confirmed, then overturned on appeal — CREF §15
     VS_COUNT
 };
+
+// True once a determination has been made, either way. False while the record
+// is still only an allegation.
+constexpr bool is_adjudicated(ViolationStatus s) {
+    return s == VS_CONFIRMED || s == VS_DISMISSED || s == VS_REMEDIED ||
+           s == VS_OVERTURNED;
+}
+
+// True only where the record will carry a measure. A dismissed or overturned
+// violation supports nothing, and a remedied one has already been answered.
+// CUR-N.4 §4.3(a) is this predicate.
+constexpr bool supports_measure(ViolationStatus s) { return s == VS_CONFIRMED; }
+
+// Whether the record may move from one status to the next. Records are amended
+// in place and never rewritten, so the permitted moves are one-way: nothing
+// returns to VS_OPEN, because a violation that has been reviewed cannot become
+// undetected. A dismissed record may be reopened for review on new evidence
+// under CUR-N.4 §4.10(d), which is a move to VS_UNDER_REVIEW, not to VS_OPEN.
+bool adjudication_permitted(ViolationStatus from, ViolationStatus to);
 
 // ENTITY-010 Type column. The five listed under FOUNDATION-004 §13 Examples.
 enum SanctionType : uint8_t {
@@ -170,9 +204,26 @@ public:
     SanctionRecord* find_sanction(const std::string& id);
     AppealRecord* find_appeal(const std::string& id);
 
-    // Most recent open or confirmed violation for an entity, if any. Used to
-    // attach a sanction to the violation that justified it.
+    // Most recent open or confirmed violation for an entity, if any.
     ViolationRecord* latest_open_violation(EntityHandle h);
+
+    // Most recent violation for an entity that can carry a measure — that is,
+    // one that has actually been determined against the entity. This is the
+    // accessor a sanction path must use; latest_open_violation also returns
+    // allegations, and attaching an active measure to an allegation is what
+    // CUR-N.4 §4.3(a) and CUR-N.5 §5.8(b) forbid.
+    ViolationRecord* latest_sanctionable_violation(EntityHandle h);
+
+    // Move a violation record to a new status. Returns false and changes
+    // nothing if the move is not permitted by adjudication_permitted, so a
+    // caller cannot quietly un-confirm or re-open a record.
+    bool adjudicate(const std::string& violation_id, ViolationStatus outcome);
+
+    // Move a sanction from SANC_PROPOSED to SANC_ACTIVE. Returns false and
+    // changes nothing unless the violation behind it is VS_CONFIRMED. A
+    // sanction with no violation_id at all can never be activated: a measure
+    // has to answer something.
+    bool activate_sanction(const std::string& sanction_id);
 
     const std::vector<ViolationRecord>& violations() const { return violations_; }
     const std::vector<SanctionRecord>& sanctions() const { return sanctions_; }

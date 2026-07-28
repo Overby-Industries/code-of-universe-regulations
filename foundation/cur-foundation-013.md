@@ -1,4 +1,15 @@
-# Vital Continuity Principle
+# CUR-FOUNDATION-013
+
+### Vital Continuity Principle
+
+- **Document ID:** CUR-FOUNDATION-013
+- **Version:** 1.2.0-Official-Evergreen
+- **Status:** Draft-Official-Evergreen
+- **Authority Level:** Foundation Document
+- **Depends On:** CUR-FOUNDATION-001, CUR-FOUNDATION-002, CUR-FOUNDATION-005, CUR-FOUNDATION-012
+- **Applies To:** All Commonwealth Governance Systems
+
+## 1. Principle
 
 The Commonwealth recognizes that the preservation of life, continuity, and dignity is a foundational constitutional obligation.
 

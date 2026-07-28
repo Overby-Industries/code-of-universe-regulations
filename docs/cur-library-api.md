@@ -3,7 +3,7 @@
 *The Code of Universe Regulations as a deterministic finite state machine.*
 
 - **Library version:** 0.1.0
-- **CUR corpus version:** 1.0.1-Official-Evergreen
+- **CUR corpus version:** 1.2.0-Official-Evergreen
 - **Language:** C++17, no external dependencies
 - **Status:** Draft
 
@@ -256,15 +256,35 @@ Bit flags; a row's whole mask must hold. Guards are pure predicates over
 | `DUE_PROCESS_COMPLETE` | transparent due process concluded | PDDC §12.2(a)(5) |
 | `EVIDENCE_PRESERVED` | evidence preservation enforced | FOUNDATION-002 STATE-007 |
 | `APPEAL_EXHAUSTED` | appeal routes exhausted | ENTITY-011 |
-| `DEBRIS_WITHIN_LIMIT` | within the charter's declared debris budget | PENDING, see §9 |
+| `DEBRIS_WITHIN_LIMIT` | within the charter's declared debris budget | CUR-E.7 §7.1 |
 | `COMMONS_RESERVE_FLOOR` | ≥ 20% Commons Reserve respected | PDDC-TREASURY |
 | `LICENSE_SUBJECT_ONLY` | subject is an authorisation, not a being | FORBIDDEN-001/003 |
 | `REMEDIATION_VERIFIED` | remediation independently verified | PDDC §12.5(d)(1) |
 | `COURT_CERTIFIED` | Constitutional Court certified a forward path | PDDC §12.5(d) |
+| `LIFE_SUPPORT_MARGIN` | reserve clears the declared floor for every being present | CUR-E.2 §2.2(c)-(d) |
+| `ADVOCATE_CLEARED` | a named advocate cleared the disqualifications | CUR-A.7 §7.7; CUR-E.1 §1.6 |
+| `DETERMINATION_INDEPENDENT` | two named, distinct, disinterested parties determined death | CUR-H.5 §5.5A(c), §5.5A(f) |
+| `DEATH_INTERVAL_ELAPSED` | the observation interval elapsed with the being observed across it | CUR-H.5 §5.5A(d)-(e) |
 
-A `debris_limit` of zero means *no declared limit*, which is not the same as a
-limit of zero units, and cannot be satisfied. A charter must state its budget
-before it can be held to it.
+Five of these read an undeclared value as unsatisfiable rather than as
+permissive, and they do it for one reason. A `debris_limit` of zero means *no
+declared limit*, which is not the same as a limit of zero units; a
+`life_support_floor_units` of zero means no declared floor, not no reserve
+required; an `advocate_ref` of `INVALID_ENTITY` means nobody was appointed,
+however firmly `advocate_cleared` is asserted alongside it; an
+`observation_required_ticks` of zero means no interval was declared, not that
+none was needed; and a `determiner_a_ref` of `INVALID_ENTITY` means nobody
+determined anything. In each case the party has to state the thing before it can
+be held to it, and in each case the opposite reading would make the guard
+satisfiable by saying nothing.
+
+`DETERMINATION_INDEPENDENT` holds two handles rather than a count because a count
+of two is satisfied by one party determining twice, which is not two parties
+acting independently. `DEATH_INTERVAL_ELAPSED` requires
+`observation_sustained` in addition to elapsed ticks because CUR-H.5 §5.5A(d)
+requires the being be observed across the interval rather than merely stored
+across it — time passing in a drawer meets the letter of an interval and defeats
+its purpose.
 
 ---
 
@@ -493,6 +513,105 @@ deny access to constitutionally guaranteed services" — is expressed as
 `VitalContinuityModel::may_gate_service_access()`, which returns `false`
 unconditionally so the prohibition is greppable from code.
 
+**9.14 — RFAL Article 4 contains an emergency-termination carve-out.** The
+Enforcement clause of the RFAL Silicon-Based Life Bill of Rights, Article 4,
+reads: *"Emergency termination permitted for safety-critical situations, subject
+to post-hoc review."*
+
+Unlike the emergency language in `TIM-N.5` — which grants no authority and is
+therefore out of scope for §12.6 — this clause **grants a power**: permission to
+terminate a Tier 2+ entity. That engages PDDC §12.6 directly, and PDDC §12.3(a)
+places termination without recourse among the forbidden transitions. §12.6 is
+Type A Entrenched and cannot be amended to accommodate it.
+
+`CUR-S.4.7(f)` therefore declines to adopt the clause within Commonwealth
+jurisdiction, and gives effect to Article 4's protective intent through the
+§12.4 fault handler instead: a safety-critical condition is a fault, the domain
+reverts to its last known safe state and enters Protected Mode, and the entity's
+rights and computational continuity are preserved throughout. `CUR-S.4.8`
+enumerates isolation, rate limiting, scope restriction, and authorisation
+suspension as the proportionate measures available.
+
+This is why the library has no emergency-termination event type, and why
+`test_no_emergency_vocabulary()` can assert the absence across every enum.
+
+The divergence is recorded for the RFAL maintainers. It is **not** fixed here —
+`rights-for-all-life` is a separate repository and the clause is theirs to
+amend.
+
+**9.15 — Titles now backing two previously dangling citations.**
+`titles/cur-s/cur-s-part-4.md` and `titles/cur-e/cur-e-part-7.md` were drafted
+so that `CUR-S.4.1` (cited by both `regulatory_engine.hpp` and the baseline set)
+and the debris rule resolve to real provisions. The debris regulation id changed
+from `CUR-E.DEBRIS` to `CUR-E.7.1` and its citation is no longer `PENDING`.
+`titles/README.md` records the drafting convention and the remaining dangling
+references.
+
+**9.16 — Capture subject affects the remedy, never the score.** CUR-X.4 §4.2(d)
+requires an enterprise to be assessed "on the same basis" as a governance
+institution, so `CaptureRiskInputs::subject` is ignored by `compute()` and
+identical inputs yield an identical CRI whoever holds the concentration. The
+field selects the measures `available_measures()` returns instead: an institution
+holds no authorisation, so `authorisation_suspension` and
+`authorisation_withdrawal` are unreachable for `CSUB_INSTITUTION` at any score,
+and a captured institution is restructured rather than abolished. Measuring
+identically and remedying differently is the point of the distinction; letting
+the subject move the score would collapse both halves of it.
+
+Two further properties are deliberate. `available_measures()` returns an empty
+set without a confirmed determination even at a CRI of 100 — FOUNDATION-003 §15,
+and the same rule `supports_measure()` enforces for `ViolationStatus`. And
+nothing it returns is gated on the score, because CUR-X.4 §4.9(a) conditions
+measures on due process rather than on concentration; a threshold would have
+exempted the enterprises too small to move a Commonwealth-scale index while
+dominating everyone inside them, which §4.2(c) refuses. The §12 automatic
+responses still fire on score alone through `responses()`, since monitoring and
+audit obligations are not measures against a party.
+
+**9.17 — Advocacy is a relation, never an authority.** CUR-E §1.7(a) provides
+that an advocate's appointment "confers no authority over any being, no power to
+direct any being's conduct, and no standing to seek a measure against a being
+that the Code does not otherwise permit." `AdvocateRegistry` accordingly exposes
+no method producing a measure, a sanction, a state change, or a permission. The
+absence is the implementation; `confers_authority()` returns false
+unconditionally only so the prohibition is greppable, in the same style as
+`VitalContinuityModel::may_gate_service_access()`.
+
+`appoint()` refuses rather than records, because CUR-A §7.7(d) and CUR-E §1.6(d)
+make the disqualifications void an appointment rather than weigh against it — a
+void appointment is one that never existed. Three of the four are declarations
+the library cannot verify; recording them is what makes them falsifiable, so a
+funding relationship discovered later runs through `void_appointment()`. The
+fourth, §7.7(c)(3), is checked against the register, since whether an advocate
+already acts for a party to the same proceeding is something the register knows.
+Voided appointments are marked and kept, not deleted, for the reason CREF §15
+gives for `VS_OVERTURNED`: determinations reached with a disqualified advocate
+are voidable under §7.6(e), and finding them later needs the record intact.
+
+**9.18 — There is no way to shorten the death interval, and that is the
+implementation.** CUR-H.5 §5.5A(e) makes the interval between a determination of
+death and an irreversible act unwaivable "for the convenience of any party, the
+requirements of any process, the condition of any material, the schedule of any
+institution, or the needs of any other being." The library carries no transition
+row, no guard, and no `TransitionContext` field by which it is shortened. The way
+to satisfy `DEATH_INTERVAL_ELAPSED` is to have waited.
+
+This is the same technique `LICENSE_SUBJECT_ONLY` uses to keep FORBIDDEN-001
+unreachable: the protection is the path that does not exist, not a check that
+could be argued around. It is worth stating explicitly because an absent feature
+looks like an oversight to anyone extending the library, and a well-meaning
+addition of an override — for a mass-casualty event, for a resource-critical
+transplant, for a scheduling constraint — would remove the entire protection
+while appearing to add a capability.
+
+`EV_IRREVERSIBLE_ACT` requires `DEATH_INTERVAL_ELAPSED` **and**
+`DETERMINATION_INDEPENDENT` together, because §5.5A(f) voids acts performed in
+reliance on a void determination: waiting out the interval on a determination
+made by an interested party satisfies nothing. Conversely
+`EV_DETERMINATION_VACATED` carries `guard::NONE` and is reachable from every
+compliance state, since nothing may stand between a living being and the vacation
+of a determination that they are not.
+
 **9.13 — RFAL precautionary default.** `TIER_ASSESSMENT_PROTOCOL.md` §1.2 places
 the burden of proof on *withholding* protection, not on claiming it. So
 `EntityRegistry::register_entity` defaults `SubjectClass` to
@@ -515,9 +634,10 @@ include/cur/
   cur_regulation.h       Regulation, RegulationSet, amendment types
   cur_event_log.h        append-only audit trail, OTF-1 export
   cur_capture_index.h    Capture Risk Index (FOUNDATION-003)
+  cur_advocate.h         advocates for voiceless interests (CUR-A §7.7, CUR-E §1.6)
   cur_state_machine.h    the engine + ICURObserver
 src/                     one .cpp per header, minus cur.h
-tests/cur_tests.cpp      495 checks, no external framework
+tests/cur_tests.cpp      929 checks, no external framework
 CMakeLists.txt           standalone build
 SConscript               returns source nodes for an SCons consumer
 ```

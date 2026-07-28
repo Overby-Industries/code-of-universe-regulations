@@ -34,6 +34,7 @@
 #ifndef CUR_H
 #define CUR_H
 
+#include "cur_advocate.h"
 #include "cur_capture_index.h"
 #include "cur_entity.h"
 #include "cur_event.h"
@@ -52,7 +53,7 @@
 namespace cur {
 
 // Version of the CUR corpus these tables were transcribed from.
-constexpr const char* CUR_CORPUS_VERSION = "1.0.1-Official-Evergreen";
+constexpr const char* CUR_CORPUS_VERSION = "1.2.0-Official-Evergreen";
 
 }  // namespace cur
 

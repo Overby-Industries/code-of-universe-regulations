@@ -2,7 +2,7 @@
 
 **Code of Universe Regulations (CUR) Project Governance**
 
-**Version:** 1.0.0-Official-Evergreen  
+**Version:** 1.2.0-Official-Evergreen
 **Last Updated:** May 19, 2026
 **Status:** Draft - Official-Evergreen
 

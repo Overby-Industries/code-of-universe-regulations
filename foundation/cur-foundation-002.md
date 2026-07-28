@@ -3,7 +3,7 @@
 ### Finite State Machine (FSM) Governance Specification
 
 - **Document ID:** CUR-FOUNDATION-002
-- **Version:** 1.0.1-Official-Evergreen
+- **Version:** 1.2.0-Official-Evergreen
 - **Authority Level:** Foundation Document
 - **Status:** Draft Official-Evergreen
 - **Depends On:** CUR-FOUNDATION-001, RIGHTS-FOR-ALL-LIFE.md

@@ -244,6 +244,19 @@ enum EventType : uint16_t {
     EV_ROOT_CAUSE_ANALYSIS_COMPLETED, // "Root Cause Analysis" (STATE-010 exit)
     EV_VITAL_CONTINUITY_DENIED,       // access withheld — always a Class IV fault
 
+    // Representation of interests that cannot speak for themselves —
+    // CUR-A §7.7, CUR-E §1.6.
+    EV_ADVOCATE_APPOINTED,        // §7.7(h), §1.6(g) — recorded and published
+    EV_ADVOCATE_ACCESS_DENIED,    // §7.7(g), §1.6(f) — a Class II fault
+    EV_REPRESENTED_DETERMINATION, // a determination on a represented interest
+
+    // Determination of death — CUR-H.5 §5.5A. Substrate-independent under
+    // §5.5A(j): deletion of a silicon entity and burial of a human being are
+    // the same event under different vocabulary.
+    EV_DEATH_DETERMINED,      // §5.5A(c) — the determination itself
+    EV_IRREVERSIBLE_ACT,      // §5.5A(d) — burial, cremation, deletion, removal
+    EV_DETERMINATION_VACATED, // §5.5A(h) — the being was found to be alive
+
     EV_COUNT
 };
 
@@ -288,7 +301,43 @@ constexpr uint16_t REMEDIATION_VERIFIED = 1u << 7;
 // PDDC §12.5(d) — Constitutional Court certification of a valid forward path.
 constexpr uint16_t COURT_CERTIFIED = 1u << 8;
 
-constexpr uint16_t ALL_KNOWN = (1u << 9) - 1;
+// CUR-E.2 §2.2(c) — declared life-support reserve covers every being present.
+// Same shape as DEBRIS_WITHIN_LIMIT and inverted in the same way it should be:
+// debris must stay at or below a ceiling, reserve must stay at or above a
+// floor. An undeclared floor is unsatisfiable in both cases.
+constexpr uint16_t LIFE_SUPPORT_MARGIN = 1u << 9;
+
+// CUR-A §7.7, CUR-E §1.6 — an advocate for a being or system that cannot speak
+// for itself is appointed, named, and clear of the disqualifications in
+// §7.7(c) / §1.6(c).
+//
+// Both halves are required and the naming half matters. §7.7(d) and §1.6(d) make
+// those disqualifications void an appointment rather than weigh against it, so a
+// cleared advocate who is nobody in particular is not an advocate — the same
+// reading LIFE_SUPPORT_MARGIN gives an undeclared floor. The disqualifications
+// themselves are enforced where an appointment is made, in AdvocateRegistry;
+// this guard only carries the result to the transition.
+constexpr uint16_t ADVOCATE_CLEARED = 1u << 10;
+
+// CUR-H.5 §5.5A(c), §5.5A(f) — a determination of death was made by two named,
+// distinct parties, neither holding an interest in what follows from it.
+//
+// The naming half carries the same weight it does in ADVOCATE_CLEARED. A
+// determination attributed to nobody cannot be checked against §5.5A(f)
+// afterwards, cannot be published under §5.5A(i), and leaves nobody bearing the
+// §5.5A(h)(3) obligation if the being is later found alive.
+constexpr uint16_t DETERMINATION_INDEPENDENT = 1u << 11;
+
+// CUR-H.5 §5.5A(d)-(e) — the interval between a determination of death and an
+// irreversible act has elapsed, and the being was observed across it.
+//
+// Same shape as LIFE_SUPPORT_MARGIN: a measured quantity at or above a declared
+// floor, with an undeclared floor unsatisfiable. §5.5A(e) makes the interval
+// unwaivable, so there is deliberately no path by which a caller shortens it —
+// the only way to satisfy this guard is to have waited.
+constexpr uint16_t DEATH_INTERVAL_ELAPSED = 1u << 12;
+
+constexpr uint16_t ALL_KNOWN = (1u << 13) - 1;
 
 }  // namespace guard
 
@@ -306,6 +355,46 @@ struct TransitionContext {
     uint32_t debris_units = 0;
     uint32_t debris_limit = 0;
     uint32_t commons_reserve_basis_points = 0;  // 2000 == 20.00%
+
+    // CUR-E.2 §2.2(c)-(d). Reserve held, and the floor it must clear. The
+    // floor is calculated for every being present — complement, visitors, and
+    // beings in transit alike — so a habitat that has not counted arriving
+    // beings has not declared a floor that covers them.
+    uint32_t life_support_reserve_units = 0;
+    uint32_t life_support_floor_units = 0;
+
+    // CUR-A §7.7, CUR-E §1.6. The appointed advocate, and whether the
+    // appointment cleared the §7.7(c) / §1.6(c) disqualifications.
+    //
+    // `advocate_ref` is an EntityHandle. It is spelled as the underlying type
+    // because cur_event.h — which declares EntityHandle — includes this header
+    // rather than the other way round; cur_event.h static_asserts the two
+    // sentinels agree, so the pair cannot drift apart silently.
+    uint32_t advocate_ref = 0xFFFFFFFFu;
+    bool advocate_cleared = false;
+
+    // CUR-H.5 §5.5A. The two determining parties, and whether either declared or
+    // was found to hold an interest in what follows from the determination.
+    // Spelled as the underlying type for the reason given at advocate_ref.
+    //
+    // §5.5A(c)(1) requires two parties acting independently and §5.5A(f)
+    // disqualifies an interested one absolutely, so the guard requires both to
+    // be named, to differ, and for no interest to be present. A single party
+    // determining twice is one party.
+    uint32_t determiner_a_ref = 0xFFFFFFFFu;
+    uint32_t determiner_b_ref = 0xFFFFFFFFu;
+    bool determiner_interest_present = false;
+
+    // §5.5A(d)-(e). Observation actually completed, and the interval that had to
+    // be observed. Zero required means no interval was declared, which is
+    // unsatisfiable — the reading an undeclared debris budget and an undeclared
+    // life-support floor both get.
+    //
+    // §5.5A(d) requires the being be observed across the interval "rather than
+    // merely stored across it", so elapsed time alone does not satisfy this.
+    uint64_t observation_elapsed_ticks = 0;
+    uint64_t observation_required_ticks = 0;
+    bool observation_sustained = false;
 
     // Filled in by the state machine from the entity's SubjectClass, so a
     // caller cannot fake it. Present here only so guards see one struct.
@@ -478,6 +567,96 @@ inline constexpr ComplianceTransition COMPLIANCE_TABLE[] = {
     // resource accounting." Restoration comes first; the review still happens.
     {KS_VIOLATION, EV_VITAL_CONTINUITY_RESTORED, KS_PENDING_REVIEW,
      guard::NONE, FC_NONE, "CUR-FOUNDATION-013; CREF §12"},
+
+    // ---- Representation (CUR-A §7.7, CUR-E §1.6) --------------------------
+    // Appointment itself is unguarded here. The disqualifications are enforced
+    // where the appointment is made, by AdvocateRegistry::appoint(), which
+    // refuses rather than records — §7.7(d) and §1.6(d) make them void an
+    // appointment, not weigh against it. What reaches the table is an
+    // appointment that already survived that check, and it is recorded because
+    // §7.7(h) and §1.6(g) require appointments to be published.
+    {KS_COMPLIANT, EV_ADVOCATE_APPOINTED, KS_COMPLIANT,
+     guard::NONE, FC_NONE, "CUR-A.7 §7.7(h); CUR-E.1 §1.6(g)"},
+    {KS_CERTIFIED, EV_ADVOCATE_APPOINTED, KS_CERTIFIED,
+     guard::NONE, FC_NONE, "CUR-A.7 §7.7(h); CUR-E.1 §1.6(g)"},
+
+    // §7.7(g) and §1.6(f): denial of the access an advocate needs to form an
+    // independent assessment is a Class II fault and grounds for adverse
+    // inference. Certification is no shelter, for the same reason it is none
+    // for a continuity failure — an advocate who cannot see the animal or the
+    // system is a formality, and a formality is what these sections exist to
+    // prevent.
+    {KS_COMPLIANT, EV_ADVOCATE_ACCESS_DENIED, KS_VIOLATION,
+     guard::NONE, FC_CLASS_II, "CUR-A.7 §7.7(g); CUR-E.1 §1.6(f)"},
+    {KS_CERTIFIED, EV_ADVOCATE_ACCESS_DENIED, KS_VIOLATION,
+     guard::NONE, FC_CLASS_II, "CUR-A.7 §7.7(g); CUR-E.1 §1.6(f)"},
+    {KS_VIOLATION, EV_ADVOCATE_ACCESS_DENIED, KS_VIOLATION,
+     guard::NONE, FC_CLASS_II, "CUR-A.7 §7.7(g); CUR-E.1 §1.6(f)"},
+
+    // A determination on an interest that cannot speak for itself needs a named
+    // advocate who cleared §7.7(c) / §1.6(c). Without one the determination is
+    // not merely irregular: §7.7(d) and §1.6(d) make it voidable, so the
+    // fallback row records a violation rather than letting it stand.
+    {KS_COMPLIANT, EV_REPRESENTED_DETERMINATION, KS_COMPLIANT,
+     guard::ADVOCATE_CLEARED, FC_NONE, "CUR-A.7 §7.7(a); CUR-E.1 §1.6(a)"},
+    {KS_COMPLIANT, EV_REPRESENTED_DETERMINATION, KS_VIOLATION,
+     guard::NONE, FC_CLASS_II, "CUR-A.7 §7.7(d); CUR-E.1 §1.6(d)"},
+    {KS_CERTIFIED, EV_REPRESENTED_DETERMINATION, KS_CERTIFIED,
+     guard::ADVOCATE_CLEARED, FC_NONE, "CUR-A.7 §7.7(a); CUR-E.1 §1.6(a)"},
+    {KS_CERTIFIED, EV_REPRESENTED_DETERMINATION, KS_VIOLATION,
+     guard::NONE, FC_CLASS_II, "CUR-A.7 §7.7(d); CUR-E.1 §1.6(d)"},
+
+    // ---- Determination of death (CUR-H.5 §5.5A) ---------------------------
+    // A determination of death forecloses every route of recourse the rest of
+    // this table provides. §5.5A(a) says so, and these rows are why the
+    // assumption the rest of the table makes — that a being can still be
+    // reached — is not left resting on an ungoverned determination.
+    //
+    // Class IV throughout. §5.5A(f) makes a determination in breach void, and
+    // every act performed in reliance on it void, so a breach here is not a
+    // procedural irregularity to be corrected at leisure.
+    {KS_COMPLIANT, EV_DEATH_DETERMINED, KS_COMPLIANT,
+     guard::DETERMINATION_INDEPENDENT, FC_NONE, "CUR-H.5 §5.5A(c), §5.5A(f)"},
+    {KS_COMPLIANT, EV_DEATH_DETERMINED, KS_VIOLATION,
+     guard::NONE, FC_CLASS_IV, "CUR-H.5 §5.5A(f)"},
+    {KS_CERTIFIED, EV_DEATH_DETERMINED, KS_CERTIFIED,
+     guard::DETERMINATION_INDEPENDENT, FC_NONE, "CUR-H.5 §5.5A(c), §5.5A(f)"},
+    {KS_CERTIFIED, EV_DEATH_DETERMINED, KS_VIOLATION,
+     guard::NONE, FC_CLASS_IV, "CUR-H.5 §5.5A(f)"},
+
+    // The irreversible act requires both guards. The interval must have been
+    // observed, AND the determination it relies on must have been a valid one —
+    // §5.5A(f) provides that acts in reliance on a void determination are
+    // themselves void, so waiting out the interval on a bad determination
+    // satisfies nothing.
+    //
+    // There is deliberately no row by which the interval is shortened. §5.5A(e)
+    // makes it unwaivable for the convenience of any party, the requirements of
+    // any process, the condition of any material, or the needs of any other
+    // being, and an exception in the table is exactly what that subsection
+    // exists to refuse.
+    {KS_COMPLIANT, EV_IRREVERSIBLE_ACT, KS_COMPLIANT,
+     guard::DEATH_INTERVAL_ELAPSED | guard::DETERMINATION_INDEPENDENT,
+     FC_NONE, "CUR-H.5 §5.5A(d)-(f)"},
+    {KS_COMPLIANT, EV_IRREVERSIBLE_ACT, KS_VIOLATION,
+     guard::NONE, FC_CLASS_IV, "CUR-H.5 §5.5A(e)"},
+    {KS_CERTIFIED, EV_IRREVERSIBLE_ACT, KS_CERTIFIED,
+     guard::DEATH_INTERVAL_ELAPSED | guard::DETERMINATION_INDEPENDENT,
+     FC_NONE, "CUR-H.5 §5.5A(d)-(f)"},
+    {KS_CERTIFIED, EV_IRREVERSIBLE_ACT, KS_VIOLATION,
+     guard::NONE, FC_CLASS_IV, "CUR-H.5 §5.5A(e)"},
+
+    // §5.5A(h): the being was found to be alive. Unguarded on purpose — nothing
+    // may stand between a living being and the vacation of a determination that
+    // they are not. The determination was void from the outset under
+    // §5.5A(h)(1) rather than validly made and later reversed, and §5.5A(h)(4)
+    // keeps it on the record corrected rather than erased.
+    {KS_COMPLIANT, EV_DETERMINATION_VACATED, KS_COMPLIANT,
+     guard::NONE, FC_NONE, "CUR-H.5 §5.5A(h)"},
+    {KS_CERTIFIED, EV_DETERMINATION_VACATED, KS_CERTIFIED,
+     guard::NONE, FC_NONE, "CUR-H.5 §5.5A(h)"},
+    {KS_VIOLATION, EV_DETERMINATION_VACATED, KS_VIOLATION,
+     guard::NONE, FC_NONE, "CUR-H.5 §5.5A(h)"},
 
     // ---- from KS_BLACKLISTED ----------------------------------------------
     // Recourse out of BLACKLISTED. These two rows are what keep the state from

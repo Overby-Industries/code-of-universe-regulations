@@ -23,9 +23,41 @@ const char* to_string(ViolationStatus s) {
         case VS_CONFIRMED: return "CONFIRMED";
         case VS_DISMISSED: return "DISMISSED";
         case VS_REMEDIED: return "REMEDIED";
+        case VS_OVERTURNED: return "OVERTURNED";
         case VS_COUNT: break;
     }
     return "UNKNOWN";
+}
+
+// Flat table, same discipline as the transition tables in cur_state.h: the
+// permitted moves are readable in one place rather than spread across
+// conditionals. Anything absent is forbidden.
+bool adjudication_permitted(ViolationStatus from, ViolationStatus to) {
+    if (from == to) return false;
+    switch (from) {
+        case VS_OPEN:
+            // An allegation may go to review, or be determined either way.
+            return to == VS_UNDER_REVIEW || to == VS_CONFIRMED ||
+                   to == VS_DISMISSED;
+        case VS_UNDER_REVIEW:
+            return to == VS_CONFIRMED || to == VS_DISMISSED;
+        case VS_CONFIRMED:
+            // Remedied once corrective action is verified; overturned on
+            // appeal under CREF §15.
+            return to == VS_REMEDIED || to == VS_OVERTURNED;
+        case VS_DISMISSED:
+            // Reopened on new evidence, CUR-N.4 §4.10(d). Reopening restores
+            // review, not the original undetermined state.
+            return to == VS_UNDER_REVIEW;
+        case VS_REMEDIED:
+            // Still appealable — ENTITY-009 Appealable does not lapse because
+            // the entity complied.
+            return to == VS_OVERTURNED;
+        case VS_OVERTURNED:
+        case VS_COUNT:
+            break;
+    }
+    return false;
 }
 
 const char* to_string(SanctionType t) {
@@ -161,6 +193,36 @@ ViolationRecord* ViolationLedger::latest_open_violation(EntityHandle h) {
         }
     }
     return nullptr;
+}
+
+ViolationRecord* ViolationLedger::latest_sanctionable_violation(EntityHandle h) {
+    for (auto it = violations_.rbegin(); it != violations_.rend(); ++it) {
+        if (it->entity != h) continue;
+        if (supports_measure(it->status)) return &(*it);
+    }
+    return nullptr;
+}
+
+bool ViolationLedger::adjudicate(const std::string& violation_id,
+                                 ViolationStatus outcome) {
+    ViolationRecord* v = find_violation(violation_id);
+    if (v == nullptr) return false;
+    if (!adjudication_permitted(v->status, outcome)) return false;
+    v->status = outcome;
+    return true;
+}
+
+bool ViolationLedger::activate_sanction(const std::string& sanction_id) {
+    SanctionRecord* s = find_sanction(sanction_id);
+    if (s == nullptr) return false;
+    if (s->status != SANC_PROPOSED) return false;
+    // A measure has to answer a determination. No violation_id, or one that is
+    // still an allegation, means there is nothing it may lawfully answer.
+    if (s->violation_id.empty()) return false;
+    const ViolationRecord* v = find_violation(s->violation_id);
+    if (v == nullptr || !supports_measure(v->status)) return false;
+    s->status = SANC_ACTIVE;
+    return true;
 }
 
 std::vector<ViolationRecord> ViolationLedger::violations_for(

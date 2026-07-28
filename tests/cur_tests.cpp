@@ -869,6 +869,781 @@ static void test_audit_trail_has_actor() {
     CHECK(json.find("\"fsmState\"") != std::string::npos);
 }
 
+// CUR-N.5 §5.8(b): a being named in a report is not thereby accountable, and
+// no record may characterise them as accountable before a determination.
+// CUR-N.4 §4.3(a): no measure is available except following a determination.
+static void test_allegation_is_not_a_finding() {
+    TEST("an allegation is not a finding (CUR-N.5 §5.8(b), CUR-N.4 §4.3(a))");
+
+    cur::ViolationLedger ledger;
+
+    cur::ViolationRecord v;
+    v.entity_id = "accused-1";
+    v.severity = cur::FC_CLASS_II;
+    v.status = cur::VS_OPEN;
+    const std::string vid = ledger.open_violation(v).violation_id;
+
+    // An open record is an allegation and carries no measure.
+    CHECK(!cur::is_adjudicated(cur::VS_OPEN));
+    CHECK(!cur::is_adjudicated(cur::VS_UNDER_REVIEW));
+    CHECK(!cur::supports_measure(cur::VS_OPEN));
+    CHECK(!cur::supports_measure(cur::VS_UNDER_REVIEW));
+
+    cur::SanctionRecord s;
+    s.entity_id = "accused-1";
+    s.violation_id = vid;
+    s.status = cur::SANC_PROPOSED;
+    const std::string sid = ledger.impose_sanction(s).sanction_id;
+
+    // Cannot activate against an allegation.
+    CHECK(!ledger.activate_sanction(sid));
+    CHECK_EQ(ledger.find_sanction(sid)->status, cur::SANC_PROPOSED);
+
+    // Review is still not a determination.
+    CHECK(ledger.adjudicate(vid, cur::VS_UNDER_REVIEW));
+    CHECK(!ledger.activate_sanction(sid));
+
+    // A determination makes the measure available.
+    CHECK(ledger.adjudicate(vid, cur::VS_CONFIRMED));
+    CHECK(cur::supports_measure(cur::VS_CONFIRMED));
+    CHECK(ledger.activate_sanction(sid));
+    CHECK_EQ(ledger.find_sanction(sid)->status, cur::SANC_ACTIVE);
+
+    // A measure answering nothing can never be activated.
+    cur::SanctionRecord orphan;
+    orphan.entity_id = "accused-1";
+    orphan.status = cur::SANC_PROPOSED;
+    const std::string oid = ledger.impose_sanction(orphan).sanction_id;
+    CHECK(!ledger.activate_sanction(oid));
+}
+
+// CUR-N.4 §4.12(d), CUR-N.5 §5.10(e): a determination overturned on appeal is
+// corrected in the record to show that outcome, not erased.
+static void test_overturned_is_recorded_not_erased() {
+    TEST("an overturned determination is corrected, not erased (CREF §15)");
+
+    cur::ViolationLedger ledger;
+    cur::ViolationRecord v;
+    v.entity_id = "cleared-1";
+    v.status = cur::VS_OPEN;
+    const std::string vid = ledger.open_violation(v).violation_id;
+
+    CHECK(ledger.adjudicate(vid, cur::VS_CONFIRMED));
+    CHECK(ledger.adjudicate(vid, cur::VS_OVERTURNED));
+    CHECK_EQ(ledger.find_violation(vid)->status, cur::VS_OVERTURNED);
+
+    // The record survives with its history legible: it is not dismissed, which
+    // would lose that it was ever confirmed, and not deleted.
+    CHECK_EQ(ledger.violations().size(), static_cast<size_t>(1));
+    CHECK(std::string(cur::to_string(cur::VS_OVERTURNED)) == "OVERTURNED");
+    CHECK(cur::is_adjudicated(cur::VS_OVERTURNED));
+    CHECK(!cur::supports_measure(cur::VS_OVERTURNED));
+
+    // Overturned is terminal. Nothing re-confirms it, and nothing returns a
+    // reviewed record to the undetermined state.
+    CHECK(!ledger.adjudicate(vid, cur::VS_CONFIRMED));
+    CHECK(!cur::adjudication_permitted(cur::VS_OVERTURNED, cur::VS_CONFIRMED));
+    CHECK(!cur::adjudication_permitted(cur::VS_CONFIRMED, cur::VS_OPEN));
+    CHECK(!cur::adjudication_permitted(cur::VS_DISMISSED, cur::VS_OPEN));
+
+    // A dismissed record reopens to review on new evidence, CUR-N.4 §4.10(d).
+    CHECK(cur::adjudication_permitted(cur::VS_DISMISSED, cur::VS_UNDER_REVIEW));
+
+    // Compliance does not extinguish the right of appeal.
+    CHECK(cur::adjudication_permitted(cur::VS_REMEDIED, cur::VS_OVERTURNED));
+}
+
+// The state machine's own sanction path must observe the same rule.
+static void test_state_machine_sanction_needs_determination() {
+    TEST("the FSM will not activate a measure on an undetermined violation");
+
+    cur::CURStateMachine m;
+    m.log().set_clock(fixed_clock);
+    auto lic = m.entities().register_entity("permit-77", cur::EC_ECONOMIC,
+                                            cur::SUBJ_OPERATIONAL_LICENSE);
+
+    cur::Event bad;
+    bad.type = cur::EV_VIOLATION_DETECTED;
+    bad.tick = 1;
+    bad.target = lic;
+    m.submit(bad);
+
+    // The violation minted by that transition is an allegation, not a finding.
+    auto vs = m.ledger().violations_for("permit-77");
+    CHECK(vs.size() >= static_cast<size_t>(1));
+    CHECK(!cur::supports_measure(vs.back().status));
+
+    cur::Event sanc;
+    sanc.type = cur::EV_SANCTION_APPLIED;
+    sanc.tick = 2;
+    sanc.target = lic;
+    sanc.context.due_process_complete = true;
+    m.submit(sanc);
+
+    // A sanction was recorded — the attempt belongs in the audit trail — but it
+    // is proposed, not active, because nothing has been determined yet.
+    auto ss = m.ledger().sanctions_for("permit-77");
+    CHECK(ss.size() >= static_cast<size_t>(1));
+    CHECK_EQ(ss.back().status, cur::SANC_PROPOSED);
+    CHECK(ss.back().violation_id.empty());
+}
+
+// CUR-E.2 §2.2(c)-(d): a habitat holds reserve clearing its declared floor for
+// every being present, and an undeclared floor is not an unlimited one.
+static void test_life_support_margin() {
+    TEST("habitat life-support margin, undeclared floor is not unlimited "
+         "(CUR-E.2 §2.2)");
+
+    // The guard resolves the same way the debris guard does, inverted: debris
+    // must sit at or below a ceiling, reserve at or above a floor.
+    cur::TransitionContext ctx;
+    CHECK((cur::resolve_guard_mask(ctx) & cur::guard::LIFE_SUPPORT_MARGIN) == 0);
+
+    ctx.life_support_reserve_units = 500;
+    ctx.life_support_floor_units = 0;   // undeclared
+    CHECK((cur::resolve_guard_mask(ctx) & cur::guard::LIFE_SUPPORT_MARGIN) == 0);
+
+    ctx.life_support_floor_units = 400;  // declared and cleared
+    CHECK((cur::resolve_guard_mask(ctx) & cur::guard::LIFE_SUPPORT_MARGIN) != 0);
+
+    ctx.life_support_floor_units = 500;  // exactly at the floor
+    CHECK((cur::resolve_guard_mask(ctx) & cur::guard::LIFE_SUPPORT_MARGIN) != 0);
+
+    ctx.life_support_floor_units = 501;  // one unit short
+    CHECK((cur::resolve_guard_mask(ctx) & cur::guard::LIFE_SUPPORT_MARGIN) == 0);
+
+    // End to end: a docking is refused where the margin does not hold.
+    cur::CURStateMachine m;
+    m.log().set_clock(fixed_clock);
+    auto hab = m.entities().register_entity("habitat-3", cur::EC_ECONOMIC,
+                                            cur::SUBJ_OPERATIONAL_LICENSE);
+
+    cur::Event dock;
+    dock.type = cur::EV_DOCKING;
+    dock.tick = 1;
+    dock.target = hab;
+    dock.context.life_support_reserve_units = 300;
+    dock.context.life_support_floor_units = 0;  // never counted the arrivals
+    auto r1 = m.submit(dock);
+    CHECK(!r1.accepted);
+
+    // Declaring a floor the reserve cannot clear does not help.
+    dock.tick = 2;
+    dock.context.life_support_floor_units = 800;
+    auto r2 = m.submit(dock);
+    CHECK(!r2.accepted);
+
+    // Reserve sufficient for everyone aboard, arrivals included.
+    dock.tick = 3;
+    dock.context.life_support_reserve_units = 900;
+    auto r3 = m.submit(dock);
+    CHECK(r3.accepted);
+
+    // Both refusals are in the audit trail. A habitat turning beings away is
+    // exactly the decision that must be reviewable afterwards.
+    CHECK(m.log().records().size() >= static_cast<size_t>(3));
+
+    // The guard names itself in a refusal record, so the reason a docking was
+    // turned away is legible without reading the table.
+    char names[256];
+    cur::describe_guards(cur::guard::LIFE_SUPPORT_MARGIN, names, sizeof(names));
+    CHECK(std::string(names).find("LIFE_SUPPORT_MARGIN") != std::string::npos);
+}
+
+static void test_enterprise_concentration_measured_alike() {
+    TEST("enterprise and institution score identically, remedy differently "
+         "(CUR-X.4 §4.2(d), §4.9)");
+
+    cur::CaptureRiskModel model;
+
+    cur::CaptureRiskInputs inst;
+    inst.eci = 70; inst.ici = 65; inst.iii = 30; inst.dpi = 25; inst.thi = 40;
+    inst.rdi = 80;
+
+    cur::CaptureRiskInputs ent = inst;
+    ent.subject = cur::CSUB_ENTERPRISE;
+
+    // §4.2(d): assessed "on the same basis". Identical inputs, identical score
+    // — the subject changes nothing about the measurement.
+    CHECK_EQ(model.compute(inst), model.compute(ent));
+    CHECK_EQ(static_cast<int>(cur::CaptureRiskModel::band(model.compute(ent))),
+             static_cast<int>(cur::CRB_HIGH));
+
+    // The default is institutional, so code written before the field existed
+    // behaves as it did.
+    cur::CaptureRiskInputs plain;
+    CHECK_EQ(static_cast<int>(plain.subject), static_cast<int>(cur::CSUB_INSTITUTION));
+}
+
+static void test_capture_measures_need_a_determination() {
+    TEST("a score is a diagnostic, not a finding (FOUNDATION-003 §15, "
+         "CUR-X.4 §4.9(a))");
+
+    // Maximum concentration, no determination. Nothing is available — not even
+    // publication. Same rule supports_measure() enforces for ViolationStatus.
+    auto none = cur::available_measures(100.0, cur::CSUB_ENTERPRISE, false);
+    CHECK(!none.publication_of_findings);
+    CHECK(!none.mandatory_audit);
+    CHECK(!none.restructuring);
+    CHECK(!none.authorisation_suspension);
+    CHECK(!none.authorisation_withdrawal);
+    CHECK(!none.continuity_assumption_required);
+
+    // A determination at a low score does carry remedies. §4.9(b) gates them on
+    // due process, not on concentration: a small enterprise found to run
+    // unreviewable authority under §4.3 must still be reachable, because
+    // §4.2(c) declines to measure domination by the size of the dominating
+    // party.
+    auto small = cur::available_measures(5.0, cur::CSUB_ENTERPRISE, true);
+    CHECK(small.publication_of_findings);
+    CHECK(small.restructuring);
+    CHECK(small.authorisation_withdrawal);
+}
+
+static void test_institution_is_restructured_not_dissolved() {
+    TEST("authorisation measures do not reach an institution (CUR-X.4 §4.9(b))");
+
+    auto inst = cur::available_measures(95.0, cur::CSUB_INSTITUTION, true);
+    CHECK(inst.restructuring);
+    CHECK(inst.publication_of_findings);
+
+    // An institution holds no authorisation to suspend or withdraw. However
+    // captured it scores, the remedy is restructuring.
+    CHECK(!inst.authorisation_suspension);
+    CHECK(!inst.authorisation_withdrawal);
+    CHECK(!inst.continuity_assumption_required);
+
+    // An enterprise at the same score is reachable by both.
+    auto ent = cur::available_measures(95.0, cur::CSUB_ENTERPRISE, true);
+    CHECK(ent.authorisation_suspension);
+    CHECK(ent.authorisation_withdrawal);
+
+    // But an ordinary enterprise supplies no Vital Continuity Service, so no
+    // continuity assumption is triggered by withdrawing its authorisation.
+    CHECK(!ent.continuity_assumption_required);
+}
+
+static void test_continuity_assumed_before_withdrawal() {
+    TEST("a Continuity Enterprise may be dissolved, its service may not be "
+         "interrupted (CUR-X.4 §4.9(c)(2), §4.9(d))");
+
+    auto ce = cur::available_measures(50.0, cur::CSUB_CONTINUITY_ENTERPRISE, true);
+    CHECK(ce.authorisation_withdrawal);
+    CHECK(ce.continuity_assumption_required);
+
+    // §4.9(d) names withdrawal; §4.9(c)(2) is broader and reaches suspension
+    // too, because a suspension delays a Vital Continuity Service exactly as a
+    // withdrawal ends it. Both carry the precondition.
+    CHECK(ce.authorisation_suspension);
+
+    // The precondition does not depend on the score either. Continuity is owed
+    // at CRI 0 and at CRI 100 alike — CUR-FOUNDATION-013 admits no threshold.
+    auto low = cur::available_measures(0.0, cur::CSUB_CONTINUITY_ENTERPRISE, true);
+    CHECK(low.continuity_assumption_required);
+
+    // And with no determination there is no measure to precondition.
+    auto undetermined =
+        cur::available_measures(100.0, cur::CSUB_CONTINUITY_ENTERPRISE, false);
+    CHECK(!undetermined.continuity_assumption_required);
+
+    // Every subject names itself, so a published finding says which regime it
+    // was decided under.
+    CHECK(std::string(cur::to_string(cur::CSUB_CONTINUITY_ENTERPRISE)) ==
+          "Continuity Enterprise");
+    CHECK(std::string(cur::to_string(cur::CSUB_INSTITUTION)) == "Institution");
+}
+
+// ---------------------------------------------------------------------------
+// Advocates — CUR-A §7.7, CUR-E §1.6
+// ---------------------------------------------------------------------------
+
+namespace {
+
+// A declaration that clears everything, so each test can spoil exactly one
+// thing and see that one thing refuse.
+cur::AdvocateDeclaration clean_declaration(cur::EntityHandle advocate,
+                                           cur::EntityHandle represented) {
+    cur::AdvocateDeclaration d;
+    d.advocate = advocate;
+    d.represented = represented;
+    d.domain = cur::ADOM_ANIMAL;
+    d.proceeding_id = "PROC-1";
+    d.expertise_demonstrated = true;
+    return d;
+}
+
+}  // namespace
+
+static void test_advocate_disqualification_refuses() {
+    TEST("a disqualification is not a factor to be weighed "
+         "(CUR-A §7.7(c)-(d), CUR-E §1.6(c)-(d))");
+
+    cur::EntityRegistry entities;
+    auto advocate = entities.register_entity("ethologist-11", cur::EC_CIVIC);
+    auto animal = entities.register_entity("orca-pod-3", cur::EC_CIVIC);
+
+    cur::AdvocateRegistry adv;
+
+    // §7.7(c)(1) — dependent on a party whose conduct is in question.
+    auto dep = clean_declaration(advocate, animal);
+    dep.dependent_on_party = true;
+    CHECK_EQ(static_cast<int>(adv.appoint(dep, entities, 1)),
+             static_cast<int>(cur::ADV_REFUSED_DEPENDENT_ON_PARTY));
+
+    // §7.7(c)(2) — an interest in the outcome.
+    auto interest = clean_declaration(advocate, animal);
+    interest.interest_in_outcome = true;
+    CHECK_EQ(static_cast<int>(adv.appoint(interest, entities, 1)),
+             static_cast<int>(cur::ADV_REFUSED_INTEREST_IN_OUTCOME));
+
+    // §7.7(b) — expertise. Undeclared is not demonstrated, the same reading an
+    // undeclared life-support floor gets.
+    auto unqualified = clean_declaration(advocate, animal);
+    unqualified.expertise_demonstrated = false;
+    CHECK_EQ(static_cast<int>(adv.appoint(unqualified, entities, 1)),
+             static_cast<int>(cur::ADV_REFUSED_NO_EXPERTISE));
+
+    // Refusal means no record was created. A void appointment is one that never
+    // existed, so nothing accumulated across those three attempts.
+    CHECK(adv.appointments().empty());
+    CHECK_EQ(adv.advocate_for("PROC-1", animal), cur::INVALID_ENTITY);
+    CHECK(!adv.determination_permitted("PROC-1", animal));
+
+    // A clean declaration is appointed.
+    CHECK_EQ(static_cast<int>(adv.appoint(clean_declaration(advocate, animal),
+                                          entities, 2)),
+             static_cast<int>(cur::ADV_APPOINTED));
+    CHECK_EQ(adv.advocate_for("PROC-1", animal), advocate);
+    CHECK(adv.determination_permitted("PROC-1", animal));
+
+    // FOUNDATION-004 §19 — no governance action outside the entity model.
+    cur::AdvocateDeclaration unknown = clean_declaration(advocate, animal);
+    unknown.represented = 9999;
+    unknown.proceeding_id = "PROC-2";
+    CHECK_EQ(static_cast<int>(adv.appoint(unknown, entities, 3)),
+             static_cast<int>(cur::ADV_REFUSED_UNKNOWN_PARTY));
+}
+
+static void test_advocate_cannot_represent_both_sides() {
+    TEST("an advocate cannot represent both an interest and a party adverse "
+         "to it (CUR-A §7.7(c)(3), CUR-E §1.6(c)(3))");
+
+    cur::EntityRegistry entities;
+    auto lawyer = entities.register_entity("counsel-4", cur::EC_CIVIC);
+    auto animal = entities.register_entity("elephant-herd-2", cur::EC_CIVIC);
+    auto operator_ = entities.register_entity(
+        "charter-safari-1", cur::EC_ECONOMIC, cur::SUBJ_OPERATIONAL_LICENSE);
+
+    cur::AdvocateRegistry adv;
+    adv.declare_party("PROC-9", operator_);
+    adv.record_party_representation("PROC-9", lawyer, operator_);
+
+    // This is the disqualification the register can establish for itself, so it
+    // is not declared on the form — it is checked.
+    auto d = clean_declaration(lawyer, animal);
+    d.proceeding_id = "PROC-9";
+    CHECK_EQ(static_cast<int>(adv.appoint(d, entities, 1)),
+             static_cast<int>(cur::ADV_REFUSED_ADVERSE_REPRESENTATION));
+
+    // The conflict is per proceeding. The same being may advocate for the
+    // animal in a proceeding the operator is not party to.
+    auto other = clean_declaration(lawyer, animal);
+    other.proceeding_id = "PROC-10";
+    CHECK_EQ(static_cast<int>(adv.appoint(other, entities, 2)),
+             static_cast<int>(cur::ADV_APPOINTED));
+
+    // And nobody advocates for themselves.
+    auto self = clean_declaration(animal, animal);
+    self.proceeding_id = "PROC-11";
+    CHECK_EQ(static_cast<int>(adv.appoint(self, entities, 3)),
+             static_cast<int>(cur::ADV_REFUSED_SELF_REPRESENTATION));
+}
+
+static void test_stewards_consulted_before_appointment() {
+    TEST("environmental appointment consults the stewarding people "
+         "(CUR-E §1.6(b), §1.7(d))");
+
+    cur::EntityRegistry entities;
+    auto ecologist = entities.register_entity("ecologist-7", cur::EC_CIVIC);
+    auto watershed = entities.register_entity("watershed-north", cur::EC_CIVIC);
+
+    cur::AdvocateRegistry adv;
+
+    cur::AdvocateDeclaration d;
+    d.advocate = ecologist;
+    d.represented = watershed;
+    d.domain = cur::ADOM_ENVIRONMENTAL;
+    d.proceeding_id = "PROC-ENV-1";
+    d.expertise_demonstrated = true;
+    d.stewardship_relationship = true;
+    d.stewards_consulted = false;
+
+    // §1.7(d) is why this refuses rather than notes: conservation has
+    // historically been a vehicle for displacing exactly these peoples.
+    CHECK_EQ(static_cast<int>(adv.appoint(d, entities, 1)),
+             static_cast<int>(cur::ADV_REFUSED_STEWARDS_NOT_CONSULTED));
+
+    d.stewards_consulted = true;
+    CHECK_EQ(static_cast<int>(adv.appoint(d, entities, 2)),
+             static_cast<int>(cur::ADV_APPOINTED));
+
+    // Where no stewardship relationship exists there is nobody to consult, and
+    // the requirement does not manufacture one.
+    cur::AdvocateDeclaration open = d;
+    open.proceeding_id = "PROC-ENV-2";
+    open.stewardship_relationship = false;
+    open.stewards_consulted = false;
+    CHECK_EQ(static_cast<int>(adv.appoint(open, entities, 3)),
+             static_cast<int>(cur::ADV_APPOINTED));
+
+    // The registry confers no authority over any being — CUR-E §1.7(a).
+    CHECK(!cur::AdvocateRegistry::confers_authority());
+}
+
+static void test_voided_appointment_is_marked_not_erased() {
+    TEST("an appointment found in breach is voided and kept on the record "
+         "(CUR-A §7.7(d), CREF §15)");
+
+    cur::EntityRegistry entities;
+    auto advocate = entities.register_entity("vet-2", cur::EC_CIVIC);
+    auto animal = entities.register_entity("wolf-pack-5", cur::EC_CIVIC);
+
+    cur::AdvocateRegistry adv;
+    CHECK_EQ(static_cast<int>(adv.appoint(clean_declaration(advocate, animal),
+                                          entities, 1)),
+             static_cast<int>(cur::ADV_APPOINTED));
+    CHECK(adv.determination_permitted("PROC-1", animal));
+
+    // A funding relationship surfaces afterwards.
+    CHECK(adv.void_appointment("PROC-1", animal,
+                               cur::ADV_REFUSED_DEPENDENT_ON_PARTY, 5));
+
+    // The appointment no longer answers, so no determination proceeds on it.
+    CHECK_EQ(adv.advocate_for("PROC-1", animal), cur::INVALID_ENTITY);
+    CHECK(!adv.determination_permitted("PROC-1", animal));
+
+    // But the record survives, marked. Determinations reached with this
+    // advocate are voidable under §7.6(e), and identifying them later requires
+    // the appointment still be findable — the same reason VS_OVERTURNED exists
+    // rather than deleting a violation record.
+    CHECK_EQ(adv.appointments().size(), size_t{1});
+    CHECK(adv.appointments()[0].voided);
+    CHECK_EQ(adv.appointments()[0].voided_tick, uint64_t{5});
+    CHECK_EQ(static_cast<int>(adv.appointments()[0].void_reason),
+             static_cast<int>(cur::ADV_REFUSED_DEPENDENT_ON_PARTY));
+
+    // Voiding twice finds nothing live to void.
+    CHECK(!adv.void_appointment("PROC-1", animal,
+                                cur::ADV_REFUSED_DEPENDENT_ON_PARTY, 6));
+
+    // With the slot free, a replacement may be appointed.
+    auto replacement = entities.register_entity("vet-9", cur::EC_CIVIC);
+    CHECK_EQ(static_cast<int>(adv.appoint(clean_declaration(replacement, animal),
+                                          entities, 7)),
+             static_cast<int>(cur::ADV_APPOINTED));
+    CHECK_EQ(adv.advocate_for("PROC-1", animal), replacement);
+}
+
+static void test_determination_needs_a_named_advocate() {
+    TEST("an unnamed advocate is not an advocate (CUR-A §7.7, CUR-E §1.6)");
+
+    // The naming half is load-bearing, exactly as the declared floor is for
+    // LIFE_SUPPORT_MARGIN. Asserting cleared without naming anyone leaves the
+    // guard unsatisfied.
+    cur::TransitionContext ctx;
+    CHECK((cur::resolve_guard_mask(ctx) & cur::guard::ADVOCATE_CLEARED) == 0);
+
+    ctx.advocate_cleared = true;
+    CHECK((cur::resolve_guard_mask(ctx) & cur::guard::ADVOCATE_CLEARED) == 0);
+
+    // Naming someone without clearing them does not help either.
+    ctx.advocate_cleared = false;
+    ctx.advocate_ref = 3;
+    CHECK((cur::resolve_guard_mask(ctx) & cur::guard::ADVOCATE_CLEARED) == 0);
+
+    ctx.advocate_cleared = true;
+    CHECK((cur::resolve_guard_mask(ctx) & cur::guard::ADVOCATE_CLEARED) != 0);
+
+    // End to end. A determination without an advocate is not merely refused —
+    // §7.7(d) and §1.6(d) make it voidable, so the fallback row records a
+    // Class II violation rather than letting it pass unnoticed.
+    cur::CURStateMachine m;
+    m.log().set_clock(fixed_clock);
+    auto body = m.entities().register_entity("review-board-2", cur::EC_CIVIC,
+                                             cur::SUBJ_OPERATIONAL_LICENSE);
+
+    cur::TransitionContext bare;
+    auto r1 = m.submit_operational(body, cur::EV_REPRESENTED_DETERMINATION,
+                                   bare, 1);
+    CHECK(r1.accepted);
+    CHECK_EQ(m.compliance_of(body), cur::KS_VIOLATION);
+    CHECK_EQ(r1.fault, cur::FC_CLASS_II);
+
+    // The guard names itself, so the reason is legible without reading the
+    // table — §7.7(h) and §1.6(g) require the record to be publishable.
+    char names[256];
+    cur::describe_guards(cur::guard::ADVOCATE_CLEARED, names, sizeof(names));
+    CHECK(std::string(names).find("ADVOCATE_CLEARED") != std::string::npos);
+
+    // Both sections attach to the event, and both are cited.
+    auto regs = cur::RegulationSet::baseline();
+    CHECK((regs.required_guards_for(cur::EV_REPRESENTED_DETERMINATION) &
+           cur::guard::ADVOCATE_CLEARED) != 0);
+    CHECK(regs.find("CUR-A.7.7") != nullptr);
+    CHECK(regs.find("CUR-E.1.6") != nullptr);
+    CHECK(regs.find("CUR-X.ADV") != nullptr);
+}
+
+static void test_advocate_access_denial_is_a_fault() {
+    TEST("denying an advocate access is a Class II fault "
+         "(CUR-A §7.7(g), CUR-E §1.6(f))");
+
+    cur::CURStateMachine m;
+    m.log().set_clock(fixed_clock);
+    auto holder = m.entities().register_entity("facility-14", cur::EC_ECONOMIC,
+                                               cur::SUBJ_OPERATIONAL_LICENSE);
+
+    // Certification is no shelter, for the same reason it is none for a
+    // continuity failure: an advocate who cannot see the animal is a formality,
+    // and a formality is what §7.7 exists to prevent.
+    cur::TransitionContext ctx;
+    ctx.rights_certified = true;
+    auto cert = m.submit_operational(holder, cur::EV_CERTIFICATION_GRANTED,
+                                     ctx, 1);
+    CHECK(cert.accepted);
+    CHECK_EQ(m.compliance_of(holder), cur::KS_CERTIFIED);
+
+    cur::TransitionContext denial;
+    auto r = m.submit_operational(holder, cur::EV_ADVOCATE_ACCESS_DENIED,
+                                  denial, 2);
+    CHECK(r.accepted);
+    CHECK_EQ(m.compliance_of(holder), cur::KS_VIOLATION);
+    CHECK_EQ(r.fault, cur::FC_CLASS_II);
+    CHECK_EQ(m.ledger().violations().size(), size_t{1});
+
+    // Grounds for adverse inference means the denial has to be findable
+    // afterwards, so it is on the record as its own event.
+    CHECK(m.ledger().violations()[0].appealable);
+}
+
+// ---------------------------------------------------------------------------
+// Determination of death — CUR-H.5 §5.5A
+// ---------------------------------------------------------------------------
+
+static void test_determination_needs_two_distinct_parties() {
+    TEST("one party determining twice is one party (CUR-H.5 §5.5A(c)(1))");
+
+    cur::TransitionContext ctx;
+    CHECK((cur::resolve_guard_mask(ctx) & cur::guard::DETERMINATION_INDEPENDENT) == 0);
+
+    // A single named determiner is not two.
+    ctx.determiner_a_ref = 4;
+    CHECK((cur::resolve_guard_mask(ctx) & cur::guard::DETERMINATION_INDEPENDENT) == 0);
+
+    // The same party entered twice is still one party acting, which is the
+    // reason two handles are held rather than a count.
+    ctx.determiner_b_ref = 4;
+    CHECK((cur::resolve_guard_mask(ctx) & cur::guard::DETERMINATION_INDEPENDENT) == 0);
+
+    ctx.determiner_b_ref = 5;
+    CHECK((cur::resolve_guard_mask(ctx) & cur::guard::DETERMINATION_INDEPENDENT) != 0);
+
+    // §5.5A(f) — an interest disqualifies absolutely, however many parties.
+    ctx.determiner_interest_present = true;
+    CHECK((cur::resolve_guard_mask(ctx) & cur::guard::DETERMINATION_INDEPENDENT) == 0);
+}
+
+static void test_death_interval_is_not_waivable() {
+    TEST("the interval before an irreversible act cannot be shortened "
+         "(CUR-H.5 §5.5A(d)-(e))");
+
+    cur::TransitionContext ctx;
+    CHECK((cur::resolve_guard_mask(ctx) & cur::guard::DEATH_INTERVAL_ELAPSED) == 0);
+
+    // An undeclared interval is not an interval of zero, the reading an
+    // undeclared debris budget and an undeclared life-support floor both get.
+    ctx.observation_elapsed_ticks = 10000;
+    ctx.observation_sustained = true;
+    CHECK((cur::resolve_guard_mask(ctx) & cur::guard::DEATH_INTERVAL_ELAPSED) == 0);
+
+    // One tick short is short.
+    ctx.observation_required_ticks = 100;
+    ctx.observation_elapsed_ticks = 99;
+    CHECK((cur::resolve_guard_mask(ctx) & cur::guard::DEATH_INTERVAL_ELAPSED) == 0);
+
+    ctx.observation_elapsed_ticks = 100;
+    CHECK((cur::resolve_guard_mask(ctx) & cur::guard::DEATH_INTERVAL_ELAPSED) != 0);
+
+    // §5.5A(d): observed across the interval, not merely stored across it.
+    // Elapsed time in a drawer is not observation, and it is observation that
+    // gives an erroneous determination the chance to become apparent.
+    ctx.observation_sustained = false;
+    ctx.observation_elapsed_ticks = 100000;
+    CHECK((cur::resolve_guard_mask(ctx) & cur::guard::DEATH_INTERVAL_ELAPSED) == 0);
+}
+
+static void test_irreversible_act_refused_without_both() {
+    TEST("burial before the interval, or on a void determination, is refused "
+         "(CUR-H.5 §5.5A(d)-(f))");
+
+    cur::CURStateMachine m;
+    m.log().set_clock(fixed_clock);
+    auto facility = m.entities().register_entity(
+        "mortuary-3", cur::EC_CIVIC, cur::SUBJ_OPERATIONAL_LICENSE);
+
+    // A determination by an interested single party is refused outright.
+    cur::TransitionContext bad;
+    bad.determiner_a_ref = 7;
+    auto r1 = m.submit_operational(facility, cur::EV_DEATH_DETERMINED, bad, 1);
+    CHECK(r1.accepted);
+    CHECK_EQ(m.compliance_of(facility), cur::KS_VIOLATION);
+    CHECK_EQ(r1.fault, cur::FC_CLASS_IV);
+
+    // Fresh machine for the interval case.
+    cur::CURStateMachine m2;
+    m2.log().set_clock(fixed_clock);
+    auto f2 = m2.entities().register_entity("mortuary-4", cur::EC_CIVIC,
+                                            cur::SUBJ_OPERATIONAL_LICENSE);
+
+    cur::TransitionContext good;
+    good.determiner_a_ref = 7;
+    good.determiner_b_ref = 8;
+    auto d = m2.submit_operational(f2, cur::EV_DEATH_DETERMINED, good, 1);
+    CHECK(d.accepted);
+    CHECK_EQ(m2.compliance_of(f2), cur::KS_COMPLIANT);
+    CHECK_EQ(d.fault, cur::FC_NONE);
+
+    // A valid determination does not by itself license the irreversible act.
+    good.observation_required_ticks = 72;
+    good.observation_elapsed_ticks = 12;
+    good.observation_sustained = true;
+    auto early = m2.submit_operational(f2, cur::EV_IRREVERSIBLE_ACT, good, 2);
+    CHECK(early.accepted);
+    CHECK_EQ(m2.compliance_of(f2), cur::KS_VIOLATION);
+    CHECK_EQ(early.fault, cur::FC_CLASS_IV);
+
+    // The guarded row did not match because the context does not satisfy the
+    // interval. `early.guards_required` reports the row that DID match — the
+    // Class IV fallback, which requires nothing — so the reason is read from
+    // the context rather than from the result.
+    CHECK((cur::resolve_guard_mask(good) & cur::guard::DEATH_INTERVAL_ELAPSED) == 0);
+
+    // And the interval alone does not cure a void determination. Waiting out
+    // the full interval on a determination made by an interested party
+    // satisfies nothing — §5.5A(f) voids acts performed in reliance on it.
+    cur::CURStateMachine m3;
+    m3.log().set_clock(fixed_clock);
+    auto f3 = m3.entities().register_entity("mortuary-5", cur::EC_CIVIC,
+                                            cur::SUBJ_OPERATIONAL_LICENSE);
+    cur::TransitionContext waited;
+    waited.determiner_a_ref = 7;
+    waited.determiner_b_ref = 8;
+    waited.determiner_interest_present = true;  // §5.5A(f)
+    waited.observation_required_ticks = 72;
+    waited.observation_elapsed_ticks = 500;
+    waited.observation_sustained = true;
+    auto act = m3.submit_operational(f3, cur::EV_IRREVERSIBLE_ACT, waited, 3);
+    CHECK(act.accepted);
+    CHECK_EQ(m3.compliance_of(f3), cur::KS_VIOLATION);
+    CHECK_EQ(act.fault, cur::FC_CLASS_IV);
+
+    // Both satisfied: the act proceeds.
+    cur::CURStateMachine m4;
+    m4.log().set_clock(fixed_clock);
+    auto f4 = m4.entities().register_entity("mortuary-6", cur::EC_CIVIC,
+                                            cur::SUBJ_OPERATIONAL_LICENSE);
+    cur::TransitionContext ok;
+    ok.determiner_a_ref = 7;
+    ok.determiner_b_ref = 8;
+    ok.observation_required_ticks = 72;
+    ok.observation_elapsed_ticks = 72;
+    ok.observation_sustained = true;
+    auto fine = m4.submit_operational(f4, cur::EV_IRREVERSIBLE_ACT, ok, 4);
+    CHECK(fine.accepted);
+    CHECK_EQ(m4.compliance_of(f4), cur::KS_COMPLIANT);
+    CHECK_EQ(fine.fault, cur::FC_NONE);
+}
+
+static void test_vacating_a_determination_is_never_blocked() {
+    TEST("nothing stands between a living being and vacating a determination "
+         "that they are not (CUR-H.5 §5.5A(h))");
+
+    cur::CURStateMachine m;
+    m.log().set_clock(fixed_clock);
+    auto being = m.entities().register_entity("citizen-8812", cur::EC_CIVIC);
+
+    // Reachable from every compliance state the being can occupy, with an
+    // empty context. §5.5A(h)(1) makes the determination void from the outset
+    // rather than validly made and later reversed, so there is nothing to
+    // satisfy before saying so.
+    cur::TransitionContext empty;
+    auto v1 = m.submit_operational(being, cur::EV_DETERMINATION_VACATED, empty, 1);
+    CHECK(v1.accepted);
+    CHECK_EQ(m.compliance_of(being), cur::KS_COMPLIANT);
+    CHECK_EQ(v1.fault, cur::FC_NONE);
+
+    // Also reachable once the being is in violation — a being wrongly declared
+    // dead does not have to be in good standing to be declared alive.
+    auto viol = m.submit_operational(being, cur::EV_VIOLATION_DETECTED, empty, 2);
+    CHECK(viol.accepted);
+    CHECK_EQ(m.compliance_of(being), cur::KS_VIOLATION);
+    auto v2 = m.submit_operational(being, cur::EV_DETERMINATION_VACATED, empty, 3);
+    CHECK(v2.accepted);
+    CHECK_EQ(v2.fault, cur::FC_NONE);
+
+    // The vacation is on the record rather than erasing anything — §5.5A(h)(4),
+    // the reasoning CREF §15 gives for VS_OVERTURNED.
+    bool found = false;
+    for (const auto& rec : m.log().records()) {
+        if (rec.trigger == cur::EV_DETERMINATION_VACATED) found = true;
+    }
+    CHECK(found);
+
+    // §5.5A(j): substrate-independent. The same rows serve a silicon entity,
+    // for which deletion is the irreversible act.
+    auto silicon = m.entities().register_entity("aevoria-node-4", cur::EC_CIVIC);
+    auto v3 = m.submit_operational(silicon, cur::EV_DETERMINATION_VACATED, empty, 4);
+    CHECK(v3.accepted);
+}
+
+static void test_death_regulations_registered() {
+    TEST("§5.5A is in the baseline regulation set at Class IV");
+
+    auto regs = cur::RegulationSet::baseline();
+    const cur::Regulation* det = regs.find("CUR-H.5.5Ac");
+    const cur::Regulation* act = regs.find("CUR-H.5.5Ad");
+    CHECK(det != nullptr);
+    CHECK(act != nullptr);
+    if (det == nullptr || act == nullptr) return;
+
+    CHECK_EQ(static_cast<int>(det->breach_fault_class()),
+             static_cast<int>(cur::FC_CLASS_IV));
+    CHECK_EQ(static_cast<int>(act->breach_fault_class()),
+             static_cast<int>(cur::FC_CLASS_IV));
+
+    // §5.5A(j) — cross-domain, because the failure is substrate-independent.
+    CHECK_EQ(static_cast<int>(det->domain()),
+             static_cast<int>(cur::DOMAIN_CROSS_DOMAIN));
+    CHECK_EQ(static_cast<int>(act->domain()),
+             static_cast<int>(cur::DOMAIN_CROSS_DOMAIN));
+
+    CHECK((regs.required_guards_for(cur::EV_IRREVERSIBLE_ACT) &
+           cur::guard::DEATH_INTERVAL_ELAPSED) != 0);
+    CHECK((regs.required_guards_for(cur::EV_IRREVERSIBLE_ACT) &
+           cur::guard::DETERMINATION_INDEPENDENT) != 0);
+
+    // Vacating carries no guard requirement at all.
+    CHECK_EQ(regs.required_guards_for(cur::EV_DETERMINATION_VACATED),
+             cur::guard::NONE);
+
+    char names[256];
+    cur::describe_guards(
+        cur::guard::DEATH_INTERVAL_ELAPSED | cur::guard::DETERMINATION_INDEPENDENT,
+        names, sizeof(names));
+    CHECK(std::string(names).find("DEATH_INTERVAL_ELAPSED") != std::string::npos);
+    CHECK(std::string(names).find("DETERMINATION_INDEPENDENT") != std::string::npos);
+}
+
 int main() {
     std::printf("libcur %s — CUR corpus %s\n\n", CUR_LIB_VERSION_STRING,
                 cur::CUR_CORPUS_VERSION);
@@ -892,6 +1667,25 @@ int main() {
     test_rfal_precautionary_default();
     test_no_emergency_vocabulary();
     test_audit_trail_has_actor();
+    test_allegation_is_not_a_finding();
+    test_overturned_is_recorded_not_erased();
+    test_state_machine_sanction_needs_determination();
+    test_life_support_margin();
+    test_enterprise_concentration_measured_alike();
+    test_capture_measures_need_a_determination();
+    test_institution_is_restructured_not_dissolved();
+    test_continuity_assumed_before_withdrawal();
+    test_advocate_disqualification_refuses();
+    test_advocate_cannot_represent_both_sides();
+    test_stewards_consulted_before_appointment();
+    test_voided_appointment_is_marked_not_erased();
+    test_determination_needs_a_named_advocate();
+    test_advocate_access_denial_is_a_fault();
+    test_determination_needs_two_distinct_parties();
+    test_death_interval_is_not_waivable();
+    test_irreversible_act_refused_without_both();
+    test_vacating_a_determination_is_never_blocked();
+    test_death_regulations_registered();
 
     std::printf("\n%d checks, %d failures\n", g_checks, g_failures);
     return g_failures == 0 ? 0 : 1;

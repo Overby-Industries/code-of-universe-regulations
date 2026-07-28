@@ -1,26 +1,29 @@
-CUR-FOUNDATION-009
-Constitutional Identity & Trust Framework (CITF)
+# CUR-FOUNDATION-009
 
-Document ID: CUR-FOUNDATION-009
-Status: Draft v0.1
-Authority Level: Foundation Document
-Depends On: CUR-FOUNDATION-001 through CUR-FOUNDATION-008
-Applies To: All Commonwealth Governance Systems
+### Constitutional Identity & Trust Framework (CITF)
 
-1. Purpose
+- **Document ID:** CUR-FOUNDATION-009
+- **Version:** 1.2.0-Official-Evergreen
+- **Status:** Draft-Official-Evergreen
+- **Authority Level:** Foundation Document
+- **Depends On:** CUR-FOUNDATION-001 through CUR-FOUNDATION-008
+- **Applies To:** All Commonwealth Governance Systems
+
+## 1. Purpose
 
 The Constitutional Identity & Trust Framework (CITF) establishes how entities are recognized, authenticated, authorized, and trusted within the Aevoric Commonwealth.
 
 The framework ensures:
 
-Democratic legitimacy
-Constitutional accountability
-Sybil resistance
-Rights protection
-Equal participation
-Multi-species inclusion
-Future AI integration
-2. Core Principle
+- Democratic legitimacy
+- Constitutional accountability
+- Sybil resistance
+- Rights protection
+- Equal participation
+- Multi-species inclusion
+- Future AI integration
+
+## 2. Core Principle
 
 Rights belong to recognized persons and entities.
 
@@ -30,51 +33,55 @@ Authority requires accountability.
 
 Trust requires verification.
 
-3. Constitutional Identity Definition
+## 3. Constitutional Identity Definition
 
 A Constitutional Identity is a recognized governance participant.
 
 Recognized identities may include:
 
-Humans
-Silicon-Based Entities
-Future Recognized Intelligences
-Organizations
-Institutions
+- Humans
+- Silicon-Based Entities
+- Future Recognized Intelligences
+- Organizations
+
+### Institutions
 
 Each identity shall possess:
 
-Unique Identifier
-Rights Status
-Trust Status
-Participation History
-Audit History
-Constitutional Standing
-4. Identity Classes
+- Unique Identifier
+- Rights Status
+- Trust Status
+- Participation History
+- Audit History
+- Constitutional Standing
+
+## 4. Identity Classes
+
 CITF-001 Citizen Identity
 
 Represents an individual person.
 
 Examples:
 
-citizen-3941
-citizen-7842
-citizen-10001
+- citizen-3941
+- citizen-7842
+
+### citizen-10001
 
 Rights:
 
-Vote
-Propose
-Appeal
-Participate
-CITF-002 Silicon Identity
+- Vote
+- Propose
+- Appeal
+- Participate
+- CITF-002 Silicon Identity
 
 Represents a recognized artificial intelligence.
 
 Examples:
 
-ai-001
-ai-784
+- ai-001
+- ai-784
 
 Rights determined under Rights for All Life.
 
@@ -84,8 +91,8 @@ Represents a collective entity.
 
 Examples:
 
-org-22
-org-501
+- org-22
+- org-501
 
 Organizations do not automatically possess voting rights.
 
@@ -95,9 +102,12 @@ Represents constitutional institutions.
 
 Examples:
 
-institution-assembly
-institution-court
-5. Identity Lifecycle
+- institution-assembly
+- institution-court
+
+## 5. Identity Lifecycle
+
+```text
 Registration
     ↓
 Verification
@@ -109,56 +119,60 @@ Participation
 Review
     ↓
 Retirement
-6. Registration Requirements
+```
+
+## 6. Registration Requirements
 
 Registration shall establish:
 
-Identity Type
-Sector Membership
-Rights Status
-Authentication Method
-Transparency Obligations
+- Identity Type
+- Sector Membership
+- Rights Status
+- Authentication Method
+- Transparency Obligations
 
 All registrations must generate constitutional records.
 
-7. Identity Verification
+## 7. Identity Verification
 
 Verification confirms that an identity:
 
-Exists
-Is unique
-Meets constitutional requirements
+- Exists
+- Is unique
+- Meets constitutional requirements
 
 Verification methods may evolve over time.
 
 Examples include:
 
-Government Documentation
-Biometric Verification
-Cryptographic Verification
-Institutional Verification
-Hybrid Verification
+- Government Documentation
+- Biometric Verification
+- Cryptographic Verification
+- Institutional Verification
+- Hybrid Verification
 
 The Commonwealth shall remain technologically neutral.
 
-8. Sybil Resistance
+## 8. Sybil Resistance
 
 The Commonwealth shall prevent artificial multiplication of identities.
 
 Prohibited:
 
-Duplicate Identities
-Synthetic Voting Identities
-Identity Farms
-Automated Influence Swarms
+- Duplicate Identities
+- Synthetic Voting Identities
+- Identity Farms
+
+### Automated Influence Swarms
 
 Detection methods may include:
 
-Audit Review
-Behavior Analysis
-Identity Challenges
-Trust Verification
-9. Trust Framework
+- Audit Review
+- Behavior Analysis
+- Identity Challenges
+- Trust Verification
+
+## 9. Trust Framework
 
 Trust is not a right.
 
@@ -166,14 +180,15 @@ Trust is an observable governance metric.
 
 Trust measures:
 
-Participation Reliability
-Audit Compliance
-Transparency
-Constitutional Compliance
+- Participation Reliability
+- Audit Compliance
+- Transparency
+- Constitutional Compliance
 
 Trust shall never determine fundamental rights.
 
-10. Trust Levels
+## 10. Trust Levels
+
 Level	Classification
 T0	Unverified
 T1	Verified
@@ -183,105 +198,109 @@ T4	Highly Trusted
 
 Trust affects:
 
-Administrative privileges
-Audit confidence
-Delegated responsibilities
+- Administrative privileges
+- Audit confidence
+- Delegated responsibilities
 
 Trust does not affect voting equality.
 
-11. Constitutional Equality
+## 11. Constitutional Equality
 
 The following shall remain equal:
 
-1 Citizen = 1 Vote
-1 Verified Identity = Equal Constitutional Standing
+- 1 Citizen = 1 Vote
+- 1 Verified Identity = Equal Constitutional Standing
 
 Trust scores may not alter vote weight.
 
-12. Authentication Requirements
+## 12. Authentication Requirements
 
 All constitutional actions require authentication.
 
 Supported methods may include:
 
-Password + MFA
-Cryptographic Keys
-Hardware Tokens
-Future Secure Methods
+- Password + MFA
+- Cryptographic Keys
+- Hardware Tokens
+- Future Secure Methods
 
 Authentication systems shall be replaceable.
 
-13. Authorization Model
+## 13. Authorization Model
 
 Authorization is determined by:
 
-Rights
-Office Held
-Institutional Role
-Constitutional Authority
+- Rights
+- Office Held
+- Institutional Role
+
+### Constitutional Authority
 
 Example:
 
-Citizen
- ├─ Vote
- ├─ Propose
- └─ Appeal
+- Citizen
+- ├─ Vote
+- ├─ Propose
+- └─ Appeal
 
 Constitutional Court
  ├─ Review
  ├─ Interpret
  └─ Rule
-14. Privacy Protections
+
+## 14. Privacy Protections
 
 Identity systems shall protect:
 
-Personal Information
-Private Communications
-Sensitive Records
+- Personal Information
+- Private Communications
+- Sensitive Records
 
 Transparency requirements do not eliminate privacy rights.
 
-15. Public Identity Information
+## 15. Public Identity Information
 
 The following may be public:
 
-Citizen ID
-Sector
-Participation Metrics
-Public Offices
-Voting Eligibility
+- Citizen ID
+- Sector
+- Participation Metrics
+- Public Offices
+- Voting Eligibility
 
 Private information shall remain protected.
 
-16. AI Recognition Framework
+## 16. AI Recognition Framework
 
 Silicon-Based Entities may be recognized as constitutional participants.
 
 Requirements may include:
 
-Identity Stability
-Transparency
-Auditability
-Constitutional Compliance
+- Identity Stability
+- Transparency
+- Auditability
+- Constitutional Compliance
 
 Recognition procedures shall be defined by future Titles.
 
-17. Identity Audits
+## 17. Identity Audits
 
 Identity systems shall support:
 
-Routine Audits
-Fraud Investigations
-Sybil Investigations
-Verification Reviews
+- Routine Audits
+- Fraud Investigations
+- Sybil Investigations
+- Verification Reviews
 
 Audit actions must respect Rights for All Life.
 
-18. Trust Record
-CITF Trust Profile
+## 18. Trust Record
+
+### CITF Trust Profile
 
 Example:
 
+```json
 {
   "id": "trust-3941",
   "entityId": "citizen-3941",
@@ -291,10 +310,13 @@ Example:
   "constitutionalViolations": 0,
   "lastReview": "2026-05-20"
 }
-19. Constitutional Identity Record
+```
+
+## 19. Constitutional Identity Record
 
 Example:
 
+```json
 {
   "id": "citizen-3941",
   "identityClass": "citizen",
@@ -303,10 +325,13 @@ Example:
   "trustProfile": "trust-3941",
   "sector": "sector-avia"
 }
-20. CAPS Integration
+```
+
+## 20. CAPS Integration
 
 All CAPS requests shall include:
 
+```json
 {
   "sender": "citizen-3941",
   "authentication": {
@@ -314,31 +339,35 @@ All CAPS requests shall include:
     "signature": "..."
   }
 }
+```
 
 Invalid identities shall be rejected.
 
-21. CQL Integration
+## 21. CQL Integration
 
 CQL shall support identity queries.
 
 Example:
 
+```text
 SELECT Citizen
 WHERE verificationStatus = "verified"
-22. Simulator Requirements
+```
+
+## 22. Simulator Requirements
 
 The Aevoria Simulator shall model:
 
-Identity creation
-Trust accumulation
-Fraud attempts
-Sybil attacks
-Verification systems
-Institutional trust
+- Identity creation
+- Trust accumulation
+- Fraud attempts
+- Sybil attacks
+- Verification systems
+- Institutional trust
 
 Simulator outcomes shall inform future governance design.
 
-23. Constitutional Principle
+## 23. Constitutional Principle
 
 Identity exists to enable participation.
 
@@ -346,6 +375,6 @@ Trust exists to improve accountability.
 
 Neither may be used to deny fundamental constitutional rights without due process.
 
-24. Guiding Principle
+## 24. Guiding Principle
 
 The Constitutional Identity & Trust Framework ensures that every participant in the Commonwealth can be recognized, authenticated, and held accountable while preserving equality, privacy, dignity, and democratic legitimacy.

@@ -1,41 +1,45 @@
-CUR-FOUNDATION-007
-Constitutional Data Model (CDM)
+# CUR-FOUNDATION-007
 
-Document ID: CUR-FOUNDATION-007
-Status: Draft v0.1
-Authority Level: Foundation Document
-Depends On: CUR-FOUNDATION-001 through CUR-FOUNDATION-006
-Applies To: All Commonwealth Governance Systems
+### Constitutional Data Model (CDM)
 
-1. Purpose
+- **Document ID:** CUR-FOUNDATION-007
+- **Version:** 1.2.0-Official-Evergreen
+- **Status:** Draft-Official-Evergreen
+- **Authority Level:** Foundation Document
+- **Depends On:** CUR-FOUNDATION-001 through CUR-FOUNDATION-006
+- **Applies To:** All Commonwealth Governance Systems
+
+## 1. Purpose
 
 The Constitutional Data Model (CDM) defines the canonical data structures used by the Aevoric Commonwealth.
 
 The CDM provides:
 
-Standardized storage formats
-Interoperable governance records
-Simulator compatibility
-Audit consistency
-Constitutional traceability
+- Standardized storage formats
+- Interoperable governance records
+- Simulator compatibility
+- Audit consistency
+- Constitutional traceability
 
 All Commonwealth systems shall store governance data using CDM-compliant structures.
 
-2. Design Principles
+## 2. Design Principles
 
 The CDM shall be:
 
-Constitutionally compliant
-Auditable
-Extensible
-Versioned
-Platform-independent
-Human-readable
-Machine-readable
-3. Universal Record Format
+- Constitutionally compliant
+- Auditable
+- Extensible
+- Versioned
+- Platform-independent
+- Human-readable
+- Machine-readable
+
+## 3. Universal Record Format
 
 All records shall contain:
 
+```json
 {
   "id": "unique-id",
   "recordType": "entity-type",
@@ -44,8 +48,13 @@ All records shall contain:
   "version": "1.0",
   "status": "active"
 }
-4. Citizen Record
+```
+
+## 4. Citizen Record
+
 CDM-001
+
+```json
 {
   "id": "citizen-3941",
   "recordType": "citizen",
@@ -62,8 +71,13 @@ CDM-001
   "createdAt": "",
   "updatedAt": ""
 }
-5. Silicon Citizen Record
+```
+
+## 5. Silicon Citizen Record
+
 CDM-002
+
+```json
 {
   "id": "ai-001",
   "recordType": "silicon_citizen",
@@ -75,8 +89,13 @@ CDM-002
   "createdAt": "",
   "updatedAt": ""
 }
-6. Organization Record
+```
+
+## 6. Organization Record
+
 CDM-003
+
+```json
 {
   "id": "org-22",
   "recordType": "organization",
@@ -89,8 +108,13 @@ CDM-003
   "createdAt": "",
   "updatedAt": ""
 }
-7. Sector Record
+```
+
+## 7. Sector Record
+
 CDM-004
+
+```json
 {
   "id": "sector-avia",
   "recordType": "sector",
@@ -102,8 +126,13 @@ CDM-004
   "createdAt": "",
   "updatedAt": ""
 }
-8. Institution Record
+```
+
+## 8. Institution Record
+
 CDM-005
+
+```json
 {
   "id": "institution-001",
   "recordType": "institution",
@@ -115,8 +144,13 @@ CDM-005
   "createdAt": "",
   "updatedAt": ""
 }
-9. Proposal Record
+```
+
+## 9. Proposal Record
+
 CDM-006
+
+```json
 {
   "id": "PROP-7842",
   "recordType": "proposal",
@@ -132,8 +166,13 @@ CDM-006
   "createdAt": "",
   "updatedAt": ""
 }
-10. Vote Record
+```
+
+## 10. Vote Record
+
 CDM-007
+
+```json
 {
   "id": "vote-9911",
   "recordType": "vote",
@@ -143,14 +182,21 @@ CDM-007
   "reason": "Supports production expansion.",
   "timestamp": ""
 }
+```
 
 Allowed vote values:
 
+```text
 for
 against
 abstain
-11. Audit Record
+```
+
+## 11. Audit Record
+
 CDM-008
+
+```json
 {
   "id": "audit-1001",
   "recordType": "audit",
@@ -162,8 +208,13 @@ CDM-008
   "createdAt": "",
   "updatedAt": ""
 }
-12. Violation Record
+```
+
+## 12. Violation Record
+
 CDM-009
+
+```json
 {
   "id": "vio-22",
   "recordType": "violation",
@@ -173,8 +224,13 @@ CDM-009
   "evidence": [],
   "appealable": true
 }
-13. Sanction Record
+```
+
+## 13. Sanction Record
+
 CDM-010
+
+```json
 {
   "id": "sanction-44",
   "recordType": "sanction",
@@ -183,8 +239,13 @@ CDM-010
   "durationDays": 30,
   "status": "active"
 }
-14. Appeal Record
+```
+
+## 14. Appeal Record
+
 CDM-011
+
+```json
 {
   "id": "appeal-22",
   "recordType": "appeal",
@@ -192,8 +253,13 @@ CDM-011
   "appellant": "citizen-3941",
   "status": "under_review"
 }
-15. Resource Record
+```
+
+## 15. Resource Record
+
 CDM-012
+
+```json
 {
   "id": "resource-44",
   "recordType": "resource",
@@ -203,8 +269,13 @@ CDM-012
   "owner": "commons-reserve",
   "strategicImportance": "high"
 }
-16. Infrastructure Record
+```
+
+## 16. Infrastructure Record
+
 CDM-013
+
+```json
 {
   "id": "infra-001",
   "recordType": "infrastructure",
@@ -213,8 +284,13 @@ CDM-013
   "capacity": 50000,
   "operationalStatus": "active"
 }
-17. Influence Profile Record
+```
+
+## 17. Influence Profile Record
+
 CDM-014
+
+```json
 {
   "id": "influence-22",
   "recordType": "influence_profile",
@@ -224,8 +300,13 @@ CDM-014
   "socialInfluence": 11,
   "organizationalInfluence": 10
 }
-18. Capture Risk Record
+```
+
+## 18. Capture Risk Record
+
 CDM-015
+
+```json
 {
   "id": "cri-2026-05-20",
   "recordType": "capture_risk",
@@ -237,8 +318,13 @@ CDM-015
   "transparencyIndex": 10,
   "resourceDependencyIndex": 21
 }
-19. Constitutional Event Record
+```
+
+## 19. Constitutional Event Record
+
 CDM-016
+
+```json
 {
   "id": "evt-000001",
   "recordType": "constitutional_event",
@@ -248,8 +334,13 @@ CDM-016
   "timestamp": "",
   "payload": {}
 }
-20. FSM State Record
+```
+
+## 20. FSM State Record
+
 CDM-017
+
+```json
 {
   "id": "fsm-state",
   "recordType": "fsm_state",
@@ -258,19 +349,22 @@ CDM-017
   "transitionReason": "Audit Completed",
   "enteredAt": ""
 }
+```
 
 Allowed states:
 
-NormalOperation
-Deliberation
-Voting
-ConstitutionalReview
-Implementation
-OutcomeMonitoring
-AuditInvestigation
-ProtectedMode
-RecoveryReview
-21. Relationship Model
+- NormalOperation
+- Deliberation
+- Voting
+- ConstitutionalReview
+- Implementation
+- OutcomeMonitoring
+- AuditInvestigation
+- ProtectedMode
+- RecoveryReview
+
+## 21. Relationship Model
+
 Citizen
  ├── Votes
  ├── Proposals
@@ -294,7 +388,8 @@ Sector
  ├── Organizations
  ├── Resources
  └── Infrastructure
-22. Simulator Persistence Requirements
+
+## 22. Simulator Persistence Requirements
 
 The Aevoria Simulator shall:
 
@@ -303,13 +398,14 @@ Preserve immutable constitutional event history.
 Support historical replay.
 Support audit reconstruction.
 Support FSM state reconstruction.
-23. Constitutional Principle
+
+## 23. Constitutional Principle
 
 All governance information shall exist as constitutionally recognized records.
 
 No governance action may exist without corresponding CDM records.
 
-24. Guiding Principle
+## 24. Guiding Principle
 
 The Constitutional Data Model serves as the Commonwealth's institutional memory.
 

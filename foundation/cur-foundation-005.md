@@ -2,7 +2,7 @@
 ### Constitutional Event Model (CEM)
 
 - **Document ID:** CUR-FOUNDATION-005
-- **Version:** 1.0.1-Official-Evergreen
+- **Version:** 1.2.0-Official-Evergreen
 - **Status:** Draft-Official-Evergreen
 - **Authority Level:** Foundation Document
 - **Depends On:** CUR-FOUNDATION-001, CUR-FOUNDATION-002, CUR-FOUNDATION-003, CUR-FOUNDATION-004
@@ -139,7 +139,7 @@ Generated when a citizen creates a proposal.
 }
 ```
 
-### FSM Result:
+### FSM Result
 
 ```mermaid
 graph TD;
@@ -155,7 +155,7 @@ Updated-Proposal-->Deliberation;
 
 - `vote_cast`
 
-### Generated when a vote is recorded.
+Generated when a vote is recorded.
 
 ```json
 {
@@ -169,7 +169,7 @@ Updated-Proposal-->Deliberation;
 }
 ```
 
-### Allowed vote values:
+Allowed vote values:
 
 - for
 - against
@@ -188,7 +188,11 @@ Updated-Proposal-->Deliberation;
     "reason": "Capture Risk Threshold Exceeded"
   }
 }
-violation_detected
+```
+
+- `violation_detected`
+
+```json
 {
   "type": "violation_detected",
   "payload": {
@@ -197,8 +201,13 @@ violation_detected
     "target": "organization-22"
   }
 }
-7. Economic Event Definitions
-resource_transferred
+```
+
+## 7. Economic Event Definitions
+
+- `resource_transferred`
+
+```json
 {
   "type": "resource_transferred",
   "payload": {
@@ -208,7 +217,11 @@ resource_transferred
     "quantity": 1200
   }
 }
-commons_contribution
+```
+
+- `commons_contribution`
+
+```json
 {
   "type": "commons_contribution",
   "payload": {
@@ -223,7 +236,7 @@ commons_contribution
 
 - `fault_detected`
 
-### Generated automatically by FSM monitoring.
+Generated automatically by FSM monitoring.
 
 ```json
 {
@@ -234,7 +247,11 @@ commons_contribution
     "description": "Authority concentration detected"
   }
 }
-protected_mode_entered
+```
+
+- `protected_mode_entered`
+
+```json
 {
   "type": "protected_mode_entered",
   "payload": {
@@ -310,7 +327,7 @@ If an action cannot be represented as a constitutional event, it does not exist 
 
 All governance shall be observable, auditable, and traceable through the Constitutional Event Model.
 
-# 15. Guiding Principle
+## 15. Guiding Principle
 
 Events are the language through which the Commonwealth records, evaluates, and governs itself.
 

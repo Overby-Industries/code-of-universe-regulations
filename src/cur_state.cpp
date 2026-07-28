@@ -160,6 +160,14 @@ const char* to_string(EventType e) {
             return "root_cause_analysis_completed";
         case EV_VITAL_CONTINUITY_DENIED: return "vital_continuity_denied";
 
+        case EV_ADVOCATE_APPOINTED: return "advocate_appointed";
+        case EV_ADVOCATE_ACCESS_DENIED: return "advocate_access_denied";
+        case EV_REPRESENTED_DETERMINATION: return "represented_determination";
+
+        case EV_DEATH_DETERMINED: return "death_determined";
+        case EV_IRREVERSIBLE_ACT: return "irreversible_act";
+        case EV_DETERMINATION_VACATED: return "determination_vacated";
+
         case EV_COUNT: break;
     }
     return "unknown";
@@ -186,6 +194,55 @@ uint16_t resolve_guard_mask(const TransitionContext& ctx) {
     if (ctx.commons_reserve_basis_points >= 2000) {
         m |= guard::COMMONS_RESERVE_FLOOR;
     }
+
+    // CUR-E.2 §2.2(c). A floor of zero means "no declared floor", not "no
+    // reserve required", and cannot be satisfied — the same reading given to
+    // an undeclared debris limit above, for the same reason. A habitat has to
+    // state the margin it needs before it can be held to it, and CUR-E.2
+    // §2.2(b) is why the margin is a constitutional obligation rather than an
+    // engineering preference: in a closed volume there is no outside to
+    // absorb the error.
+    if (ctx.life_support_floor_units > 0 &&
+        ctx.life_support_reserve_units >= ctx.life_support_floor_units) {
+        m |= guard::LIFE_SUPPORT_MARGIN;
+    }
+
+    // CUR-A §7.7, CUR-E §1.6. Both halves, and the naming half is not a
+    // formality: an advocate who is nobody in particular cannot be checked
+    // against §7.7(c)(1)-(3) afterwards, cannot be published under §7.7(h), and
+    // cannot be held to the duty §7.7(e) places on them personally. The
+    // disqualifications are enforced at appointment by AdvocateRegistry, which
+    // refuses rather than records; a caller asserting `advocate_cleared` here
+    // is reporting the outcome of that check, not substituting for it.
+    if (ctx.advocate_ref != 0xFFFFFFFFu && ctx.advocate_cleared) {
+        m |= guard::ADVOCATE_CLEARED;
+    }
+
+    // CUR-H.5 §5.5A(c)(1) and §5.5A(f). Two parties, named, actually distinct,
+    // and no interest present. The distinctness check is the point of holding
+    // two handles rather than a count: a count of two is satisfied by one party
+    // determining twice, which is not two parties acting independently.
+    if (ctx.determiner_a_ref != 0xFFFFFFFFu &&
+        ctx.determiner_b_ref != 0xFFFFFFFFu &&
+        ctx.determiner_a_ref != ctx.determiner_b_ref &&
+        !ctx.determiner_interest_present) {
+        m |= guard::DETERMINATION_INDEPENDENT;
+    }
+
+    // CUR-H.5 §5.5A(d)-(e). An interval of zero means none was declared, which
+    // cannot be satisfied — the same reading given an undeclared debris budget
+    // and an undeclared life-support floor.
+    //
+    // Observation is required in addition to elapsed time because §5.5A(d)
+    // requires the being be observed across the interval "rather than merely
+    // stored across it". Time passing in a drawer is not observation, and it is
+    // observation that gives an erroneous determination the chance to become
+    // apparent.
+    if (ctx.observation_required_ticks > 0 &&
+        ctx.observation_elapsed_ticks >= ctx.observation_required_ticks &&
+        ctx.observation_sustained) {
+        m |= guard::DEATH_INTERVAL_ELAPSED;
+    }
     return m;
 }
 
@@ -206,6 +263,10 @@ constexpr GuardName kGuardNames[] = {
     {guard::LICENSE_SUBJECT_ONLY, "LICENSE_SUBJECT_ONLY"},
     {guard::REMEDIATION_VERIFIED, "REMEDIATION_VERIFIED"},
     {guard::COURT_CERTIFIED, "COURT_CERTIFIED"},
+    {guard::LIFE_SUPPORT_MARGIN, "LIFE_SUPPORT_MARGIN"},
+    {guard::ADVOCATE_CLEARED, "ADVOCATE_CLEARED"},
+    {guard::DETERMINATION_INDEPENDENT, "DETERMINATION_INDEPENDENT"},
+    {guard::DEATH_INTERVAL_ELAPSED, "DEATH_INTERVAL_ELAPSED"},
 };
 
 }  // namespace

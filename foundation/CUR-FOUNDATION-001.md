@@ -1,8 +1,8 @@
-# CUR-FOUNDATION-001.md
+# CUR-FOUNDATION-001
 
 - **Code of Universe Regulations (CUR)**  
 - **Foundation Document 001: Anti-Capture and Resilience**
-- **Version:** 1.0.1-Official-Evergreen
+- **Version:** 1.2.0-Official-Evergreen
 - **Date:** May 15, 2026  
 - **Project:** Overby Industries – Rights for All Life / Code of Universe Regulations  
 - **Status:** Draft - Official-Evergreen
@@ -78,12 +78,10 @@ Silicon-based entities receive standing and continuity of identity/memory as a f
 - Periodic audits and simulation testing of Fault scenarios are mandatory.
 - Decentralized “fork and exit” rights are preserved to allow healthy experimentation.
 
----
 
 Approval & Version History
 - v1.0.1 – Initial Foundation Draft (May 15, 2026)
 
----
 
 Related Documents  
  

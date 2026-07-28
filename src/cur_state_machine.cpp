@@ -364,15 +364,29 @@ std::string CURStateMachine::record_sanction(const EntityRecord& target,
     // participation sanction, and even that leaves Axis C untouched.
     s.type = target.is_license() ? SANC_CONTRACT_RESTRICTION
                                  : SANC_TEMPORARY_PARTICIPATION_SUSPENSION;
-    s.status = SANC_ACTIVE;
     s.appeal_status = APPEAL_NONE;
     s.imposed_tick = e.tick;
     s.citation = citation;
     s.log_record_seq = log_seq;
     s.affected_compliance_axis = affected_compliance_axis;
 
-    ViolationRecord* v = ledger_.latest_open_violation(target.handle);
-    if (v != nullptr) s.violation_id = v->violation_id;
+    // CUR-N.4 §4.3(a): no measure is available except following a
+    // determination. Only a violation that has actually been determined can
+    // carry one, so the sanction attaches to the latest such record — never to
+    // an allegation that happens to be the most recent.
+    //
+    // Where no determination exists the sanction is still recorded, because
+    // the attempt is part of the audit trail and dropping it would hide the
+    // event. It is recorded SANC_PROPOSED rather than SANC_ACTIVE: proposed is
+    // exactly what a measure is before there is a finding behind it. It
+    // becomes active only through activate_sanction, which re-checks.
+    ViolationRecord* v = ledger_.latest_sanctionable_violation(target.handle);
+    if (v != nullptr) {
+        s.violation_id = v->violation_id;
+        s.status = SANC_ACTIVE;
+    } else {
+        s.status = SANC_PROPOSED;
+    }
 
     return ledger_.impose_sanction(std::move(s)).sanction_id;
 }

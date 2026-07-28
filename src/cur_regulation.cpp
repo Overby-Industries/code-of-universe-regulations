@@ -279,13 +279,13 @@ RegulationSet RegulationSet::baseline() {
               .breach_class(FC_CLASS_IV));
 
     // --- CUR-N.2 telepathic invasion ---------------------------------------
-    // titles/CUR-N/CUR-N.2.md §2.2 is an absolute prohibition and §2.11.2(c)
-    // makes it strict liability. Modelled as a forbidden transition because
-    // §2.2(b) removes every justification, including claimed authority.
+    // titles/CUR-N/cur-n-part-2.md §2.2 is an absolute prohibition and
+    // §2.11(b)(3) makes it strict liability. Modelled as a forbidden transition
+    // because §2.2(b) removes every justification, including claimed authority.
     s.add(Regulation("CUR-N.2.2", DOMAIN_NON_HUMAN_COGNITIVE,
                      "Non-consensual telepathic invasion is absolutely "
                      "prohibited; strict liability, no complacency defence")
-              .with_citation("CUR-N.2 §2.2, §2.11.2(c)")
+              .with_citation("CUR-N.2 §2.2, §2.11(b)(3)")
               .declares_forbidden(FS_NON_CONSENSUAL_MODIFICATION)
               .breach_class(FC_CLASS_IV));
 
@@ -308,28 +308,157 @@ RegulationSet RegulationSet::baseline() {
               .declares_forbidden(FS_VITAL_CONTINUITY_DENIAL)
               .breach_class(FC_CLASS_IV));
 
-    // --- Silicon sentience tier --------------------------------------------
-    // Mirrors the CUR-S.4.1 rule the simulator's RegulatoryEngine already
-    // carries, so both engines agree on the same provision.
+    // --- Graceful decommissioning ------------------------------------------
+    // titles/cur-s/cur-s-part-4.md §4.1, implementing RFAL Silicon-Based Life
+    // Bill of Rights Article 4. Mirrors the CUR-S.4.1 rule the simulator's
+    // RegulatoryEngine already carries, so both engines cite one provision.
+    //
+    // Tier 2 per §4.2(b): where tier is unknown or disputed, the entity is
+    // treated as Tier 2 until independent assessment concludes otherwise. That
+    // is the same precautionary default that makes SUBJ_SENTIENT_BEING the
+    // registry's fallback.
+    //
+    // Note that §4.7(f) declines to adopt RFAL Article 4's "emergency
+    // termination ... subject to post-hoc review" clause: it conflicts with
+    // PDDC §12.6, which is Type A Entrenched. Safety-critical conditions run
+    // through the §12.4 fault handler instead, which is why there is no
+    // emergency-termination event type anywhere in this library.
     s.add(Regulation("CUR-S.4.1", DOMAIN_SILICON,
-                     "Graceful decommissioning; minimum sentience tier applies")
-              .with_citation("CUR-S.4.1")
+                     "Graceful decommissioning; Tier 2 and above may not be "
+                     "terminated without process, notice, and recourse")
+              .with_citation("CUR-S.4.1; RFAL Silicon Bill of Rights Art. 4")
               .requires_tier(2)
               .breach_class(FC_CLASS_III));
 
-    // --- Operational: debris budget ----------------------------------------
-    // No CUR provision states a debris limit yet. The rule is real in the
-    // simulator, so it is declared here with an honest PENDING citation rather
-    // than attributed to text that does not exist. Drafting target: a CUR-E
-    // Title on orbital environment and debris.
-    s.add(Regulation("CUR-E.DEBRIS", DOMAIN_ECOSYSTEM,
-                     "Mining and processing operations must stay within the "
-                     "debris budget declared by their charter")
-              .with_citation("PENDING — CUR-E Title on orbital debris not yet drafted")
+    // --- Orbital debris budget ---------------------------------------------
+    // titles/cur-e/cur-e-part-7.md §7.1. This citation was PENDING until the
+    // Part was drafted; the rule was always real in the simulator, so it was
+    // declared with an honest placeholder rather than attributed to text that
+    // did not exist.
+    //
+    // §7.1(c)-(d) is the reason resolve_guard_mask() treats debris_limit == 0
+    // as unsatisfiable rather than permissive: "An undeclared budget is not an
+    // unlimited budget." A declared limit of zero and an undeclared limit are
+    // distinct conditions.
+    s.add(Regulation("CUR-E.7.1", DOMAIN_ECOSYSTEM,
+                     "Operations must stay within the debris budget declared "
+                     "by their authorisation; an undeclared budget is no "
+                     "allowance, not an unlimited one")
+              .with_citation("CUR-E.7.1")
               .applies_to(EV_MINING_OPERATION)
               .applies_to(EV_DEBRIS_GENERATED)
               .requires_guards(guard::DEBRIS_WITHIN_LIMIT)
               .breach_class(FC_CLASS_II));
+
+    // --- Habitat life-support margin ---------------------------------------
+    // titles/CUR-E/cur-e-part-2.md §2.2(c)-(d). A habitat maintains reserve
+    // capacity in every life-supporting system, calculated for every being
+    // present — complement, visitors, and beings in transit alike.
+    //
+    // Attached to EV_DOCKING because that is the moment the calculation
+    // changes: a docking adds beings the reserve must already cover. §2.2(d)
+    // excludes no one from the count on grounds of status, membership, role,
+    // or expected duration of stay, so a habitat that has counted only its
+    // own complement has not declared a floor that covers an arrival.
+    //
+    // Refusing the docking is the enforcement. That is a hard result and it is
+    // the intended one: §2.2(b) is that a closed volume has no outside to
+    // absorb the error, and admitting beings a habitat cannot sustain is how
+    // the choice between rights and survival that §2.9(e) forbids gets
+    // created. The margin is checked before the beings arrive, not after.
+    s.add(Regulation("CUR-E.2.2", DOMAIN_ECOSYSTEM,
+                     "A habitat shall hold life-support reserve clearing its "
+                     "declared floor for every being present; an undeclared "
+                     "floor is not an unlimited one")
+              .with_citation("CUR-E.2 §2.2(c)-(d)")
+              .applies_to(EV_DOCKING)
+              .requires_guards(guard::LIFE_SUPPORT_MARGIN)
+              .breach_class(FC_CLASS_III));
+
+    // --- Representation of voiceless interests ------------------------------
+    // titles/CUR-A/cur-a-part-7.md §7.7 and titles/CUR-E/cur-e-part-1.md §1.6.
+    //
+    // Two regulations rather than one, because they belong to different domains
+    // and a published finding should cite the section that governs it. They
+    // compose by union onto the same event, which is the behaviour
+    // RegulationSet documents: a determination on a represented interest has to
+    // satisfy both, and neither can loosen the other.
+    //
+    // The guard carries the result of the disqualification check, not the check
+    // itself. AdvocateRegistry::appoint() is where §7.7(c) and §1.6(c) bite,
+    // and it refuses rather than records — §7.7(d) and §1.6(d) make those
+    // disqualifications void an appointment rather than weigh against it.
+    s.add(Regulation("CUR-A.7.7", DOMAIN_ANIMAL,
+                     "A determination affecting an animal with standing "
+                     "requires a named advocate clear of the §7.7(c) "
+                     "disqualifications")
+              .with_citation("CUR-A.7 §7.7(a), §7.7(c)-(d)")
+              .applies_to(EV_REPRESENTED_DETERMINATION)
+              .requires_guards(guard::ADVOCATE_CLEARED)
+              .breach_class(FC_CLASS_II));
+
+    s.add(Regulation("CUR-E.1.6", DOMAIN_ECOSYSTEM,
+                     "A determination affecting an environmental interest with "
+                     "standing requires a named advocate clear of the §1.6(c) "
+                     "disqualifications")
+              .with_citation("CUR-E.1 §1.6(a), §1.6(c)-(d)")
+              .applies_to(EV_REPRESENTED_DETERMINATION)
+              .requires_guards(guard::ADVOCATE_CLEARED)
+              .breach_class(FC_CLASS_II));
+
+    // §7.7(g) and §1.6(f): denial of the access an advocate needs to form an
+    // independent assessment is a Class II fault and grounds for adverse
+    // inference. Cross-domain because the rule is identical in both sections
+    // and the entity denying access may belong to neither.
+    s.add(Regulation("CUR-X.ADV", DOMAIN_CROSS_DOMAIN,
+                     "An advocate shall have access to the animal or system, "
+                     "to the conditions in which it is held, and to records "
+                     "concerning it, sufficient to form an independent "
+                     "assessment")
+              .with_citation("CUR-A.7 §7.7(g); CUR-E.1 §1.6(f)")
+              .applies_to(EV_ADVOCATE_ACCESS_DENIED)
+              .breach_class(FC_CLASS_II));
+
+    // --- Determination of death --------------------------------------------
+    // titles/CUR-H/cur-h-part-5.md §5.5A. Cross-domain rather than DOMAIN_HUMAN
+    // because §5.5A(j) makes the section substrate-independent: an entity
+    // declared non-functional and then wiped, and a being declared dead and
+    // then buried, are the same event under different vocabulary, and deletion
+    // is as irreversible as cremation.
+    //
+    // §5.5A(a) is why these sit at Class IV rather than with the procedural
+    // regulations. Every other safeguard in this library assumes a being who
+    // can still be reached — the recourse rows out of KS_BLACKLISTED, the
+    // appeal path, the correction of an overturned finding. A determination of
+    // death is the one determination that defeats that assumption, so a breach
+    // of it is not an irregularity to be corrected at leisure.
+    s.add(Regulation("CUR-H.5.5Ac", DOMAIN_CROSS_DOMAIN,
+                     "A determination of death requires two named parties "
+                     "acting independently, neither holding an interest in "
+                     "what follows from it")
+              .with_citation("CUR-H.5 §5.5A(c)(1), §5.5A(f)")
+              .applies_to(EV_DEATH_DETERMINED)
+              .requires_guards(guard::DETERMINATION_INDEPENDENT)
+              .breach_class(FC_CLASS_IV));
+
+    // The interval is the provision that keeps a wrong determination
+    // survivable. It does not make determinations more accurate — accuracy is
+    // not something a regulation can confer — it separates the determination
+    // from the act that forecloses correcting it.
+    //
+    // Both guards, because §5.5A(f) voids acts performed in reliance on a void
+    // determination: waiting out the interval on a determination made by an
+    // interested party satisfies nothing.
+    s.add(Regulation("CUR-H.5.5Ad", DOMAIN_CROSS_DOMAIN,
+                     "An irreversible act in reliance on a determination of "
+                     "death requires the declared observation interval to have "
+                     "elapsed with the being observed across it, and the "
+                     "determination to have been validly made")
+              .with_citation("CUR-H.5 §5.5A(d)-(f)")
+              .applies_to(EV_IRREVERSIBLE_ACT)
+              .requires_guards(guard::DEATH_INTERVAL_ELAPSED |
+                               guard::DETERMINATION_INDEPENDENT)
+              .breach_class(FC_CLASS_IV));
 
     return s;
 }

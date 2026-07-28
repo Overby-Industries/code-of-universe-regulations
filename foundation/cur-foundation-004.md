@@ -2,7 +2,7 @@
 ### Governance Entity Model (GEM)
 
 - **Document ID:** CUR-FOUNDATION-004
-- **Version:** 1.0.1-Official-Evergreen
+- **Version:** 1.2.0-Official-Evergreen
 - **Authority Level:** Foundation Document
 - **Status:** Draft-Official-Evergreen
 - **Depends On:** CUR-FOUNDATION-001, CUR-FOUNDATION-002, CUR-FOUNDATION-003, RIGHTS-FOR-ALL-LIFE.md
