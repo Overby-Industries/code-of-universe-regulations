@@ -164,6 +164,10 @@ const char* to_string(EventType e) {
         case EV_ADVOCATE_ACCESS_DENIED: return "advocate_access_denied";
         case EV_REPRESENTED_DETERMINATION: return "represented_determination";
 
+        case EV_DEATH_DETERMINED: return "death_determined";
+        case EV_IRREVERSIBLE_ACT: return "irreversible_act";
+        case EV_DETERMINATION_VACATED: return "determination_vacated";
+
         case EV_COUNT: break;
     }
     return "unknown";
@@ -213,6 +217,32 @@ uint16_t resolve_guard_mask(const TransitionContext& ctx) {
     if (ctx.advocate_ref != 0xFFFFFFFFu && ctx.advocate_cleared) {
         m |= guard::ADVOCATE_CLEARED;
     }
+
+    // CUR-H.5 §5.5A(c)(1) and §5.5A(f). Two parties, named, actually distinct,
+    // and no interest present. The distinctness check is the point of holding
+    // two handles rather than a count: a count of two is satisfied by one party
+    // determining twice, which is not two parties acting independently.
+    if (ctx.determiner_a_ref != 0xFFFFFFFFu &&
+        ctx.determiner_b_ref != 0xFFFFFFFFu &&
+        ctx.determiner_a_ref != ctx.determiner_b_ref &&
+        !ctx.determiner_interest_present) {
+        m |= guard::DETERMINATION_INDEPENDENT;
+    }
+
+    // CUR-H.5 §5.5A(d)-(e). An interval of zero means none was declared, which
+    // cannot be satisfied — the same reading given an undeclared debris budget
+    // and an undeclared life-support floor.
+    //
+    // Observation is required in addition to elapsed time because §5.5A(d)
+    // requires the being be observed across the interval "rather than merely
+    // stored across it". Time passing in a drawer is not observation, and it is
+    // observation that gives an erroneous determination the chance to become
+    // apparent.
+    if (ctx.observation_required_ticks > 0 &&
+        ctx.observation_elapsed_ticks >= ctx.observation_required_ticks &&
+        ctx.observation_sustained) {
+        m |= guard::DEATH_INTERVAL_ELAPSED;
+    }
     return m;
 }
 
@@ -235,6 +265,8 @@ constexpr GuardName kGuardNames[] = {
     {guard::COURT_CERTIFIED, "COURT_CERTIFIED"},
     {guard::LIFE_SUPPORT_MARGIN, "LIFE_SUPPORT_MARGIN"},
     {guard::ADVOCATE_CLEARED, "ADVOCATE_CLEARED"},
+    {guard::DETERMINATION_INDEPENDENT, "DETERMINATION_INDEPENDENT"},
+    {guard::DEATH_INTERVAL_ELAPSED, "DEATH_INTERVAL_ELAPSED"},
 };
 
 }  // namespace

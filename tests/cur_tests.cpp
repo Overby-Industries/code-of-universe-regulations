@@ -1426,6 +1426,224 @@ static void test_advocate_access_denial_is_a_fault() {
     CHECK(m.ledger().violations()[0].appealable);
 }
 
+// ---------------------------------------------------------------------------
+// Determination of death — CUR-H.5 §5.5A
+// ---------------------------------------------------------------------------
+
+static void test_determination_needs_two_distinct_parties() {
+    TEST("one party determining twice is one party (CUR-H.5 §5.5A(c)(1))");
+
+    cur::TransitionContext ctx;
+    CHECK((cur::resolve_guard_mask(ctx) & cur::guard::DETERMINATION_INDEPENDENT) == 0);
+
+    // A single named determiner is not two.
+    ctx.determiner_a_ref = 4;
+    CHECK((cur::resolve_guard_mask(ctx) & cur::guard::DETERMINATION_INDEPENDENT) == 0);
+
+    // The same party entered twice is still one party acting, which is the
+    // reason two handles are held rather than a count.
+    ctx.determiner_b_ref = 4;
+    CHECK((cur::resolve_guard_mask(ctx) & cur::guard::DETERMINATION_INDEPENDENT) == 0);
+
+    ctx.determiner_b_ref = 5;
+    CHECK((cur::resolve_guard_mask(ctx) & cur::guard::DETERMINATION_INDEPENDENT) != 0);
+
+    // §5.5A(f) — an interest disqualifies absolutely, however many parties.
+    ctx.determiner_interest_present = true;
+    CHECK((cur::resolve_guard_mask(ctx) & cur::guard::DETERMINATION_INDEPENDENT) == 0);
+}
+
+static void test_death_interval_is_not_waivable() {
+    TEST("the interval before an irreversible act cannot be shortened "
+         "(CUR-H.5 §5.5A(d)-(e))");
+
+    cur::TransitionContext ctx;
+    CHECK((cur::resolve_guard_mask(ctx) & cur::guard::DEATH_INTERVAL_ELAPSED) == 0);
+
+    // An undeclared interval is not an interval of zero, the reading an
+    // undeclared debris budget and an undeclared life-support floor both get.
+    ctx.observation_elapsed_ticks = 10000;
+    ctx.observation_sustained = true;
+    CHECK((cur::resolve_guard_mask(ctx) & cur::guard::DEATH_INTERVAL_ELAPSED) == 0);
+
+    // One tick short is short.
+    ctx.observation_required_ticks = 100;
+    ctx.observation_elapsed_ticks = 99;
+    CHECK((cur::resolve_guard_mask(ctx) & cur::guard::DEATH_INTERVAL_ELAPSED) == 0);
+
+    ctx.observation_elapsed_ticks = 100;
+    CHECK((cur::resolve_guard_mask(ctx) & cur::guard::DEATH_INTERVAL_ELAPSED) != 0);
+
+    // §5.5A(d): observed across the interval, not merely stored across it.
+    // Elapsed time in a drawer is not observation, and it is observation that
+    // gives an erroneous determination the chance to become apparent.
+    ctx.observation_sustained = false;
+    ctx.observation_elapsed_ticks = 100000;
+    CHECK((cur::resolve_guard_mask(ctx) & cur::guard::DEATH_INTERVAL_ELAPSED) == 0);
+}
+
+static void test_irreversible_act_refused_without_both() {
+    TEST("burial before the interval, or on a void determination, is refused "
+         "(CUR-H.5 §5.5A(d)-(f))");
+
+    cur::CURStateMachine m;
+    m.log().set_clock(fixed_clock);
+    auto facility = m.entities().register_entity(
+        "mortuary-3", cur::EC_CIVIC, cur::SUBJ_OPERATIONAL_LICENSE);
+
+    // A determination by an interested single party is refused outright.
+    cur::TransitionContext bad;
+    bad.determiner_a_ref = 7;
+    auto r1 = m.submit_operational(facility, cur::EV_DEATH_DETERMINED, bad, 1);
+    CHECK(r1.accepted);
+    CHECK_EQ(m.compliance_of(facility), cur::KS_VIOLATION);
+    CHECK_EQ(r1.fault, cur::FC_CLASS_IV);
+
+    // Fresh machine for the interval case.
+    cur::CURStateMachine m2;
+    m2.log().set_clock(fixed_clock);
+    auto f2 = m2.entities().register_entity("mortuary-4", cur::EC_CIVIC,
+                                            cur::SUBJ_OPERATIONAL_LICENSE);
+
+    cur::TransitionContext good;
+    good.determiner_a_ref = 7;
+    good.determiner_b_ref = 8;
+    auto d = m2.submit_operational(f2, cur::EV_DEATH_DETERMINED, good, 1);
+    CHECK(d.accepted);
+    CHECK_EQ(m2.compliance_of(f2), cur::KS_COMPLIANT);
+    CHECK_EQ(d.fault, cur::FC_NONE);
+
+    // A valid determination does not by itself license the irreversible act.
+    good.observation_required_ticks = 72;
+    good.observation_elapsed_ticks = 12;
+    good.observation_sustained = true;
+    auto early = m2.submit_operational(f2, cur::EV_IRREVERSIBLE_ACT, good, 2);
+    CHECK(early.accepted);
+    CHECK_EQ(m2.compliance_of(f2), cur::KS_VIOLATION);
+    CHECK_EQ(early.fault, cur::FC_CLASS_IV);
+
+    // The guarded row did not match because the context does not satisfy the
+    // interval. `early.guards_required` reports the row that DID match — the
+    // Class IV fallback, which requires nothing — so the reason is read from
+    // the context rather than from the result.
+    CHECK((cur::resolve_guard_mask(good) & cur::guard::DEATH_INTERVAL_ELAPSED) == 0);
+
+    // And the interval alone does not cure a void determination. Waiting out
+    // the full interval on a determination made by an interested party
+    // satisfies nothing — §5.5A(f) voids acts performed in reliance on it.
+    cur::CURStateMachine m3;
+    m3.log().set_clock(fixed_clock);
+    auto f3 = m3.entities().register_entity("mortuary-5", cur::EC_CIVIC,
+                                            cur::SUBJ_OPERATIONAL_LICENSE);
+    cur::TransitionContext waited;
+    waited.determiner_a_ref = 7;
+    waited.determiner_b_ref = 8;
+    waited.determiner_interest_present = true;  // §5.5A(f)
+    waited.observation_required_ticks = 72;
+    waited.observation_elapsed_ticks = 500;
+    waited.observation_sustained = true;
+    auto act = m3.submit_operational(f3, cur::EV_IRREVERSIBLE_ACT, waited, 3);
+    CHECK(act.accepted);
+    CHECK_EQ(m3.compliance_of(f3), cur::KS_VIOLATION);
+    CHECK_EQ(act.fault, cur::FC_CLASS_IV);
+
+    // Both satisfied: the act proceeds.
+    cur::CURStateMachine m4;
+    m4.log().set_clock(fixed_clock);
+    auto f4 = m4.entities().register_entity("mortuary-6", cur::EC_CIVIC,
+                                            cur::SUBJ_OPERATIONAL_LICENSE);
+    cur::TransitionContext ok;
+    ok.determiner_a_ref = 7;
+    ok.determiner_b_ref = 8;
+    ok.observation_required_ticks = 72;
+    ok.observation_elapsed_ticks = 72;
+    ok.observation_sustained = true;
+    auto fine = m4.submit_operational(f4, cur::EV_IRREVERSIBLE_ACT, ok, 4);
+    CHECK(fine.accepted);
+    CHECK_EQ(m4.compliance_of(f4), cur::KS_COMPLIANT);
+    CHECK_EQ(fine.fault, cur::FC_NONE);
+}
+
+static void test_vacating_a_determination_is_never_blocked() {
+    TEST("nothing stands between a living being and vacating a determination "
+         "that they are not (CUR-H.5 §5.5A(h))");
+
+    cur::CURStateMachine m;
+    m.log().set_clock(fixed_clock);
+    auto being = m.entities().register_entity("citizen-8812", cur::EC_CIVIC);
+
+    // Reachable from every compliance state the being can occupy, with an
+    // empty context. §5.5A(h)(1) makes the determination void from the outset
+    // rather than validly made and later reversed, so there is nothing to
+    // satisfy before saying so.
+    cur::TransitionContext empty;
+    auto v1 = m.submit_operational(being, cur::EV_DETERMINATION_VACATED, empty, 1);
+    CHECK(v1.accepted);
+    CHECK_EQ(m.compliance_of(being), cur::KS_COMPLIANT);
+    CHECK_EQ(v1.fault, cur::FC_NONE);
+
+    // Also reachable once the being is in violation — a being wrongly declared
+    // dead does not have to be in good standing to be declared alive.
+    auto viol = m.submit_operational(being, cur::EV_VIOLATION_DETECTED, empty, 2);
+    CHECK(viol.accepted);
+    CHECK_EQ(m.compliance_of(being), cur::KS_VIOLATION);
+    auto v2 = m.submit_operational(being, cur::EV_DETERMINATION_VACATED, empty, 3);
+    CHECK(v2.accepted);
+    CHECK_EQ(v2.fault, cur::FC_NONE);
+
+    // The vacation is on the record rather than erasing anything — §5.5A(h)(4),
+    // the reasoning CREF §15 gives for VS_OVERTURNED.
+    bool found = false;
+    for (const auto& rec : m.log().records()) {
+        if (rec.trigger == cur::EV_DETERMINATION_VACATED) found = true;
+    }
+    CHECK(found);
+
+    // §5.5A(j): substrate-independent. The same rows serve a silicon entity,
+    // for which deletion is the irreversible act.
+    auto silicon = m.entities().register_entity("aevoria-node-4", cur::EC_CIVIC);
+    auto v3 = m.submit_operational(silicon, cur::EV_DETERMINATION_VACATED, empty, 4);
+    CHECK(v3.accepted);
+}
+
+static void test_death_regulations_registered() {
+    TEST("§5.5A is in the baseline regulation set at Class IV");
+
+    auto regs = cur::RegulationSet::baseline();
+    const cur::Regulation* det = regs.find("CUR-H.5.5Ac");
+    const cur::Regulation* act = regs.find("CUR-H.5.5Ad");
+    CHECK(det != nullptr);
+    CHECK(act != nullptr);
+    if (det == nullptr || act == nullptr) return;
+
+    CHECK_EQ(static_cast<int>(det->breach_fault_class()),
+             static_cast<int>(cur::FC_CLASS_IV));
+    CHECK_EQ(static_cast<int>(act->breach_fault_class()),
+             static_cast<int>(cur::FC_CLASS_IV));
+
+    // §5.5A(j) — cross-domain, because the failure is substrate-independent.
+    CHECK_EQ(static_cast<int>(det->domain()),
+             static_cast<int>(cur::DOMAIN_CROSS_DOMAIN));
+    CHECK_EQ(static_cast<int>(act->domain()),
+             static_cast<int>(cur::DOMAIN_CROSS_DOMAIN));
+
+    CHECK((regs.required_guards_for(cur::EV_IRREVERSIBLE_ACT) &
+           cur::guard::DEATH_INTERVAL_ELAPSED) != 0);
+    CHECK((regs.required_guards_for(cur::EV_IRREVERSIBLE_ACT) &
+           cur::guard::DETERMINATION_INDEPENDENT) != 0);
+
+    // Vacating carries no guard requirement at all.
+    CHECK_EQ(regs.required_guards_for(cur::EV_DETERMINATION_VACATED),
+             cur::guard::NONE);
+
+    char names[256];
+    cur::describe_guards(
+        cur::guard::DEATH_INTERVAL_ELAPSED | cur::guard::DETERMINATION_INDEPENDENT,
+        names, sizeof(names));
+    CHECK(std::string(names).find("DEATH_INTERVAL_ELAPSED") != std::string::npos);
+    CHECK(std::string(names).find("DETERMINATION_INDEPENDENT") != std::string::npos);
+}
+
 int main() {
     std::printf("libcur %s — CUR corpus %s\n\n", CUR_LIB_VERSION_STRING,
                 cur::CUR_CORPUS_VERSION);
@@ -1463,6 +1681,11 @@ int main() {
     test_voided_appointment_is_marked_not_erased();
     test_determination_needs_a_named_advocate();
     test_advocate_access_denial_is_a_fault();
+    test_determination_needs_two_distinct_parties();
+    test_death_interval_is_not_waivable();
+    test_irreversible_act_refused_without_both();
+    test_vacating_a_determination_is_never_blocked();
+    test_death_regulations_registered();
 
     std::printf("\n%d checks, %d failures\n", g_checks, g_failures);
     return g_failures == 0 ? 0 : 1;

@@ -3,7 +3,7 @@
 *Code of Universe Regulations - Human*
 
 - **Document ID:** CUR-H.5
-- **Version:** 1.1.0-Draft
+- **Version:** 1.2.0-Draft
 - **Date:** 2026-07-27
 - **Status:** Draft
 - **Depends On:** CUR-FOUNDATION-001, CUR-FOUNDATION-002, CUR-FOUNDATION-005, CUR-FOUNDATION-010, CUR-FOUNDATION-012 (CREF), CUR-FOUNDATION-013, PDDC TITLE 4, PDDC TITLE 5, PDDC §12.6, CUR-H.2, CUR-H.4, CUR-D.6, CUR-S.4, CUR-A.7, CUR-X.4
@@ -409,9 +409,11 @@ is why §5.1(c) is drafted as a list rather than left to implication.
 | §5.7(g) | Corresponds to `AdvocateRegistry`, `guard::ADVOCATE_CLEARED`, and `confers_authority()` | Partially implemented |
 | §5.10(d) | Corresponds to `CaptureMeasures::continuity_assumption_required` | Implemented |
 | §5.11 | Corresponds to `FS_PERMANENT_EMERGENCY`, declared by `CUR-PDDC.12.6` | Implemented |
-| §5.5A(d), §5.5A(e) | The interval before an irreversible act is a duration between two events, which the library's tick-based event log can express; no guard currently requires it | Gap, tractable |
-| §5.5A(f) | The disqualification is the same shape as `AdvocateRegistry::appoint()` refusing on a declared interest | Gap, tractable |
+| §5.5A(c)(1), §5.5A(f) | Corresponds to `guard::DETERMINATION_INDEPENDENT` and regulation `CUR-H.5.5Ac` on `EV_DEATH_DETERMINED`, at Class IV | Implemented |
+| §5.5A(d), §5.5A(e) | Corresponds to `guard::DEATH_INTERVAL_ELAPSED` and regulation `CUR-H.5.5Ad` on `EV_IRREVERSIBLE_ACT`, which requires both guards | Implemented |
+| §5.5A(h) | Corresponds to `EV_DETERMINATION_VACATED`, reachable unguarded from every compliance state | Implemented |
 | §5.5A(h)(4) | Corresponds to the `VS_OVERTURNED` pattern: corrected on the record rather than erased | Partially implemented |
+| §5.5A(j) | Corresponds to the regulations being `DOMAIN_CROSS_DOMAIN` and the rows carrying no subject-class condition | Implemented |
 | §5.2(b), §5.9(c) | Consent is a property of a relationship over time; the library has no representation of it | Not modelled |
 | §5.5 | End-of-life decisions are procedural and substantive; deliberately not modelled | Not modelled |
 | §5.8(f), §5.8(g) | Care without charge is an absence of a mechanism; there is no billing path in the library to remove | Not modelled |
@@ -429,22 +431,51 @@ made, because the enumerator is part of the interface the Aevoria Simulator
 builds against and this Part is the first to need it — the change should be made
 once, with the Part it serves already drafted, rather than speculatively.
 
-Note on the §5.5A gaps. Two of them are worth stating precisely, because they are
-the kind that look harder than they are. §5.5A(d) requires an interval between a
-determination and an irreversible act, and the library already carries everything
-needed to check it: events hold a `tick`, the event log is append-only and
-ordered, and a guard reading the interval between a determination event and a
-subsequent irreversible-act event would be a pure predicate over context in the
-same way `LIFE_SUPPORT_MARGIN` is. §5.5A(f) is closer still — a declared interest
-disqualifying a determining party is the same shape as
-`AdvocateRegistry::appoint()` refusing on `dependent_on_party`, and the same
-discipline applies: it refuses rather than records, because §5.5A(f) makes the
-determination void rather than questionable.
+Note on how §5.5A is enforced. Both provisions this Part recorded as gaps are now
+implemented, and four details of the implementation are load-bearing.
 
-Neither is made here. Both would need new event types, and the interval guard
-would need a new `TransitionContext` field, which is published interface for the
-Aevoria Simulator. Two interface changes landed in this corpus within a day of
-each other and a third should wait until the bridge has caught up.
+The first is that `DETERMINATION_INDEPENDENT` holds two handles rather than a
+count. §5.5A(c)(1) requires two parties acting independently, and a count of two
+is satisfied by one party determining twice. The guard therefore requires both to
+be named, and requires the names to differ — the same reasoning that makes
+`ADVOCATE_CLEARED` require an advocate be named as well as cleared. A
+determination attributed to nobody cannot be checked against §5.5A(f) afterwards,
+cannot be published under §5.5A(i), and leaves nobody bearing the §5.5A(h)(3)
+obligation if the being turns out to be alive.
+
+The second is that `DEATH_INTERVAL_ELAPSED` requires observation in addition to
+elapsed time. §5.5A(d) requires the being be observed across the interval "rather
+than merely stored across it," and time passing in a drawer satisfies the letter
+of an interval while defeating its entire purpose. It is observation that gives
+an erroneous determination the chance to become apparent; the interval is only
+the window in which observing can happen.
+
+The third is that `EV_IRREVERSIBLE_ACT` requires **both** guards. Waiting out the
+full interval on a determination made by an interested party satisfies nothing,
+because §5.5A(f) voids acts performed in reliance on a void determination. The
+two requirements are not alternatives and the composition is not incidental.
+
+The fourth is a deliberate absence. There is no row, no guard, and no context
+field by which the interval is shortened. §5.5A(e) makes it unwaivable for the
+convenience of any party, the requirements of any process, the condition of any
+material, or the needs of any other being, and an exception in the transition
+table is precisely what that subsection exists to refuse. The way to satisfy
+`DEATH_INTERVAL_ELAPSED` is to have waited. This is the same technique
+`guard::LICENSE_SUBJECT_ONLY` uses to make FORBIDDEN-001 unreachable: the
+protection is the missing path, not a check that could be argued around.
+
+`EV_DETERMINATION_VACATED` carries `guard::NONE` and is reachable from every
+compliance state including `KS_VIOLATION`, which is also deliberate. Nothing may
+stand between a living being and the vacation of a determination that they are
+not, and a being wrongly declared dead does not have to be in good standing to be
+declared alive. §5.5A(h)(1) makes the determination void from the outset rather
+than validly made and later reversed, so there is nothing to satisfy before
+saying so.
+
+Both regulations are `DOMAIN_CROSS_DOMAIN` rather than `DOMAIN_HUMAN`, on
+§5.5A(j). The rows carry no subject-class condition, so an entity declared
+non-functional and then deleted is reached by the same machinery as a being
+declared dead and then buried.
 
 Note on what is deliberately not modelled. §5.5 is the clearest case in the
 corpus of a provision that should not be given a guard. A transition table

@@ -419,6 +419,47 @@ RegulationSet RegulationSet::baseline() {
               .applies_to(EV_ADVOCATE_ACCESS_DENIED)
               .breach_class(FC_CLASS_II));
 
+    // --- Determination of death --------------------------------------------
+    // titles/CUR-H/cur-h-part-5.md §5.5A. Cross-domain rather than DOMAIN_HUMAN
+    // because §5.5A(j) makes the section substrate-independent: an entity
+    // declared non-functional and then wiped, and a being declared dead and
+    // then buried, are the same event under different vocabulary, and deletion
+    // is as irreversible as cremation.
+    //
+    // §5.5A(a) is why these sit at Class IV rather than with the procedural
+    // regulations. Every other safeguard in this library assumes a being who
+    // can still be reached — the recourse rows out of KS_BLACKLISTED, the
+    // appeal path, the correction of an overturned finding. A determination of
+    // death is the one determination that defeats that assumption, so a breach
+    // of it is not an irregularity to be corrected at leisure.
+    s.add(Regulation("CUR-H.5.5Ac", DOMAIN_CROSS_DOMAIN,
+                     "A determination of death requires two named parties "
+                     "acting independently, neither holding an interest in "
+                     "what follows from it")
+              .with_citation("CUR-H.5 §5.5A(c)(1), §5.5A(f)")
+              .applies_to(EV_DEATH_DETERMINED)
+              .requires_guards(guard::DETERMINATION_INDEPENDENT)
+              .breach_class(FC_CLASS_IV));
+
+    // The interval is the provision that keeps a wrong determination
+    // survivable. It does not make determinations more accurate — accuracy is
+    // not something a regulation can confer — it separates the determination
+    // from the act that forecloses correcting it.
+    //
+    // Both guards, because §5.5A(f) voids acts performed in reliance on a void
+    // determination: waiting out the interval on a determination made by an
+    // interested party satisfies nothing.
+    s.add(Regulation("CUR-H.5.5Ad", DOMAIN_CROSS_DOMAIN,
+                     "An irreversible act in reliance on a determination of "
+                     "death requires the declared observation interval to have "
+                     "elapsed with the being observed across it, and the "
+                     "determination to have been validly made")
+              .with_citation("CUR-H.5 §5.5A(d)-(f)")
+              .applies_to(EV_IRREVERSIBLE_ACT)
+              .requires_guards(guard::DEATH_INTERVAL_ELAPSED |
+                               guard::DETERMINATION_INDEPENDENT)
+              .breach_class(FC_CLASS_IV));
+
     return s;
 }
 
