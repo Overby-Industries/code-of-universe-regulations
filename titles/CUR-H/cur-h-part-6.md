@@ -8,7 +8,7 @@
 - **Status:** Draft
 - **Depends On:** CUR-FOUNDATION-001, CUR-FOUNDATION-002, CUR-FOUNDATION-005, CUR-FOUNDATION-010, CUR-FOUNDATION-012 (CREF), CUR-FOUNDATION-013, PDDC TITLE 4, PDDC TITLE 5, PDDC §12.6, CUR-H.2, CUR-H.4, CUR-H.5, CUR-D.6, CUR-N.5, CUR-X.4
 - **Implements:** RFAL Human Bill of Rights v1.7.0 Article IV §4.1, Article II §2.3, and Article VI; RFAL Declaration of Cognitive Sovereignty (five-element consent standard)
-- **Referenced by:** CUR-H.5 Implementation Notes
+- **Referenced by:** CUR-H.5 Implementation Notes, CUR-H.7 §7.15(b)
 
 Numbering note. CUR-H Part numbers are not aligned to RFAL article numbers. That
 alignment was broken deliberately at CUR-H.4 and the reasons are recorded there.
@@ -395,7 +395,7 @@ and leaves the institution untouched.
 | §6.8(a), §6.8(e) | The duty to investigate every report and the routine review schedule are procedural; no event type represents a report | Gap, tractable |
 | §6.9(b) | An absence of capability cannot be represented as an absence; there is nothing in the library to remove | Not modelled |
 | §6.2, §6.3 | Consent is a property of a relationship over time; the library has no representation of it | Not modelled |
-| CUR-H.7 | Offences against the person generally, including homicide | To be drafted |
+| CUR-H.7 | Offences against the person generally, including homicide; §7.15(b) incorporates §6.7, §6.8(a)-(d), §6.12, and §6.13(f) rather than restating them | Drafted |
 
 Note on the two recorded gaps. Both are real and both are smaller than they look.
 `EntityRecord` carries no age, so §6.5 cannot be checked by the library at all —
