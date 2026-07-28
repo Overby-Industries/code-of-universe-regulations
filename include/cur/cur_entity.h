@@ -42,6 +42,27 @@ struct EntityRecord {
     EntityCategory category = EC_CIVIC;
     SubjectClass subject_class = SUBJ_SENTIENT_BEING;
 
+    // The class this entity was registered with. Written once, by
+    // register_entity, and never again.
+    //
+    // This field exists because every structural protection in the library keys
+    // off subject class — CURStateMachine::structural_forbidden() returns
+    // FS_NONE immediately for a licence — and `subject_class` above is a public
+    // field on a record reachable through a non-const get(). Without this, a
+    // caller could register a being, write SUBJ_OPERATIONAL_LICENSE over its
+    // class, and walk it into KS_SUSPENDED with FORBIDDEN-001 and FORBIDDEN-003
+    // never consulted. That is not a hypothetical: it was demonstrated against
+    // this library before this field was added.
+    //
+    // It is the oldest evasion there is. The rule is not broken; the subject is
+    // redefined until the rule does not apply to it. A protection that can be
+    // switched off by relabelling the thing it protects is not a protection,
+    // and the Code says so directly — CUR-X.4 §4.2(a) treats an enterprise as a
+    // governance structure "in fact, regardless of how it is constituted or
+    // described", and CUR-N.5 §5.2A grades practices rather than the names
+    // given to them.
+    SubjectClass registered_subject_class = SUBJ_SENTIENT_BEING;
+
     StateVector state;
 
     // PDDC §12.4(c) — the last known safe state to revert to. Updated after
@@ -65,8 +86,36 @@ struct EntityRecord {
     // FOUNDATION-002 §7). Kept as a map so adding an index is a data change.
     std::unordered_map<std::string, double> metrics;
 
-    bool is_sentient() const { return subject_class == SUBJ_SENTIENT_BEING; }
-    bool is_license() const { return subject_class == SUBJ_OPERATIONAL_LICENSE; }
+    // Both resolve to the MORE PROTECTIVE of the registered and current class,
+    // so the ratchet only ever turns toward protection.
+    //
+    // An entity registered as a being cannot be made suspendable by a later
+    // write, because is_license() requires both fields to agree. An entity
+    // registered as a licence and later marked sentient does gain protection,
+    // and that direction is safe to allow: it removes reachable states, it does
+    // not create them.
+    //
+    // This is the same precautionary default that makes SUBJ_SENTIENT_BEING the
+    // registry's fallback — where the answer is contested, the protective
+    // reading wins, and the burden falls on the party seeking to remove
+    // protection rather than on the entity.
+    bool is_sentient() const {
+        return subject_class == SUBJ_SENTIENT_BEING ||
+               registered_subject_class == SUBJ_SENTIENT_BEING;
+    }
+    bool is_license() const {
+        return subject_class == SUBJ_OPERATIONAL_LICENSE &&
+               registered_subject_class == SUBJ_OPERATIONAL_LICENSE;
+    }
+
+    // True where the two disagree. Prevention is not enough on its own: an
+    // attempt to reclassify a being is evidence about the party that attempted
+    // it, and silently refusing would discard that evidence. CUR-N.5 §5.2B is
+    // the reasoning — a hazard running undetected in the background is the
+    // thing routine checking exists to surface.
+    bool subject_class_tampered() const {
+        return subject_class != registered_subject_class;
+    }
 };
 
 // The registry. Handles are indices, so lookup in the step path is O(1) and

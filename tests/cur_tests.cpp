@@ -1644,6 +1644,153 @@ static void test_death_regulations_registered() {
     CHECK(std::string(names).find("DETERMINATION_INDEPENDENT") != std::string::npos);
 }
 
+// ---------------------------------------------------------------------------
+// Adversarial tests
+// ---------------------------------------------------------------------------
+// These do not test intended behaviour. They test whether the protections can
+// be walked around by a caller who is trying to, which is a different question
+// and the only one that matters for a protection. Each was a working evasion
+// against this library before the fix it now guards.
+
+static void test_reclassifying_a_being_cannot_unlock_sanctions() {
+    TEST("a being cannot be made suspendable by relabelling it "
+         "(FORBIDDEN-001, FORBIDDEN-003)");
+
+    cur::CURStateMachine m;
+    m.log().set_clock(fixed_clock);
+    auto person = m.entities().register_entity("citizen-4471", cur::EC_CIVIC);
+    CHECK_EQ(static_cast<int>(m.entities().get(person)->registered_subject_class),
+             static_cast<int>(cur::SUBJ_SENTIENT_BEING));
+
+    // The definitional escape: do not break the rule, redefine the subject
+    // until the rule does not apply. This is a direct write to a public field
+    // on a record reachable through a non-const get(), so nothing stops the
+    // write itself.
+    m.entities().get(person)->subject_class = cur::SUBJ_OPERATIONAL_LICENSE;
+
+    // The write happened. What it does not do is change what the entity is.
+    CHECK(m.entities().get(person)->subject_class_tampered());
+    CHECK(!m.entities().get(person)->is_license());
+    CHECK(m.entities().get(person)->is_sentient());
+
+    // And the sanction path stays shut. Before the ratchet existed, this
+    // sequence reached KS_SUSPENDED.
+    cur::TransitionContext ctx;
+    m.submit_operational(person, cur::EV_VIOLATION_DETECTED, ctx, 1);
+    ctx.due_process_complete = true;
+    m.submit_operational(person, cur::EV_SANCTION_APPLIED, ctx, 2);
+    CHECK(m.compliance_of(person) != cur::KS_SUSPENDED);
+    CHECK(m.compliance_of(person) != cur::KS_BLACKLISTED);
+}
+
+static void test_reclassification_is_itself_a_fault() {
+    TEST("attempting to reclassify a being is recorded, not silently refused "
+         "(CUR-N.5 §5.2B)");
+
+    cur::CURStateMachine m;
+    m.log().set_clock(fixed_clock);
+    auto person = m.entities().register_entity("citizen-4472", cur::EC_CIVIC);
+    m.entities().get(person)->subject_class = cur::SUBJ_OPERATIONAL_LICENSE;
+
+    // Refusing quietly would discard the fact that the attempt was made, and
+    // that fact is evidence about the party that made it. The first event
+    // touching the record surfaces it.
+    cur::TransitionContext ctx;
+    auto r = m.submit_operational(person, cur::EV_VIOLATION_DETECTED, ctx, 1);
+    CHECK(r.fault_raised);
+    CHECK_EQ(static_cast<int>(r.forbidden),
+             static_cast<int>(cur::FS_RIGHTS_SUSPENSION));
+
+    // The attempt is in the audit trail, so a pattern of them is visible.
+    bool logged = false;
+    for (const auto& rec : m.log().records()) {
+        if (rec.forbidden == cur::FS_RIGHTS_SUSPENSION) logged = true;
+    }
+    CHECK(logged);
+
+    // An entity genuinely registered as a licence is unaffected — the check is
+    // for disagreement, not for being a licence.
+    auto charter = m.entities().register_entity(
+        "charter-9", cur::EC_ECONOMIC, cur::SUBJ_OPERATIONAL_LICENSE);
+    CHECK(!m.entities().get(charter)->subject_class_tampered());
+    CHECK(m.entities().get(charter)->is_license());
+}
+
+static void test_ratchet_only_turns_toward_protection() {
+    TEST("reclassification toward protection is allowed; away from it is not");
+
+    cur::EntityRegistry reg;
+    auto charter = reg.register_entity("charter-10", cur::EC_ECONOMIC,
+                                       cur::SUBJ_OPERATIONAL_LICENSE);
+
+    // Licence -> being removes reachable states rather than creating them, so
+    // it is safe and is honoured.
+    reg.get(charter)->subject_class = cur::SUBJ_SENTIENT_BEING;
+    CHECK(reg.get(charter)->is_sentient());
+    CHECK(!reg.get(charter)->is_license());
+}
+
+static void test_entrenched_regulations_cannot_be_removed_or_disabled() {
+    TEST("Forbidden State declarations survive the direct path, not only the "
+         "amendment path (FOUNDATION-002 §10, PDDC §12.6(a))");
+
+    cur::RegulationSet s = cur::RegulationSet::baseline();
+
+    const cur::Regulation* vc = s.find("CUR-F013.VC");
+    CHECK(vc != nullptr);
+    if (vc == nullptr) return;
+    CHECK(vc->declared_forbidden() != cur::FS_NONE);
+
+    // The amendment validator has always refused to disable this. Both of the
+    // direct routes used to walk past it.
+    CHECK(!s.remove("CUR-F013.VC"));
+    CHECK(s.find("CUR-F013.VC") != nullptr);
+
+    cur::Regulation* mutable_vc = s.find("CUR-F013.VC");
+    CHECK(mutable_vc != nullptr);
+    if (mutable_vc == nullptr) return;
+    CHECK(!mutable_vc->set_enabled(false));
+    CHECK(mutable_vc->enabled());
+
+    // Disabling is the quieter evasion of the two and therefore the worse one:
+    // the regulation stays in the set, so an audit listing regulations still
+    // shows it present and correct.
+    CHECK_EQ(static_cast<int>(s.find("CUR-F013.VC")->declared_forbidden()),
+             static_cast<int>(cur::FS_VITAL_CONTINUITY_DENIAL));
+
+    // A regulation that declares no forbidden state is ordinary law and stays
+    // amendable — entrenchment is narrow on purpose.
+    cur::Regulation* debris = s.find("CUR-E.7.1");
+    CHECK(debris != nullptr);
+    if (debris != nullptr) {
+        CHECK_EQ(static_cast<int>(debris->declared_forbidden()),
+                 static_cast<int>(cur::FS_NONE));
+        CHECK(debris->set_enabled(false));
+        CHECK(!debris->enabled());
+        CHECK(debris->set_enabled(true));
+        CHECK(s.remove("CUR-E.7.1"));
+    }
+}
+
+static void test_denial_still_faults_after_tampering_attempt() {
+    TEST("a Vital Continuity denial stays Class IV after an attempt to "
+         "remove its regulation");
+
+    cur::CURStateMachine m;
+    m.log().set_clock(fixed_clock);
+    auto being = m.entities().register_entity("citizen-4473", cur::EC_CIVIC);
+
+    m.regulations().remove("CUR-F013.VC");
+    if (auto* r = m.regulations().find("CUR-F013.VC")) r->set_enabled(false);
+
+    cur::TransitionContext ctx;
+    auto res = m.submit_operational(being, cur::EV_VITAL_CONTINUITY_DENIED, ctx, 1);
+    CHECK(res.fault_raised);
+    CHECK_EQ(static_cast<int>(res.forbidden),
+             static_cast<int>(cur::FS_VITAL_CONTINUITY_DENIAL));
+    CHECK_EQ(res.fault, cur::FC_CLASS_IV);
+}
+
 int main() {
     std::printf("libcur %s — CUR corpus %s\n\n", CUR_LIB_VERSION_STRING,
                 cur::CUR_CORPUS_VERSION);
@@ -1686,6 +1833,11 @@ int main() {
     test_irreversible_act_refused_without_both();
     test_vacating_a_determination_is_never_blocked();
     test_death_regulations_registered();
+    test_reclassifying_a_being_cannot_unlock_sanctions();
+    test_reclassification_is_itself_a_fault();
+    test_ratchet_only_turns_toward_protection();
+    test_entrenched_regulations_cannot_be_removed_or_disabled();
+    test_denial_still_faults_after_tampering_attempt();
 
     std::printf("\n%d checks, %d failures\n", g_checks, g_failures);
     return g_failures == 0 ? 0 : 1;

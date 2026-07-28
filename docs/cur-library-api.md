@@ -612,6 +612,66 @@ made by an interested party satisfies nothing. Conversely
 compliance state, since nothing may stand between a living being and the vacation
 of a determination that they are not.
 
+**9.19 — What "structurally unreachable" does and does not mean.** Several
+protections in this library are described as structural: the forbidden state is
+unreachable because no path to it exists, rather than because a check refuses to
+take one. That claim is precise and it is narrower than it sounds. It is worth
+stating the boundary plainly, because a protection believed to be stronger than
+it is will be relied on where it does not reach.
+
+**What it covers.** For any transition the machine evaluates, the guarantee
+holds. `guard::LICENSE_SUBJECT_ONLY` is resolved from the registry and
+overwrites whatever the caller supplied, so `KS_SUSPENDED` and `KS_BLACKLISTED`
+cannot be reached for a being by asserting anything. There is no argument, no
+flag, and no ordering of events that produces it.
+
+**What it does not cover, and cannot.** An act that is never submitted is never
+evaluated. The library sees events; it does not see the world. Nothing here
+detects a being harmed by conduct nobody logged, and no guard can be made strong
+enough to change that — the evasion is not against the guard, it is against the
+reporting. That is why CUR-N.5 §5.2B does not rely on complaint: it requires
+every report to be investigated *and* imposes routine, random, and triggered
+monitoring independent of any complaint, on the reasoning that a hazard running
+undetected in the background is what routine checking exists to surface. The
+structural guarantee and the sampling regime answer different halves of the
+problem, and neither substitutes for the other.
+
+**Three evasions that were real, and are now closed.** Each worked against this
+library and each is now a regression test.
+
+1. *Redefining the subject.* `EntityRecord::subject_class` is a public field on a
+   record reachable through a non-const `get()`, and every structural protection
+   keyed off it — `structural_forbidden()` returned `FS_NONE` immediately for a
+   licence. Registering a being and then writing `SUBJ_OPERATIONAL_LICENSE` over
+   its class walked it into `KS_SUSPENDED` with FORBIDDEN-001 and FORBIDDEN-003
+   never consulted. `registered_subject_class` now records the class at
+   registration and is never written again; `is_license()` requires both to
+   agree, so the ratchet turns only toward protection. The attempt additionally
+   faults as FORBIDDEN-003, because refusing quietly would discard evidence
+   about the party that tried.
+
+2. *Removing the regulation.* `RegulationSet::remove()` erased any regulation,
+   including one declaring a forbidden state. The amendment validator had always
+   refused that for `AMEND_DISABLE_REGULATION` — the rule existed and there was
+   an unlocked door beside it. Removal stopped `forbidden_for()` classifying the
+   event, so a Class IV constitutional fault was recorded as an ordinary
+   violation. `remove()` now refuses for entrenched regulations.
+
+3. *Disabling the regulation.* `set_enabled(false)` did the same thing more
+   quietly, leaving the regulation in the set so an audit listing regulations
+   still showed it present. `set_enabled` now returns `bool` and refuses to
+   disable an entrenched regulation.
+
+**The general lesson.** All three were the same evasion in different clothes: not
+breaking the rule, but altering the thing the rule is applied to, or the register
+the rule lives in. The corpus already names this pattern — CUR-X.4 §4.2(a)
+treats an enterprise as a governance structure "in fact, regardless of how it is
+constituted or described", and CUR-N.5 §5.2A grades practices rather than the
+labels put on them. The library now applies the same reading to itself. When
+adding a protection here, the question to ask is not only "can this check be
+passed falsely" but "can the thing being checked be redefined, and can the check
+be removed."
+
 **9.13 — RFAL precautionary default.** `TIER_ASSESSMENT_PROTOCOL.md` §1.2 places
 the burden of proof on *withholding* protection, not on claiming it. So
 `EntityRegistry::register_entity` defaults `SubjectClass` to
@@ -637,7 +697,7 @@ include/cur/
   cur_advocate.h         advocates for voiceless interests (CUR-A §7.7, CUR-E §1.6)
   cur_state_machine.h    the engine + ICURObserver
 src/                     one .cpp per header, minus cur.h
-tests/cur_tests.cpp      929 checks, no external framework
+tests/cur_tests.cpp      959 checks, no external framework
 CMakeLists.txt           standalone build
 SConscript               returns source nodes for an SCons consumer
 ```

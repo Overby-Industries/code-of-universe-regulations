@@ -172,6 +172,33 @@ ForbiddenState CURStateMachine::classify_forbidden(
 ForbiddenState CURStateMachine::structural_forbidden(
     const ComplianceTransition& row, const EntityRecord& target,
     std::string* out_citation) const {
+    // Checked before anything else, and before the licence shortcut below.
+    //
+    // A record whose current subject class disagrees with the class it was
+    // registered with has had someone attempt to redefine what it is.
+    // EntityRecord::is_license() already refuses to honour a downgrade, so the
+    // attempt cannot succeed — but refusing silently would throw away the fact
+    // that it was made, and that fact is evidence about the party that made it.
+    // CUR-N.5 §5.2B is the reasoning: a hazard operating undetected in the
+    // background is exactly what routine checking exists to surface, and an
+    // attempt on the classification of a being is not a clerical matter.
+    //
+    // Faulted as FORBIDDEN-003 because that is what the attempt is. Stripping a
+    // being's protected classification to make sanctions reachable against them
+    // is a suspension of rights whether or not the sanction ever lands.
+    if (target.subject_class_tampered()) {
+        std::string tamper_id;
+        std::string tamper_citation;
+        regulations_.citation_for_forbidden(FS_RIGHTS_SUSPENSION, &tamper_id,
+                                            &tamper_citation);
+        if (out_citation != nullptr) {
+            *out_citation = tamper_citation.empty()
+                                ? "CUR-FOUNDATION-002 §6 FORBIDDEN-003"
+                                : tamper_citation;
+        }
+        return FS_RIGHTS_SUSPENSION;
+    }
+
     if (target.is_license()) return FS_NONE;
 
     std::string reg_id;

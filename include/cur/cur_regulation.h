@@ -84,7 +84,18 @@ public:
     ForbiddenState declared_forbidden() const { return declared_forbidden_; }
 
     bool enabled() const { return enabled_; }
-    void set_enabled(bool e) { enabled_ = e; }
+
+    // Returns false and changes nothing where the change is refused.
+    //
+    // Enabling always succeeds. Disabling is refused for a regulation that
+    // declares a forbidden state: FOUNDATION-002 §10 places Forbidden States
+    // behind the highest amendment threshold and PDDC §12.6(a) makes them Type
+    // A Entrenched. The amendment validator enforced that already; this makes
+    // it hold on the direct path too, which previously bypassed it.
+    //
+    // Callers that ignore the return value are not silently obeyed — check
+    // enabled() if it matters.
+    bool set_enabled(bool e);
 
 private:
     std::string id_;
