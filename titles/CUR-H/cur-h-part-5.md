@@ -8,7 +8,7 @@
 - **Status:** Draft
 - **Depends On:** CUR-FOUNDATION-001, CUR-FOUNDATION-002, CUR-FOUNDATION-005, CUR-FOUNDATION-010, CUR-FOUNDATION-012 (CREF), CUR-FOUNDATION-013, PDDC TITLE 4, PDDC TITLE 5, PDDC §12.6, CUR-H.2, CUR-H.4, CUR-D.6, CUR-S.4, CUR-A.7, CUR-X.4
 - **Implements:** RFAL Human Bill of Rights v1.7.0 Article IV §4.1 (Sovereignty Over One's Own Body), all four subsections
-- **Referenced by:** CUR-H.4 Implementation Notes
+- **Referenced by:** CUR-H.4 Implementation Notes, CUR-H.6
 
 Numbering note. RFAL Article IV is implemented across two Parts. Article IV §4.2
 (Cognitive Liberty) is at CUR-H.2 §2.4, drafted there because CUR-H.2 aligned
@@ -420,7 +420,8 @@ is why §5.1(c) is drafted as a list rather than left to implication.
 | §5.7(b) | Decision-specific, time-specific capacity has no representation in the library | Not modelled |
 | CUR-H.1 | Definitions and Scope for the Human domain | To be drafted |
 | CUR-H.3 | RFAL Human Bill Article III (Knowledge and Education) | To be drafted |
-| CUR-H.6, CUR-H.7 | RFAL Human Bill Articles VI and VII | To be drafted |
+| CUR-H.6 | Protection from Sexual Violence, Coercion, and Exploitation; extends §5.2 and §5.9 to the conduct by which bodily sovereignty is most often overridden | Drafted |
+| CUR-H.7 | Offences against the person generally, including homicide | To be drafted |
 
 Note on §5.7(g) and the advocate registry. `AdvocateRegistry` was built for
 CUR-A §7.7 and CUR-E §1.6, and its `AdvocateDomain` enumerates `ADOM_ANIMAL` and

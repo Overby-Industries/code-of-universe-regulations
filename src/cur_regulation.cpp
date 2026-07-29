@@ -90,7 +90,37 @@ bool RegulationSet::remove(const std::string& id) {
     auto it = std::find_if(regulations_.begin(), regulations_.end(),
                            [&](const Regulation& r) { return r.id() == id; });
     if (it == regulations_.end()) return false;
+
+    // FOUNDATION-002 §10 places Forbidden States behind the highest amendment
+    // threshold, and PDDC §12.6(a) makes them Type A Entrenched. The amendment
+    // validator has always enforced that for AMEND_DISABLE_REGULATION — and
+    // this function walked straight past it, which made the validator's rule
+    // advisory rather than structural.
+    //
+    // A rule with a door beside it is not a rule. Removing a regulation that
+    // declares a forbidden state does not merely delete a citation: it stops
+    // forbidden_for() classifying the event, so conduct that was a Class IV
+    // constitutional fault is recorded as an ordinary violation and never
+    // reaches the fault handler. The entrenchment has to hold on every path
+    // that can reach the set, not only the one an honest caller uses.
+    if (it->declared_forbidden() != FS_NONE) return false;
+
     regulations_.erase(it);
+    return true;
+}
+
+bool Regulation::set_enabled(bool e) {
+    // Enabling is always permitted; it can only add or restore a requirement.
+    if (e) {
+        enabled_ = true;
+        return true;
+    }
+    // Disabling an entrenched regulation is refused for the reason given in
+    // RegulationSet::remove(). Disabling is the quieter of the two evasions and
+    // therefore the more dangerous: the regulation stays in the set, so an
+    // audit that lists regulations still shows it present and correct.
+    if (declared_forbidden() != FS_NONE) return false;
+    enabled_ = false;
     return true;
 }
 

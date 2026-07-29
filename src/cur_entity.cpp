@@ -23,6 +23,9 @@ EntityHandle EntityRegistry::register_entity(const std::string& id,
     rec.display_name = display_name.empty() ? id : display_name;
     rec.category = category;
     rec.subject_class = subject_class;
+    // Written here and nowhere else. See the field comment in cur_entity.h for
+    // why the library keeps a second copy it never updates.
+    rec.registered_subject_class = subject_class;
     rec.state = StateVector{};
     rec.last_known_safe = rec.state;
     rec.last_known_safe_tick = 0;
