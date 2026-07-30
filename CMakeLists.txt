@@ -30,6 +30,7 @@ add_library(cur STATIC
     src/cur_violation.cpp
     src/cur_event_log.cpp
     src/cur_capture_index.cpp
+    src/cur_obligation.cpp
     src/cur_advocate.cpp
     src/cur_state_machine.cpp
 )

@@ -39,6 +39,7 @@
 #include "cur_entity.h"
 #include "cur_event.h"
 #include "cur_event_log.h"
+#include "cur_obligation.h"
 #include "cur_regulation.h"
 #include "cur_state.h"
 #include "cur_state_machine.h"

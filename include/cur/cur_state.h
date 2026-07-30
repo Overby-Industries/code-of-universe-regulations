@@ -257,6 +257,12 @@ enum EventType : uint16_t {
     EV_IRREVERSIBLE_ACT,      // §5.5A(d) — burial, cremation, deletion, removal
     EV_DETERMINATION_VACATED, // §5.5A(h) — the being was found to be alive
 
+    // Raised by CURStateMachine::run_builtin_test() when an obligation matured
+    // unmet — CUR-H.6 §6.8(a), CUR-H.7 §7.12(c)(3), CUR-FOUNDATION-010 §5,
+    // CUR-N.5 §5.2B. The only event in this enum the clock produces rather than
+    // a caller; see cur_obligation.h.
+    EV_OBLIGATION_LAPSED,
+
     EV_COUNT
 };
 

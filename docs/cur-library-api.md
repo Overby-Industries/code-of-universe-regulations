@@ -672,6 +672,42 @@ adding a protection here, the question to ask is not only "can this check be
 passed falsely" but "can the thing being checked be redefined, and can the check
 be removed."
 
+**9.20 — The built-in test, and what a guard structurally cannot see.** Every
+guard answers "may this event proceed", and is evaluated only when something is
+submitted. Four provisions need a different question answered — CUR-H.6 §6.8(a)
+(every report investigated), CUR-H.7 §7.12(c)(3) (restrictions reviewed at
+intervals), CUR-FOUNDATION-010 §5 (routine audit), CUR-N.5 §5.2B (routine
+monitoring) — and in each the failure IS that nothing was submitted. A party who
+simply stops reviewing submits nothing, and nothing is precisely what a guard
+cannot catch.
+
+`ObligationRegister` plus `CURStateMachine::run_builtin_test()` answer it. This
+is the only entry point in the library not driven by a submitted event: it runs
+because the clock advanced. CUR-N.5 §5.2B calls it a routine system check, and
+the framing came from aviation — a periodic BIT that runs on a schedule rather
+than on a stimulus.
+
+The load-bearing property is the direction of failure, set by CUR-H.7 §7.12(d):
+`restriction_supported()` returns false the moment a review falls due unmet, and
+does not wait for anyone to run the check, notice, or apply. Silence resolves
+against the restriction. The opposite convention produces indefinite detention
+with a review attached, which is what every system attempting this has built.
+
+Three further properties are deliberate. A lapse is a fault against `owed_by` and
+never against `concerning` — CUR-H.7 §7.11(c) forbids a measure attaching to the
+being an obligation protects, and a being still waiting for an investigation is
+the last party who should acquire a record from the waiting. The violation opens
+at `VS_OPEN`, because a detected lapse is an allegation and what the party failed
+to do still requires determination under CUR-N.5 §5.8(b). And `lapsed` is not
+cleared when an obligation is later discharged: a party reviewing late every
+cycle is compliant at every instant it is inspected, and the pattern exists only
+if the lapses survive being cured.
+
+**The limit.** This register sees obligations that were opened. Conduct nobody
+recorded, by a party who opened no obligation, is as invisible here as it is to
+the transition table. It narrows the unlogged gap; it does not close it, and
+closing it is an institutional problem rather than a library one.
+
 **9.13 — RFAL precautionary default.** `TIER_ASSESSMENT_PROTOCOL.md` §1.2 places
 the burden of proof on *withholding* protection, not on claiming it. So
 `EntityRegistry::register_entity` defaults `SubjectClass` to
@@ -695,6 +731,7 @@ include/cur/
   cur_event_log.h        append-only audit trail, OTF-1 export
   cur_capture_index.h    Capture Risk Index (FOUNDATION-003)
   cur_advocate.h         advocates for voiceless interests (CUR-A §7.7, CUR-E §1.6)
+  cur_obligation.h       scheduled obligations + the built-in test
   cur_state_machine.h    the engine + ICURObserver
 src/                     one .cpp per header, minus cur.h
 tests/cur_tests.cpp      959 checks, no external framework

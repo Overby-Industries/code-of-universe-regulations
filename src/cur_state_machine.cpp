@@ -1023,6 +1023,67 @@ AmendmentResult CURStateMachine::propose_amendment(const AmendmentProposal& p,
 // Capture risk
 // ---------------------------------------------------------------------------
 
+size_t CURStateMachine::run_builtin_test(uint64_t tick) {
+    const std::vector<uint32_t> lapsed = obligations_.check(tick);
+
+    for (uint32_t id : lapsed) {
+        const Obligation* o = obligations_.get(id);
+        if (o == nullptr) continue;
+
+        const FaultClass severity = lapse_fault_class(o->kind);
+
+        // The record is against the party that owed the obligation. Never
+        // against `concerning` — CUR-H.7 §7.11(c) forbids a measure attaching
+        // to the being an obligation protects, and a being still waiting for
+        // the investigation they asked for is the last party who should
+        // acquire a record out of the waiting.
+        const EntityRecord* owed = entities_.get(o->owed_by);
+
+        LogRecord rec;
+        rec.kind = REC_TRANSITION_ACCEPTED;
+        rec.axis = REC_AXIS_NONE;
+        rec.tick = tick;
+        rec.entity = o->owed_by;
+        rec.entity_id = owed != nullptr ? owed->id : std::string();
+        rec.actor = INVALID_ENTITY;  // the clock, not a party
+        rec.subject_class =
+            owed != nullptr ? owed->subject_class : SUBJ_SENTIENT_BEING;
+        rec.trigger = EV_OBLIGATION_LAPSED;
+        rec.fault = severity;
+        rec.citation = o->citation;
+        rec.detail = o->detail.empty() ? o->citation : o->detail;
+        const uint64_t seq = log_.append(rec).record_seq;
+
+        // An ENTITY-009 record so the lapse is answerable in the same shape as
+        // any other breach. VS_OPEN, not VS_CONFIRMED: a lapse is detected, not
+        // adjudicated, and CUR-N.5 §5.8(b) forbids a measure resting on an
+        // allegation. What the party failed to do still has to be determined.
+        if (owed != nullptr) {
+            ViolationRecord v;
+            v.entity = owed->handle;
+            v.entity_id = owed->id;
+            v.severity = severity;
+            v.domain = DOMAIN_CROSS_DOMAIN;
+            v.category = category_for_fault(severity, v.domain);
+            v.forbidden = FS_NONE;
+            v.evidence = o->detail;
+            v.status = VS_OPEN;
+            v.appealable = true;
+            v.citation = o->citation;
+            v.trigger = EV_OBLIGATION_LAPSED;
+            v.tick = tick;
+            v.log_record_seq = seq;
+            ledger_.open_violation(std::move(v));
+        }
+
+        for (ICURObserver* obs : observers_) {
+            obs->on_obligation_lapsed(*o, severity);
+        }
+    }
+
+    return lapsed.size();
+}
+
 double CURStateMachine::update_capture_risk(const CaptureRiskInputs& in,
                                             uint64_t tick) {
     const double previous = capture_risk_;

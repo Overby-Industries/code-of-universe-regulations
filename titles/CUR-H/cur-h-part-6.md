@@ -392,7 +392,7 @@ and leaves the institution untouched.
 | §6.12(e) | Corresponds to `VS_OVERTURNED`: corrected on the record rather than erased | Implemented |
 | §6.14 | Corresponds to `FS_PERMANENT_EMERGENCY`, declared by `CUR-PDDC.12.6` | Implemented |
 | §6.5 | Age is not represented in the entity model; the prohibition is absolute and has no guard to attach to | Gap, tractable |
-| §6.8(a), §6.8(e) | The duty to investigate every report and the routine review schedule are procedural; no event type represents a report | Gap, tractable |
+| §6.8(a) | Corresponds to `OBLIG_INVESTIGATE_REPORT` and `run_builtin_test()`, which raises a Class III fault when a report goes uninvestigated past its due tick | Implemented |
 | §6.9(b) | An absence of capability cannot be represented as an absence; there is nothing in the library to remove | Not modelled |
 | §6.2, §6.3 | Consent is a property of a relationship over time; the library has no representation of it | Not modelled |
 | CUR-H.7 | Offences against the person generally, including homicide; §7.15(b) incorporates §6.7, §6.8(a)-(d), §6.12, and §6.13(f) rather than restating them | Drafted |

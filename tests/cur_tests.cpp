@@ -1791,6 +1791,163 @@ static void test_denial_still_faults_after_tampering_attempt() {
     CHECK_EQ(res.fault, cur::FC_CLASS_IV);
 }
 
+// ---------------------------------------------------------------------------
+// Scheduled obligations — the built-in test
+// ---------------------------------------------------------------------------
+
+static void test_lapsed_review_withdraws_support() {
+    TEST("a lapsed review withdraws support for the restriction rather than "
+         "leaving it standing (CUR-H.7 §7.12(d))");
+
+    cur::ObligationRegister reg;
+    const cur::EntityHandle body = 1;
+    const cur::EntityHandle being = 2;
+
+    // A restriction with a review owed every 100 ticks.
+    const uint32_t id = reg.open(cur::OBLIG_REVIEW_RESTRICTION, body, being,
+                                 /*opened=*/0, /*due=*/100, /*recur=*/100);
+
+    // Before it falls due, the restriction is supported.
+    CHECK(reg.restriction_supported(being, 50));
+    CHECK(reg.restriction_supported(being, 99));
+
+    // The moment the review is owed and not given, support falls away. This is
+    // the whole point: nobody had to petition, nobody had to notice, and the
+    // being under restriction did nothing at all.
+    CHECK(!reg.restriction_supported(being, 100));
+    CHECK(!reg.restriction_supported(being, 5000));
+
+    // And it does not depend on anyone having run the built-in test. Silence
+    // resolves against the restriction, not in favour of it.
+    CHECK(reg.outstanding(100).size() == size_t{1});
+
+    // Reviewing restores support, and reschedules from the discharge.
+    CHECK(reg.discharge(id, 120));
+    CHECK(reg.restriction_supported(being, 120));
+    CHECK(reg.restriction_supported(being, 219));
+    CHECK(!reg.restriction_supported(being, 220));
+
+    // A different being is unaffected by this one's obligation.
+    CHECK(reg.restriction_supported(/*concerning=*/99, 5000));
+}
+
+static void test_builtin_test_runs_on_the_clock() {
+    TEST("the built-in test detects what no guard can: that nothing was "
+         "submitted (CUR-N.5 §5.2B)");
+
+    cur::CURStateMachine m;
+    m.log().set_clock(fixed_clock);
+    auto tribunal = m.entities().register_entity("tribunal-2", cur::EC_CIVIC,
+                                                 cur::SUBJ_OPERATIONAL_LICENSE);
+    auto reporter = m.entities().register_entity("citizen-771", cur::EC_CIVIC);
+
+    m.obligations().open(cur::OBLIG_INVESTIGATE_REPORT, tribunal, reporter,
+                         /*opened=*/1, /*due=*/50, /*recur=*/0,
+                         "report received, no investigation opened");
+
+    // Nothing is submitted. No event, no transition, no guard evaluated —
+    // exactly the failure mode a transition table cannot see.
+    CHECK_EQ(m.run_builtin_test(10), size_t{0});
+    CHECK_EQ(m.run_builtin_test(49), size_t{0});
+
+    const size_t before = m.ledger().violations().size();
+    CHECK_EQ(m.run_builtin_test(50), size_t{1});
+
+    // The lapse is a fault against the body that owed the investigation.
+    CHECK_EQ(m.ledger().violations().size(), before + 1);
+    const auto& v = m.ledger().violations().back();
+    CHECK_EQ(v.entity, tribunal);
+    CHECK_EQ(v.severity, cur::FC_CLASS_III);
+
+    // An allegation, not a finding. What the body failed to do still has to be
+    // determined — CUR-N.5 §5.8(b).
+    CHECK_EQ(static_cast<int>(v.status), static_cast<int>(cur::VS_OPEN));
+    CHECK(!cur::supports_measure(v.status));
+
+    // Crucially, nothing attaches to the being who reported. They are still
+    // waiting; acquiring a record from the waiting would be perverse.
+    for (const auto& rec : m.ledger().violations()) CHECK(rec.entity != reporter);
+
+    // Running the test again at the same tick does not double-count, so a
+    // caller polling every tick and one polling hourly see the same history.
+    CHECK_EQ(m.run_builtin_test(50), size_t{0});
+    CHECK_EQ(m.run_builtin_test(500), size_t{0});
+    CHECK_EQ(m.ledger().violations().size(), before + 1);
+
+    // It is on the audit trail as its own event, actor-less because the clock
+    // raised it rather than any party.
+    bool logged = false;
+    for (const auto& rec : m.log().records()) {
+        if (rec.trigger == cur::EV_OBLIGATION_LAPSED) {
+            logged = true;
+            CHECK_EQ(rec.actor, cur::INVALID_ENTITY);
+            CHECK_EQ(rec.entity, tribunal);
+        }
+    }
+    CHECK(logged);
+}
+
+static void test_lapses_survive_being_cured() {
+    TEST("a party late every cycle is compliant at every instant unless the "
+         "lapses survive (CREF §15)");
+
+    cur::ObligationRegister reg;
+    const uint32_t id = reg.open(cur::OBLIG_ROUTINE_AUDIT, 1, 2, 0, 100, 100);
+
+    CHECK_EQ(reg.check(100).size(), size_t{1});
+    CHECK(reg.discharge(id, 110));
+
+    // Discharging cures the obligation but does not erase the lapse. Otherwise
+    // a party reviewing ten ticks late forever looks perfect at every point it
+    // is inspected, and the pattern exists nowhere.
+    const cur::Obligation* o = reg.get(id);
+    CHECK(o != nullptr);
+    if (o == nullptr) return;
+    CHECK(o->lapsed);
+    CHECK_EQ(o->lapse_count, uint32_t{1});
+
+    // Next cycle lapses independently and the count accumulates.
+    CHECK_EQ(reg.check(210).size(), size_t{1});
+    CHECK_EQ(reg.get(id)->lapse_count, uint32_t{2});
+
+    // Early discharge does not bank credit. Rescheduling runs from the
+    // discharge, so a party cannot discharge at once and then go quiet for
+    // longer than the interval allows.
+    cur::ObligationRegister r2;
+    const uint32_t e = r2.open(cur::OBLIG_MONITOR_PRACTICE, 1, 2, 0, 100, 100);
+    CHECK(r2.discharge(e, 10));            // discharged 90 ticks early
+    CHECK_EQ(r2.get(e)->due_tick, uint64_t{110});  // not 200
+}
+
+static void test_lapse_severity_distinguishes_the_failures() {
+    TEST("an unanswered report and a missed sweep are not the same failure");
+
+    // A being reported harm and nobody came. CUR-H.6 §6.8(b) removes every
+    // ground on which this could be a paperwork problem.
+    CHECK_EQ(cur::lapse_fault_class(cur::OBLIG_INVESTIGATE_REPORT),
+             cur::FC_CLASS_III);
+
+    // A restriction of liberty continued past its review. Class IV, because
+    // §7.12(d) makes the lapse withdraw its support: what is running is a
+    // deprivation of liberty nobody has justified.
+    CHECK_EQ(cur::lapse_fault_class(cur::OBLIG_REVIEW_RESTRICTION),
+             cur::FC_CLASS_IV);
+
+    CHECK_EQ(cur::lapse_fault_class(cur::OBLIG_ROUTINE_AUDIT), cur::FC_CLASS_II);
+    CHECK_EQ(cur::lapse_fault_class(cur::OBLIG_MONITOR_PRACTICE),
+             cur::FC_CLASS_II);
+
+    // Every kind names its provision, since a lapse is published and
+    // "obligation overdue" is not a reviewable statement.
+    CHECK(std::string(cur::to_string(cur::OBLIG_REVIEW_RESTRICTION))
+              .find("§7.12(c)(3)") != std::string::npos);
+    CHECK(std::string(cur::to_string(cur::OBLIG_INVESTIGATE_REPORT))
+              .find("§6.8(a)") != std::string::npos);
+
+    // The register binds the party that owes, never the being it protects.
+    CHECK(!cur::ObligationRegister::binds_the_protected());
+}
+
 int main() {
     std::printf("libcur %s — CUR corpus %s\n\n", CUR_LIB_VERSION_STRING,
                 cur::CUR_CORPUS_VERSION);
@@ -1833,6 +1990,10 @@ int main() {
     test_irreversible_act_refused_without_both();
     test_vacating_a_determination_is_never_blocked();
     test_death_regulations_registered();
+    test_lapsed_review_withdraws_support();
+    test_builtin_test_runs_on_the_clock();
+    test_lapses_survive_being_cured();
+    test_lapse_severity_distinguishes_the_failures();
     test_reclassifying_a_being_cannot_unlock_sanctions();
     test_reclassification_is_itself_a_fault();
     test_ratchet_only_turns_toward_protection();
