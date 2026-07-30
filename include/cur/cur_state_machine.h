@@ -32,6 +32,7 @@
 #include "cur_entity.h"
 #include "cur_event.h"
 #include "cur_event_log.h"
+#include "cur_obligation.h"
 #include "cur_regulation.h"
 #include "cur_state.h"
 #include "cur_violation.h"
@@ -103,6 +104,12 @@ public:
     virtual void on_amendment(const AmendmentProposal& /*p*/,
                               const AmendmentResult& /*r*/) {}
     virtual void on_capture_risk(double /*cri*/, CaptureRiskBand /*band*/) {}
+
+    // An obligation matured unmet. Raised by run_builtin_test(), which is
+    // driven by the clock rather than by any submitted event — see
+    // cur_obligation.h for why this could not be a guard.
+    virtual void on_obligation_lapsed(const Obligation& /*o*/,
+                                      FaultClass /*severity*/) {}
 };
 
 // ---------------------------------------------------------------------------
@@ -128,6 +135,28 @@ public:
     // FOUNDATION-004 defines. Records cross-reference each other by id.
     ViolationLedger& ledger() { return ledger_; }
     const ViolationLedger& ledger() const { return ledger_; }
+
+    // Obligations that come due on a schedule — CUR-H.6 §6.8(a), CUR-H.7
+    // §7.12(c)(3), CUR-FOUNDATION-010 §5, CUR-N.5 §5.2B.
+    ObligationRegister& obligations() { return obligations_; }
+    const ObligationRegister& obligations() const { return obligations_; }
+
+    // The built-in test. Checks every open obligation against `tick`, logs each
+    // lapse with the fault class its kind carries, opens a violation record
+    // against the party that owed it, and notifies observers. Returns the
+    // number of lapses found.
+    //
+    // This is the one entry point in the library not driven by a submitted
+    // event. It exists because the failure it detects is that nothing was
+    // submitted, which no guard can see. CUR-N.5 §5.2B calls it a routine
+    // system check and that is exactly what it is: it runs because the clock
+    // advanced, not because anyone suspected a fault.
+    //
+    // A lapse is a fault against `owed_by` and never against `concerning`.
+    // CUR-H.7 §7.11(c) forbids a measure attaching to the being an obligation
+    // protects, and a being left waiting for an investigation is the last party
+    // who should acquire a record from the waiting.
+    size_t run_builtin_test(uint64_t tick);
 
     CaptureRiskModel& capture_model() { return capture_model_; }
 
@@ -292,6 +321,7 @@ private:
     EntityRegistry entities_;
     EventLog log_;
     ViolationLedger ledger_;
+    ObligationRegister obligations_;
     CaptureRiskModel capture_model_;
 
     std::vector<ComplianceTransition> table_;  // baseline + amendments

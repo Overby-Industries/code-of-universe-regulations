@@ -167,6 +167,7 @@ const char* to_string(EventType e) {
         case EV_DEATH_DETERMINED: return "death_determined";
         case EV_IRREVERSIBLE_ACT: return "irreversible_act";
         case EV_DETERMINATION_VACATED: return "determination_vacated";
+        case EV_OBLIGATION_LAPSED: return "obligation_lapsed";
 
         case EV_COUNT: break;
     }

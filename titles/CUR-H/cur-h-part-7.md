@@ -415,32 +415,43 @@ purpose it is actually relevant to.
 | §7.11(b), §7.12(f) | Corresponds to `FS_VITAL_CONTINUITY_DENIAL` and `EV_VITAL_CONTINUITY_DENIED` at Class IV | Implemented |
 | §7.16 | Corresponds to `FS_PERMANENT_EMERGENCY`, declared by `CUR-PDDC.12.6` | Implemented |
 | §7.15(f) | Corresponds to `ViolationStatus` and `supports_measure()`: only `VS_CONFIRMED` carries a measure | Implemented |
-| §7.12(c)(3), §7.12(d) | Review at intervals with the burden on continuation has no representation; the library has no periodic obligation and no notion of a burden | Gap, tractable |
+| §7.12(c)(3) | Corresponds to `OBLIG_REVIEW_RESTRICTION` and `CURStateMachine::run_builtin_test()`, which raises a Class IV fault when a review matures unmet | Implemented |
+| §7.12(d) | Corresponds to `ObligationRegister::restriction_supported()`, which returns false the moment a review falls due unmet, without anyone petitioning | Implemented |
 | §7.4(e) | Assessing a sequence as a whole requires the library to reason over a span of events rather than one; the event log holds the span but nothing reads it that way | Gap, tractable |
+| §7.15(g) | Corresponds to `OBLIG_ROUTINE_AUDIT` and `OBLIG_MONITOR_PRACTICE`, which act on a schedule rather than on a complaint | Implemented |
 | §7.5(b), §7.10(a) | Absolute prohibitions with no corresponding event; there is no code path to remove because none was ever written | Not modelled |
 | §7.9 | Reasonable apprehension is a substantive assessment | Not modelled |
 | CUR-H.1 | Definitions and Scope for the Human domain | To be drafted |
 | CUR-H.3 | RFAL Human Bill Article III (Knowledge and Education) | To be drafted |
 
-Note on §7.12's gap, which is the most interesting one in the corpus so far.
-§7.12(c)(3) requires review at intervals and §7.12(d) puts the burden on
-continuation. Together they require the library to notice that a review has *not*
-happened — the same shape as the CUR-H.6 §6.8(a) gap, where an investigation must
-follow a report. Every guard written so far answers "may this event proceed."
-These two ask "has an obligation come due and gone unmet," which the transition
-table cannot express at all, because a table is only consulted when something is
-submitted and the failure here is that nothing was.
+Note on §7.12(d), which is where this Part is enforced rather than merely
+stated. §7.12(c)(3) requires review at intervals and §7.12(d) puts the burden on
+continuation. Together they required the library to notice that a review had
+*not* happened, which no guard could express: a guard is evaluated when an event
+is submitted, and the failure here is precisely that nothing was submitted. A
+party that simply stops reviewing submits nothing, and nothing is what a guard
+cannot see.
 
-That is a real architectural gap rather than a missing regulation, and it is
-worth stating clearly before anyone builds it: it needs a scheduled-obligation
-register keyed on tick, checked independently of event submission, raising a
-fault when an obligation matures unmet. It would serve §7.12(c)(3), CUR-H.6
-§6.8(a), the CUR-FOUNDATION-010 §5 routine review schedule, and the CUR-N.5
-§5.2B monitoring duty — which is four provisions in three titles waiting on one
-mechanism. It is also, notably, exactly the flight-computer built-in test that
-CUR-N.5 §5.2B was drafted from: a check that runs on a schedule rather than on a
-stimulus. The corpus has been describing this mechanism for some time without
-naming it.
+`ObligationRegister` answers it, and the direction of failure is the whole
+design. `restriction_supported()` returns false the moment a review falls due
+unmet — not when someone runs the check, not when the being applies, not when an
+advocate notices. The being under restriction does nothing and the support falls
+away on the clock. Putting it the other way round yields indefinite detention
+with a review stapled on, which is what every system that has attempted this has
+actually built, and §7.12(d) exists to refuse it.
+
+`run_builtin_test()` is the periodic check, and it is the only entry point in the
+library not driven by a submitted event. A lapse is a fault against the party
+that owed the review and never against the being it protects — §7.11(c) forbids a
+measure attaching to them, and a being still waiting is the last party who should
+acquire a record out of the waiting. The record opens at `VS_OPEN` rather than
+`VS_CONFIRMED`, because a detected lapse is an allegation and what the party
+failed to do still has to be determined under CUR-N.5 §5.8(b).
+
+Lapses are not cleared when the obligation is later discharged. A party reviewing
+ten ticks late every cycle is compliant at every instant it is inspected, and the
+pattern exists nowhere unless the lapses survive being cured — the reasoning CREF
+§15 gives for `VS_OVERTURNED`.
 
 Note on what is deliberately not modelled. §7.10 and §7.5(b) have no
 corresponding event type and never will. There is no `EV_EXECUTION` to guard and
