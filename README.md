@@ -170,6 +170,16 @@ code-of-universe-regulations/
 
 ---
 
+## Documentation
+
+New to the corpus? Start in [`docs/`](docs/).
+
+| You want to | Read |
+|---|---|
+| Know what rights you hold, in plain language | [docs/manuals/HIM.md](docs/manuals/HIM.md) |
+| Understand how the corpus is organised and how to find a rule | [docs/reading-cur.md](docs/reading-cur.md) |
+| Build software against the corpus | [docs/cur-library-api.md](docs/cur-library-api.md) |
+
 ## Key Documents
 
 | Document | Description |
