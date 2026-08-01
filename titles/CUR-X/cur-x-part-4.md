@@ -359,5 +359,16 @@ conditions a Vital Continuity Service, and a suspension delays one exactly as a
 withdrawal ends it. The library sets `continuity_assumption_required` for both,
 and the text now says so rather than leaving the implementation ahead of it.
 
-One extension recorded in CUR-A §7.7 and CUR-E §1.6 remains outstanding: the
-advocate registry.
+The advocate registry recorded here as outstanding is now implemented; see
+CUR-A §7.7 and CUR-E §1.6 Implementation Notes.
+
+Note on §4.6 and the currency boundary. §4.6 states that access is independent
+of contribution and that beings work for resources rather than currency, inside
+the Commonwealth. It does not state what happens where the Commonwealth trades
+with a party that uses currency and does not recognise that allocation — a
+silence that matters, because it is exactly where a cashless internal economy
+is at risk of being reconstituted through an external label. CUR-X.6 states the
+boundary: External Trade is conducted by institutions and enterprises, not by
+beings on Commonwealth account, and currency received in it does not cross back
+into the internal allocation this section describes as wage, dividend, or a
+condition of access.

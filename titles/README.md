@@ -139,6 +139,7 @@ Current status:
 | CUR-E.1 | CUR-X §3.7(b)(3), CUR-E.7 Implementation Notes | Drafted |
 | CUR-X.4 | Anticipated — enterprise accountability and ownership | Drafted |
 | CUR-X.5 | Overby Transparency Protocol design record §4 — the public record: what is published, in what form, and the limits on its use | Drafted |
+| CUR-X.6 | CUR-X.4 §4.6 Implementation Notes; PDDC §9.1 jurisdictional boundary — external trade and the currency boundary | Drafted |
 | CUR-E.2 | Anticipated — habitat, Earth, extraterrestrial environments | Drafted |
 
 No dangling references remain. Every provision cited by a published title, an
