@@ -13,6 +13,7 @@ read it in file order to find out what it says.
 |---|---|
 | Understand how the corpus is organised, and how to find a rule | [reading-cur.md](reading-cur.md) |
 | Know what rights you actually hold, in plain language | [manuals/HIM.md](manuals/HIM.md) |
+| Know what raising a child does and does not give you authority to do | [manuals/PIM.md](manuals/PIM.md) |
 | Build software against the corpus | [cur-library-api.md](cur-library-api.md) |
 | Know why a title is drafted the way it is | The Implementation Notes at the end of that title |
 | Know what is still missing | [reading-cur.md §6](reading-cur.md), and the status tables in each title |
@@ -57,13 +58,13 @@ and the manual is wrong.
 |---|---|---|
 | [reading-cur.md](reading-cur.md) | How the corpus is structured, how citations work, how to find the rule for a situation, and what the status vocabulary means | Anyone working on or with the corpus |
 | [manuals/HIM.md](manuals/HIM.md) | Human Information Manual — what the human-domain titles mean for a person | Everyone |
+| [manuals/PIM.md](manuals/PIM.md) | Parent Information Manual — what raising a child does and does not give you authority to do, built from the provisions that already exist. Says plainly, in its §8, that custody, guardianship, and education have no dedicated title yet, rather than inventing one | Parents and guardians |
 | [cur-library-api.md](cur-library-api.md) | `libcur` API, the three state axes, guards, and the interpretation notes where the corpus needed a judgement call | Implementers |
 
 ### Planned
 
 | File | What it will be |
 |---|---|
-| `manuals/PIM.md` | Parent Information Manual — children, guardianship, education, and the limits on authority over a young being |
 | `manuals/SIM.md` | Silicon Information Manual — for Silicon-Based Life, on the same terms |
 | `manuals/EIM.md` | Enterprise Information Manual — obligations of a body that directs the work of others |
 | `otp-integration.md` | How CUR publishes into the Overby Ledger under CUR-X.5 |
