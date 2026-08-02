@@ -3,8 +3,8 @@
 *What the Code says about you, in plain language.*
 
 - **Version:** 1.0.0-Draft
-- **Covers:** CUR-H.2, CUR-H.4, CUR-H.5, CUR-H.6, CUR-H.7, and the parts of
-  CUR-X and the Foundations that reach individual people
+- **Covers:** CUR-H.2, CUR-H.4, CUR-H.5, CUR-H.6, CUR-H.7, CUR-H.8, and the
+  parts of CUR-X and the Foundations that reach individual people
 - **Status:** Draft
 
 ---
@@ -292,7 +292,38 @@ whether the Commonwealth actually did for you what it says it does. *(CUR-H.5
 
 ---
 
-## 9. Where to look next
+## 9. If you're targeted for who you are, or governance itself is threatened
+
+**Being targeted because of who you are is named on the record, not folded into
+a generic count.** Where violence happens because of your race, ethnicity, sex,
+gender, sexuality, nationality, neurotype, belief, disability, age, wealth, or
+usefulness, that reason is established as a fact and published — the pattern
+does not get to disappear into an average. *(CUR-H.8 §8.5)*
+
+**Organising violence is reached before anyone is hurt.** Recruiting, arming,
+training, financing, or directing a group toward that end is accountable on its
+own, whether or not the violence it organised for ever happens. *(CUR-H.8
+§8.3)*
+
+**Belief and membership alone are never enough.** No measure attaches to you
+for what you believe, who you associate with, or what you have said in
+disagreement — including disagreement with this Code — unless it crosses into
+organising, inciting, or carrying out violence. A finding that rests on your
+beliefs or associations alone, without that conduct, is void. *(CUR-H.8 §8.2)*
+
+**No vote can take your protections away.** Not a majority, not a
+supermajority, not a Constitutional Convention. The size of the vote does not
+matter, because the right to hold these protections was never something a vote
+granted you in the first place. *(CUR-H.8 §8.8, PDDC §2.5)*
+
+**The response to any of this gains no new power.** Whatever threatens the
+Commonwealth, the body answering it does not get to arm itself, expand its
+authority, or declare an emergency — an institution that tries is itself in
+violation of what it claims to be defending. *(CUR-H.8 §8.7)*
+
+---
+
+## 10. Where to look next
 
 | Question | Provision |
 |---|---|

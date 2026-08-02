@@ -141,6 +141,7 @@ Current status:
 | CUR-X.5 | Overby Transparency Protocol design record §4 — the public record: what is published, in what form, and the limits on its use | Drafted |
 | CUR-X.6 | CUR-X.4 §4.6 Implementation Notes; PDDC §9.1 jurisdictional boundary — external trade and the currency boundary | Drafted |
 | CUR-E.2 | Anticipated — habitat, Earth, extraterrestrial environments | Drafted |
+| CUR-H.8 | HIM §9 — organised political violence, hate-motivated targeting, and the defence of self-governance against seizure by force | Drafted |
 
 No dangling references remain. Every provision cited by a published title, an
 operational manual, or shipping code now resolves to drafted text. Subsequent
