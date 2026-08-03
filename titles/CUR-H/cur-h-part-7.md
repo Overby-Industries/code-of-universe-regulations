@@ -7,7 +7,7 @@
 - **Date:** 2026-07-28
 - **Status:** Draft
 - **Depends On:** CUR-FOUNDATION-001, CUR-FOUNDATION-002, CUR-FOUNDATION-005, CUR-FOUNDATION-010, CUR-FOUNDATION-012 (CREF), CUR-FOUNDATION-013, PDDC TITLE 4, PDDC TITLE 5, PDDC §12.3, PDDC §12.4, PDDC §12.6, CUR-H.2, CUR-H.4, CUR-H.5, CUR-H.6, CUR-N.4, CUR-X.4, CUR-E.2
-- **Implements:** RFAL Human Bill of Rights v1.7.0 Article I (Inherent Dignity and Cosmic Origin), Article IV §4.1, and Article V; PDDC §12.3(a)(1)
+- **Implements:** RFAL Human Bill of Rights v1.7.0 Article I (Inherent Dignity and Cosmic Origin) and Article IV §4.1; PDDC §10.1(a)-(c) and §12.3(a)(1)
 - **Referenced by:** CUR-H.6 Implementation Notes
 
 Relationship to CUR-H.6. That Part governs sexual violence and its specific
@@ -323,6 +323,25 @@ substance of this Part; the prohibitions are the easy half.
 (d) §7.10 survives the unenforceability of every other provision of this Part, including the suspension worked by subsection (c). The prohibition on the Commonwealth killing a being does not depend on any other provision being in force, and rests additionally on §7.2, on CUR-H.5 §5.5A, and on PDDC §12.6.
 
 ## Implementation Notes
+
+Citation correction. This Part originally cited RFAL Human Bill of Rights
+"Article V" as a source alongside Article I and Article IV §4.1. Checked against
+the RFAL repository's history — back to the earliest recorded version,
+v1.4.0 — Article V has always been "Relational Rights — Humans Among All
+Life," a provision about humans' relationships to animal, silicon, and
+ecological life, never about security of the person. The citation was
+incorrect from the first draft rather than drifted by a later RFAL
+renumbering, and the Human Bill of Rights in fact contains no dedicated
+right-to-life, anti-torture, or anti-slavery provision at any version checked.
+What this Part actually rests on for that content, and always has in
+substance, is PDDC §10.1(a)-(c) — the non-derogable TITLE 4 rights to life and
+bodily integrity, freedom from torture and cruel treatment, and freedom from
+slavery and forced labour — which this Part already depended on without citing
+directly. The header now cites it. This is the same drafting-ahead-of-RFAL
+position CUR-E.1 §1.11 and CUR-H.8 record for their own subjects, applied here
+retroactively rather than disclosed at the time, and titles/README.md's rule
+that a conformance change is recorded rather than made silently governs this
+note.
 
 What this Part is actually for. The prohibitions are the straightforward half.
 Every governance document prohibits murder. The half that determines whether a
