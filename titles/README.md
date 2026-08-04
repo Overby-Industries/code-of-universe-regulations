@@ -142,6 +142,7 @@ Current status:
 | CUR-X.6 | CUR-X.4 §4.6 Implementation Notes; PDDC §9.1 jurisdictional boundary — external trade and the currency boundary | Drafted |
 | CUR-E.2 | Anticipated — habitat, Earth, extraterrestrial environments | Drafted |
 | CUR-H.8 | HIM §9 — organised political violence, hate-motivated targeting, and the defence of self-governance against seizure by force | Drafted |
+| CUR-H.3 | PIM §3, §8 — knowledge, education, and protection from enforced ignorance | Drafted |
 
 No dangling references remain. Every provision cited by a published title, an
 operational manual, or shipping code now resolves to drafted text. Subsequent

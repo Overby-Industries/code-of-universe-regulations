@@ -441,7 +441,7 @@ purpose it is actually relevant to.
 | §7.5(b), §7.10(a) | Absolute prohibitions with no corresponding event; there is no code path to remove because none was ever written | Not modelled |
 | §7.9 | Reasonable apprehension is a substantive assessment | Not modelled |
 | CUR-H.1 | Definitions and Scope for the Human domain | To be drafted |
-| CUR-H.3 | RFAL Human Bill Article III (Knowledge and Education) | To be drafted |
+| CUR-H.3 | RFAL Human Bill Article III (Knowledge and Education) | Drafted |
 
 Note on §7.12(d), which is where this Part is enforced rather than merely
 stated. §7.12(c)(3) requires review at intervals and §7.12(d) puts the burden on

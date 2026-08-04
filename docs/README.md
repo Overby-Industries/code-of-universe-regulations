@@ -58,7 +58,7 @@ and the manual is wrong.
 |---|---|---|
 | [reading-cur.md](reading-cur.md) | How the corpus is structured, how citations work, how to find the rule for a situation, and what the status vocabulary means | Anyone working on or with the corpus |
 | [manuals/HIM.md](manuals/HIM.md) | Human Information Manual — what the human-domain titles mean for a person | Everyone |
-| [manuals/PIM.md](manuals/PIM.md) | Parent Information Manual — what raising a child does and does not give you authority to do, built from the provisions that already exist. Says plainly, in its §8, that custody, guardianship, and education have no dedicated title yet, rather than inventing one | Parents and guardians |
+| [manuals/PIM.md](manuals/PIM.md) | Parent Information Manual — what raising a child does and does not give you authority to do, built from the provisions that already exist. Says plainly, in its §8, that custody and guardianship have no dedicated title yet, and that CUR-H.3 narrows but does not close the education gap, rather than implying either is settled | Parents and guardians |
 | [cur-library-api.md](cur-library-api.md) | `libcur` API, the three state axes, guards, and the interpretation notes where the corpus needed a judgement call | Implementers |
 
 ### Planned

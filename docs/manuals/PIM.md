@@ -4,8 +4,8 @@
 holds regardless of who is raising them.*
 
 - **Version:** 1.0.0-Draft
-- **Covers:** CUR-H.2, CUR-H.4, CUR-H.5, CUR-H.6 §6.5, CUR-D.6, and the parts
-  of the Foundations that reach every being without qualification
+- **Covers:** CUR-H.2, CUR-H.3, CUR-H.4, CUR-H.5, CUR-H.6 §6.5, CUR-D.6, and
+  the parts of the Foundations that reach every being without qualification
 - **Status:** Draft
 
 ---
@@ -82,7 +82,11 @@ theology and does not prevent a parent from raising a child within it. *(CUR-D.6
 **Make ordinary decisions of care.** Health, education, daily life, and the
 countless decisions that come with responsibility for someone who cannot yet
 make every decision themselves — that is what guardianship is, and it is
-distinct from the authority the Code withholds in section 2.
+distinct from the authority the Code withholds in section 2. Where education
+specifically is concerned, CUR-H.3 states the floor: your choice of what to
+teach and emphasise is yours, but not the power to withhold the evidence-based
+account of a matter or replace it with doctrine presented as settled fact.
+*(CUR-H.3 §3.2(c), §3.4)*
 
 The line between the two is not always obvious in the moment, so the next
 sections state where the Code has drawn it explicitly.
@@ -199,7 +203,10 @@ a child:
 
 - What standard governs a custody dispute between parents
 - What a guardian's authority looks like where it is not addressed above
-- What a school or an education system owes a child, and what it may require
+- What a school or an education system owes a child, and what it may
+  require — **narrowed by CUR-H.3**, which states what may not be withheld
+  or replaced with doctrine, but does not state what a school owes a child
+  beyond content
 - How authority transfers, is shared, or is withdrawn
 - What happens where a parent's own rights and a child's protection appear to
   conflict, beyond what section 4 already resolves
