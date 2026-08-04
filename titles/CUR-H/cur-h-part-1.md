@@ -8,7 +8,7 @@
 - **Status:** Draft
 - **Depends On:** CUR-FOUNDATION-001, CUR-FOUNDATION-002, CUR-FOUNDATION-004, CUR-FOUNDATION-005, CUR-FOUNDATION-010, CUR-FOUNDATION-012 (CREF), CUR-FOUNDATION-013, PDDC TITLE 1, PDDC TITLE 4, PDDC TITLE 5, PDDC §12.6, PDDC Appendix A §A.1, CUR-H.2, CUR-H.3, CUR-H.4, CUR-H.5, CUR-H.6, CUR-H.7, CUR-H.8, CUR-S.4, CUR-X.3
 - **Implements:** RFAL Human Bill of Rights v1.7.0 Article I §1.1 and §1.3 (the identity and dignity grounding for who this domain protects); PDDC §1.3 (Jurisdiction) and Appendix A §A.1(g) (Avian); CUR-X.3 §3.2 (equal constitutional standing across domains)
-- **Referenced by:** None yet
+- **Referenced by:** CUR-H.2, CUR-H.3, CUR-H.4, CUR-H.5, CUR-H.7, CUR-H.8 Implementation Notes; HIM, PIM
 
 Note on sequence. This Part carries the number a Definitions and Scope Part
 conventionally carries first, but it was drafted last, after CUR-H.2 through

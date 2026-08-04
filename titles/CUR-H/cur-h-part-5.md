@@ -421,7 +421,7 @@ is why §5.1(c) is drafted as a list rather than left to implication.
 | CUR-H.1 | Definitions and Scope for the Human domain | Drafted |
 | CUR-H.3 | RFAL Human Bill Article III (Knowledge and Education) | Drafted |
 | CUR-H.6 | Protection from Sexual Violence, Coercion, and Exploitation; extends §5.2 and §5.9 to the conduct by which bodily sovereignty is most often overridden | Drafted |
-| CUR-H.7 | Offences against the person generally, including homicide | To be drafted |
+| CUR-H.7 | Offences against the person generally, including homicide | Drafted |
 
 Note on §5.7(g) and the advocate registry. `AdvocateRegistry` was built for
 CUR-A §7.7 and CUR-E §1.6, and its `AdvocateDomain` enumerates `ADOM_ANIMAL` and
