@@ -267,4 +267,4 @@ resolve. PIM §8's remaining bullets stand, minus the one this Part narrows.
 | §3.6(c) | Corresponds to `ViolationStatus` and `supports_measure()`, and to institutional audit referral under `CUR-FOUNDATION-010`, both already Implemented for other Parts in this domain | Implemented |
 | §3.6(d) | Corresponds to the reasoning CUR-H.2 §2.8(f) already carries; no separate mechanism required | Implemented |
 | §3.7 | Corresponds to `FS_PERMANENT_EMERGENCY`, declared by `CUR-PDDC.12.6` | Implemented |
-| CUR-H.1 | Definitions and Scope for the Human domain | To be drafted |
+| CUR-H.1 | Definitions and Scope for the Human domain | Drafted |

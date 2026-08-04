@@ -395,5 +395,5 @@ and is not restated here.
 | §8.9(a) | Corresponds to `ViolationStatus` and `supports_measure()`: only `VS_CONFIRMED` carries a measure | Implemented |
 | §8.9(e) | Corresponds to `run_builtin_test()` raising no fault, and no guard evaluating, on affiliation or belief alone — the same absence recorded at §8.2 | Not modelled |
 | §8.10 | Corresponds to `FS_PERMANENT_EMERGENCY`, declared by `CUR-PDDC.12.6` | Implemented |
-| CUR-H.1 | Definitions and Scope for the Human domain | To be drafted |
+| CUR-H.1 | Definitions and Scope for the Human domain | Drafted |
 | CUR-H.3 | RFAL Human Bill Article III (Knowledge and Education) | Drafted |

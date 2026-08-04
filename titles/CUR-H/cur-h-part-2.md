@@ -285,7 +285,7 @@ are not an implied licence to score access to them.
 | §2.2, §2.3 | No corresponding regulation in the `libcur` baseline set. The domain is `DOMAIN_HUMAN`, which currently carries no rules | Not modelled |
 | §2.5(b)-(g) | Disclosure, explanation, appeal, and correction are procedural and out of scope for the FSM | Not modelled |
 | §2.7 | The thought/expression boundary is adjudicative and not reducible to a transition guard | Not modelled |
-| CUR-H.1 | Definitions and Scope for the Human domain | To be drafted |
+| CUR-H.1 | Definitions and Scope for the Human domain | Drafted |
 | CUR-H.3 | RFAL Human Bill Article III (Knowledge and Education) | Drafted |
 | CUR-H.4 | Psychological Harm, cited by CUR-N.2 §2.9(a)(2) and by §2.9(a)(1) of this Part | To be drafted |
 | CUR-D.6 | Prohibition on Coercive Worship, cited by §2.3(i) and §2.10 | To be drafted |

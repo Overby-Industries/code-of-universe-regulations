@@ -3,8 +3,8 @@
 *What the Code says about you, in plain language.*
 
 - **Version:** 1.0.0-Draft
-- **Covers:** CUR-H.2, CUR-H.4, CUR-H.5, CUR-H.6, CUR-H.7, CUR-H.8, and the
-  parts of CUR-X and the Foundations that reach individual people
+- **Covers:** CUR-H.1, CUR-H.2, CUR-H.4, CUR-H.5, CUR-H.6, CUR-H.7, CUR-H.8,
+  and the parts of CUR-X and the Foundations that reach individual people
 - **Status:** Draft
 
 ---

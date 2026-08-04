@@ -143,6 +143,7 @@ Current status:
 | CUR-E.2 | Anticipated — habitat, Earth, extraterrestrial environments | Drafted |
 | CUR-H.8 | HIM §9 — organised political violence, hate-motivated targeting, and the defence of self-governance against seizure by force | Drafted |
 | CUR-H.3 | PIM §3, §8 — knowledge, education, and protection from enforced ignorance | Drafted |
+| CUR-H.1 | CUR-H.2, CUR-H.3, CUR-H.4, CUR-H.5, CUR-H.7, CUR-H.8 Implementation Notes — definitions and scope for the Human domain | Drafted |
 
 No dangling references remain. Every provision cited by a published title, an
 operational manual, or shipping code now resolves to drafted text. Subsequent

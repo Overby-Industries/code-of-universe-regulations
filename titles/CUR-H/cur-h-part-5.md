@@ -418,8 +418,8 @@ is why §5.1(c) is drafted as a list rather than left to implication.
 | §5.5 | End-of-life decisions are procedural and substantive; deliberately not modelled | Not modelled |
 | §5.8(f), §5.8(g) | Care without charge is an absence of a mechanism; there is no billing path in the library to remove | Not modelled |
 | §5.7(b) | Decision-specific, time-specific capacity has no representation in the library | Not modelled |
-| CUR-H.1 | Definitions and Scope for the Human domain | To be drafted |
-| CUR-H.3 | RFAL Human Bill Article III (Knowledge and Education) | To be drafted |
+| CUR-H.1 | Definitions and Scope for the Human domain | Drafted |
+| CUR-H.3 | RFAL Human Bill Article III (Knowledge and Education) | Drafted |
 | CUR-H.6 | Protection from Sexual Violence, Coercion, and Exploitation; extends §5.2 and §5.9 to the conduct by which bodily sovereignty is most often overridden | Drafted |
 | CUR-H.7 | Offences against the person generally, including homicide | To be drafted |
 

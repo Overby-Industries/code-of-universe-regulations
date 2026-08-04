@@ -284,8 +284,8 @@ possible; here, the surviving remainder would be worse than nothing.
 | §4.2, §4.3 | No corresponding regulation. `DOMAIN_HUMAN` carries no rules in the baseline set | Not modelled |
 | §4.9(b) | Evidentiary weight is adjudicative and out of scope for the FSM | Not modelled |
 | §4.10 | Stated as an interpretive rule; there is no transition it could guard | Not modelled |
-| CUR-H.1 | Definitions and Scope for the Human domain | To be drafted |
-| CUR-H.3 | Reserved | To be drafted |
+| CUR-H.1 | Definitions and Scope for the Human domain | Drafted |
+| CUR-H.3 | RFAL Human Bill Article III (Knowledge and Education) | Drafted |
 | CUR-H.5 | Bodily Autonomy and Self-Determination, implementing RFAL Human Bill Article IV §4.1 | Drafted |
 | CUR-A | Protection from psychological harm for animals, cited by §4.12 | To be drafted |
 

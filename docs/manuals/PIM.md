@@ -4,8 +4,9 @@
 holds regardless of who is raising them.*
 
 - **Version:** 1.0.0-Draft
-- **Covers:** CUR-H.2, CUR-H.3, CUR-H.4, CUR-H.5, CUR-H.6 §6.5, CUR-D.6, and
-  the parts of the Foundations that reach every being without qualification
+- **Covers:** CUR-H.1, CUR-H.2, CUR-H.3, CUR-H.4, CUR-H.5, CUR-H.6 §6.5,
+  CUR-D.6, and the parts of the Foundations that reach every being without
+  qualification
 - **Status:** Draft
 
 ---
