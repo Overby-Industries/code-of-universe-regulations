@@ -8,7 +8,7 @@
 - **Status:** Draft
 - **Depends On:** CUR-FOUNDATION-002, CUR-FOUNDATION-013, PDDC §9.1, PDDC §9.3, PDDC-TREASURY-AND-FUNDING, CUR-X.4, CUR-X.5
 - **Implements:** PDDC §9.1 (Common Heritage Principle, Type A Entrenched) at its jurisdictional boundary
-- **Referenced by:** CUR-X.4 §4.6 Implementation Notes
+- **Referenced by:** CUR-X.4 §4.6 Implementation Notes, `docs/manuals/EIM.md`
 
 Note on why this Part exists. CUR-X.4 §4.6 states that beings work for
 resources rather than for currency, and PDDC §9.1 makes Commonwealth resources

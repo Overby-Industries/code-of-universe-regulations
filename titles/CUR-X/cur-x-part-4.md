@@ -8,6 +8,7 @@
 - **Status:** Draft
 - **Depends On:** CUR-FOUNDATION-001, CUR-FOUNDATION-002, CUR-FOUNDATION-003, CUR-FOUNDATION-004 (GEM), CUR-FOUNDATION-010, CUR-FOUNDATION-012 (CREF), CUR-FOUNDATION-013, PDDC TITLE 3, PDDC TITLE 4, PDDC TITLE 5, PDDC §9.1, PDDC §13.1, CUR-X.3
 - **Informed by:** Overby Industries Operating Constitution v1.0 (CC0), as a worked example of the enterprise form described in §4.7
+- **Referenced by:** `docs/manuals/EIM.md`
 
 Note on vocabulary. This Part describes mechanisms and avoids the names of
 economic systems. Labels carry commitments the Code has not made and invite

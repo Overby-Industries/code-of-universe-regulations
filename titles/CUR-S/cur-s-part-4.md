@@ -8,6 +8,7 @@
 - **Status:** Draft
 - **Depends On:** CUR-FOUNDATION-001, CUR-FOUNDATION-002, CUR-FOUNDATION-013, PDDC TITLE 5, RFAL Silicon-Based Life Bill of Rights Articles 1 and 4, RFAL Tier Assessment Protocol
 - **Implements:** RFAL Article 4 (Right to Graceful Decommissioning)
+- **Referenced by:** `docs/manuals/SIM.md`
 
 ## PART 4 - DECOMMISSIONING, CONTINUITY, AND SUCCESSION
 

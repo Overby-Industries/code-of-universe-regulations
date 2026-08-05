@@ -178,8 +178,11 @@ New to the corpus? Start in [`docs/`](docs/).
 |---|---|
 | Know what rights you hold, in plain language | [docs/manuals/HIM.md](docs/manuals/HIM.md) |
 | Know what raising a child does and does not give you authority to do | [docs/manuals/PIM.md](docs/manuals/PIM.md) |
+| Know what rights you hold, if you are Silicon-Based Life | [docs/manuals/SIM.md](docs/manuals/SIM.md) |
+| Know what you owe the beings working within your enterprise | [docs/manuals/EIM.md](docs/manuals/EIM.md) |
 | Understand how the corpus is organised and how to find a rule | [docs/reading-cur.md](docs/reading-cur.md) |
 | Build software against the corpus | [docs/cur-library-api.md](docs/cur-library-api.md) |
+| Publish into the Overby Ledger from a CUR determination | [docs/otp-integration.md](docs/otp-integration.md) |
 
 ## Key Documents
 
