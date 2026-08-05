@@ -113,60 +113,57 @@ The FSM architecture applies to all six PDDC documents, all Sector Charters, all
 code-of-universe-regulations/
 ├── CUR-FORMAT-GUIDE.md                             # Formatting and hierarchy standards
 ├── README.md                                       # This file
-├── LICENSE                                         # Creative Commons CC0 1.0
+├── LICENSE.md                                      # Creative Commons CC0 1.0
 ├── CHANGELOG.md                                    # Version history
 ├── VERSION.md                                      # Current version
 │
-├── foundation/                                     # Immutable core documents
-│   ├── CUR-FOUNDATION-001.md                       # FSM Anti-Capture and Resilience System
-│   ├── RIGHTS-FOR-ALL-LIFE.md                      # Rights for All Life Charter (RALC)
-│   └── PRINCIPLES.md                               # Core principles of the Commonwealth
+├── foundation/                                     # Foundation documents (13, cur-foundation-001 through -013)
+│   └── cur-foundation-001.md ... -013.md           # FSM, CREF, CTAF, Vital Continuity, and the rest
 │
-├── PROGRESSIVE-DIRECT-DEMOCRACY-CONSTITUTION.md    # Supreme governance instrument (PDDC)
-├── PDDC-IMPLEMENTATION-ROADMAP.md                  # 44-waypoint, 5-phase, 36-month buildout
-├── PDDC-GOVERNANCE-MECHANICS.md                    # Procedural rules for all institutions
-├── PDDC-SECTOR-CHARTER.md                          # Mandatory standards and Model Charter
-├── PDDC-TREASURY-AND-FUNDING.md                    # Financial architecture and ISRU revenue
-├── PDDC-AMENDMENT-AND-SAFEGUARDS.md                # Amendment categories and Entrenchment Framework
+├── progressive-direct-democracy-constitution.md    # Supreme governance instrument (PDDC)
+├── pddc-implementation-roadmap.md                  # 44-waypoint, 5-phase, 36-month buildout
+├── pddc-sector-charter.md                          # Mandatory standards and Model Charter
+├── pddc-treasury-and-funding.md                    # Financial architecture and ISRU revenue
+├── pddc-amendment-and-safeguards.md                # Amendment categories and Entrenchment Framework
 │
-├── titles/                                         # Formal regulatory code
-│   ├── title-01/                                   # Fundamental Rights and Interior Sovereignty
-│   ├── title-03/                                   # Silicon-Based Life Regulations
-│   └── ...
+├── titles/                                         # Formal regulatory code (CUR), by domain
+│   ├── CUR-H/  CUR-S/  CUR-A/  CUR-D/              # Human, Silicon-Based Life, Animal, Deity
+│   ├── CUR-E/  CUR-X/  CUR-N/                      # Ecosystem, Cross-Domain, Non-Human Cognitive
+│   └── README.md                                   # Conventions and drafting-order status
 │
-├── proposals/                                      # Community proposals
-│   ├── ACTIVE/                                     # Proposals under debate
-│   ├── ARCHIVED/                                   # Past proposals
-│   ├── TEMPLATE.md                                 # Template for new proposals
-│   └── README.md                                   # How to submit proposals
+├── docs/                                           # Where to start reading; manuals; library and OTP API
+│   ├── manuals/                                    # HIM, PIM, SIM, EIM — plain-language, per audience
+│   ├── reading-cur.md  cur-library-api.md  otp-integration.md
+│   └── README.md
 │
-├── governance/                                     # Governance processes
-│   ├── voting-system.md                            # Voting mechanics
-│   ├── audit-protocol.md                           # AI and human audits
-│   └── dispute-resolution.md                       # Conflict resolution
+├── manuals/operational/                            # Operational manuals for institutions (TIM-N and others)
 │
-├── economy/                                        # Economic model
-│   ├── resource-distribution.md                    # ISRU revenue waterfall and commons reserve
-│   ├── incentives.md                               # Contribution rewards
-│   └── trade-policy.md                             # Ethical trade policy
+├── proposals/                                      # The repository's own contribution process
+│   ├── ACTIVE/                                     # Proposals under discussion
+│   ├── ARCHIVED/                                   # Resolved proposals, kept on the record
+│   ├── TEMPLATE.md
+│   └── README.md                                   # How this differs from the in-fiction GA process
 │
-├── historical-lessons/                             # Case studies from governance history
-│   ├── athens.md                                   # Lessons from Ancient Athens
-│   ├── rome.md                                     # Lessons from the Roman Republic
-│   └── oklahoma-constitution.md                    # Oklahoma constitutional analysis
+├── governance/                                     # Commonwealth governance mechanics, by function
+│   ├── pddc-governance-mechanics.md                # Authoritative source: every institution's procedure
+│   ├── voting-system.md  audit-protocol.md  dispute-resolution.md
+│   └── README.md
 │
-├── technical/                                      # Technical specifications
-│   ├── fsm/                                        # Finite State Machine specifications
-│   │   └── specs.md                                # FSM anti-capture framework
-│   └── transparency/                               # Transparency standards
-│       ├── fts.md                                  # Full Transparency Standard
-│       └── otf-1.md                                # Open Transparency Format
+├── economy/                                        # Commonwealth economic model, by function
+│   ├── resource-distribution.md  incentives.md  trade-policy.md
+│   └── README.md
 │
-└── .github/
-└── ISSUE_TEMPLATE/
-├── proposal.md                             # Template for new proposals
-└── bug.md                                  # Template for reporting issues
+├── history-lessons/                                # Reserved — case studies from governance history. Empty.
+├── technical/                                       # Reserved — technical specifications. Empty.
+│
+├── include/cur/  src/  tests/                      # libcur — the CUR regulatory FSM, C++17
+└── scripts/                                         # Release tooling
 ```
+
+`history-lessons/` and `technical/` are named in this diagram because
+`CUR-FORMAT-GUIDE.md` anticipates them, not because they currently hold
+anything — they are empty, honestly, the way `titles/README.md` marks a
+provision `Reserved` rather than pretending it is drafted.
 
 ---
 
@@ -188,13 +185,13 @@ New to the corpus? Start in [`docs/`](docs/).
 
 | Document | Description |
 |---|---|
-| `foundation/CUR-FOUNDATION-001.md` | FSM Anti-Capture and Resilience System — the architectural foundation |
-| `PROGRESSIVE-DIRECT-DEMOCRACY-CONSTITUTION.md` | Supreme governance instrument; 9 Titles; FSM TITLE 5 replaces all emergency powers |
-| `PDDC-IMPLEMENTATION-ROADMAP.md` | 44 waypoints across 5 Phases; 36-month institutional buildout; 9 FSM-specific milestones |
-| `PDDC-GOVERNANCE-MECHANICS.md` | Full procedural rules for every Commonwealth institution; FSM State Monitoring System |
-| `PDDC-SECTOR-CHARTER.md` | Mandatory charter standards and Model Charter; includes Sector Avia reference charter |
-| `PDDC-TREASURY-AND-FUNDING.md` | Treasury Assembly; ISRU revenue waterfall; 20% Commons Reserve floor; Protected Mode financial continuity |
-| `PDDC-AMENDMENT-AND-SAFEGUARDS.md` | Amendment categories A–D; Entrenchment Framework (§2.4–§2.9); 7 entrenched provisions; anti-capture typology |
+| [`foundation/cur-foundation-001.md`](foundation/cur-foundation-001.md) | FSM Anti-Capture and Resilience System — the architectural foundation |
+| [`progressive-direct-democracy-constitution.md`](progressive-direct-democracy-constitution.md) | Supreme governance instrument; 9 Titles; FSM TITLE 5 replaces all emergency powers |
+| [`pddc-implementation-roadmap.md`](pddc-implementation-roadmap.md) | 44 waypoints across 5 Phases; 36-month institutional buildout; 9 FSM-specific milestones |
+| [`governance/pddc-governance-mechanics.md`](governance/pddc-governance-mechanics.md) | Full procedural rules for every Commonwealth institution; FSM State Monitoring System |
+| [`pddc-sector-charter.md`](pddc-sector-charter.md) | Mandatory charter standards and Model Charter; includes Sector Avia reference charter |
+| [`pddc-treasury-and-funding.md`](pddc-treasury-and-funding.md) | Treasury Assembly; ISRU revenue waterfall; 20% Commons Reserve floor; Protected Mode financial continuity |
+| [`pddc-amendment-and-safeguards.md`](pddc-amendment-and-safeguards.md) | Amendment categories A–D; Entrenchment Framework (§2.4–§2.9); 7 entrenched provisions; anti-capture typology |
 | `GOVERNANCE.md` | Project governance and future civilization governance rules |
 | `MAINTAINERS.md` | Current maintainers and Bus Factor policy |
 | `CONTRIBUTING.md` | How to participate |
@@ -205,17 +202,17 @@ New to the corpus? Start in [`docs/`](docs/).
 
 The six-document Progressive Direct Democracy Constitution suite is the complete governance architecture of the Aevoric Commonwealth. Together they form a single interlocked system:
 
-**PROGRESSIVE-DIRECT-DEMOCRACY-CONSTITUTION.md** is the supreme instrument. Nine Titles establish foundational principles, membership, the General Assembly, the Coordinating Council, the Finite State Machine architecture (TITLE 5), the Constitutional Court, Sectors, the ISRU economy, and amendment authority. The FSM TITLE 5 contains the complete Valid Core States (§12.2), Forbidden Transitions (§12.3), Fault Handler Protocol (§12.4), Protected Mode (§12.5), and Emergency Powers Prohibition (§12.6).
+**[progressive-direct-democracy-constitution.md](progressive-direct-democracy-constitution.md)** is the supreme instrument. Nine Titles establish foundational principles, membership, the General Assembly, the Coordinating Council, the Finite State Machine architecture (TITLE 5), the Constitutional Court, Sectors, the ISRU economy, and amendment authority. The FSM TITLE 5 contains the complete Valid Core States (§12.2), Forbidden Transitions (§12.3), Fault Handler Protocol (§12.4), Protected Mode (§12.5), and Emergency Powers Prohibition (§12.6).
 
-**PDDC-IMPLEMENTATION-ROADMAP.md** translates constitutional commitments into a binding, time-bound flight path. Five Phases, 44 waypoints, 36 months. Phase 0 (Ratification and Transition) through Phase 4 (Full Operational Democracy) are each composed of named waypoints with responsible actors, success metrics, and continuity protocols. Nine waypoints are dedicated specifically to FSM deployment and Protected Mode operational testing.
+**[pddc-implementation-roadmap.md](pddc-implementation-roadmap.md)** translates constitutional commitments into a binding, time-bound flight path. Five Phases, 44 waypoints, 36 months. Phase 0 (Ratification and Transition) through Phase 4 (Full Operational Democracy) are each composed of named waypoints with responsible actors, success metrics, and continuity protocols. Nine waypoints are dedicated specifically to FSM deployment and Protected Mode operational testing.
 
-**PDDC-GOVERNANCE-MECHANICS.md** governs the procedural how of every institution. General Assembly session mechanics, Coordinating Council procedures, Constitutional Court protocols, Capture Tribunal rules, FSM State Monitoring System operations, and Protected Mode coordination are all fully specified. No procedural rule may create, invoke, or functionally approximate emergency powers.
+**[governance/pddc-governance-mechanics.md](governance/pddc-governance-mechanics.md)** governs the procedural how of every institution. General Assembly session mechanics, Coordinating Council procedures, Constitutional Court protocols, Capture Tribunal rules, FSM State Monitoring System operations, and Protected Mode coordination are all fully specified. No procedural rule may create, invoke, or functionally approximate emergency powers. [`governance/voting-system.md`](governance/voting-system.md), [`audit-protocol.md`](governance/audit-protocol.md), and [`dispute-resolution.md`](governance/dispute-resolution.md) index it by function.
 
-**PDDC-SECTOR-CHARTER.md** establishes mandatory standards for every Sector Charter in the Commonwealth. TITLE 5 provides the Model Sector Charter — a ready-to-adapt template. The founding reference charter for Sector Avia is included. All Sector Charters must satisfy FSM compliance standards and may not contain provisions approaching forbidden transitions.
+**[pddc-sector-charter.md](pddc-sector-charter.md)** establishes mandatory standards for every Sector Charter in the Commonwealth. TITLE 5 provides the Model Sector Charter — a ready-to-adapt template. The founding reference charter for Sector Avia is included. All Sector Charters must satisfy FSM compliance standards and may not contain provisions approaching forbidden transitions.
 
-**PDDC-TREASURY-AND-FUNDING.md** governs the financial architecture. The Treasury Assembly composition, ISRU revenue waterfall, mandatory 20% Commons Reserve floor, Workers' Dividend, deficit and surplus management, audit standards, and Protected Mode financial continuity are all specified. The Treasury has no emergency financial powers and gains no expanded authority during fault conditions.
+**[pddc-treasury-and-funding.md](pddc-treasury-and-funding.md)** governs the financial architecture. The Treasury Assembly composition, ISRU revenue waterfall, mandatory 20% Commons Reserve floor, Workers' Dividend, deficit and surplus management, audit standards, and Protected Mode financial continuity are all specified. The Treasury has no emergency financial powers and gains no expanded authority during fault conditions. [`economy/`](economy/) indexes it, and the being-level guarantees in CUR-X.4, by function.
 
-**PDDC-AMENDMENT-AND-SAFEGUARDS.md** governs constitutional change and anti-capture defense. Amendment Categories A through D are calibrated to the significance of the provision being changed — Type A Entrenched provisions require a full Constitutional Convention. The Entrenchment Framework (§2.4–§2.9) defines all seven entrenched provisions. The anti-capture typology identifies eight capture types mapped to FSM detection signals. The Governance Health Index provides a continuous systemic health measurement.
+**[pddc-amendment-and-safeguards.md](pddc-amendment-and-safeguards.md)** governs constitutional change and anti-capture defense. Amendment Categories A through D are calibrated to the significance of the provision being changed — Type A Entrenched provisions require a full Constitutional Convention. The Entrenchment Framework (§2.4–§2.9) defines all seven entrenched provisions. The anti-capture typology identifies eight capture types mapped to FSM detection signals. The Governance Health Index provides a continuous systemic health measurement.
 
 ---
 
