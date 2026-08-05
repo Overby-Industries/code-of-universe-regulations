@@ -60,6 +60,7 @@ and the manual is wrong.
 | [manuals/HIM.md](manuals/HIM.md) | Human Information Manual — what the human-domain titles mean for a person | Everyone |
 | [manuals/PIM.md](manuals/PIM.md) | Parent Information Manual — what raising a child does and does not give you authority to do, built from the provisions that already exist. Says plainly, in its §8, that custody and guardianship have no dedicated title yet, and that CUR-H.3 narrows but does not close the education gap, rather than implying either is settled | Parents and guardians |
 | [cur-library-api.md](cur-library-api.md) | `libcur` API, the three state axes, guards, and the interpretation notes where the corpus needed a judgement call | Implementers |
+| [otp-integration.md](otp-integration.md) | How CUR-X.5 maps onto `otp::Ledger` and `otp::Registry` in `transparency-protocol` — the publishable set, disclosure, instance identity, and what neither side has closed yet | Implementers |
 
 ### Planned
 
@@ -67,7 +68,6 @@ and the manual is wrong.
 |---|---|
 | `manuals/SIM.md` | Silicon Information Manual — for Silicon-Based Life, on the same terms |
 | `manuals/EIM.md` | Enterprise Information Manual — obligations of a body that directs the work of others |
-| `otp-integration.md` | How CUR publishes into the Overby Ledger under CUR-X.5 |
 
 ---
 

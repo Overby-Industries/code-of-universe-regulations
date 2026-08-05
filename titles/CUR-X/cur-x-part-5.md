@@ -8,7 +8,7 @@
 - **Status:** Draft
 - **Depends On:** CUR-FOUNDATION-002, CUR-FOUNDATION-003, CUR-FOUNDATION-010, CUR-FOUNDATION-012 (CREF), CUR-FOUNDATION-013, PDDC §12.7, CUR-H.5, CUR-H.6, CUR-H.7, CUR-A.7, CUR-E.1, CUR-N.5, CUR-X.3, CUR-X.4
 - **Implements:** PDDC §12.7(b)(4); CUR-FOUNDATION-010 transparency levels
-- **Referenced by:** Overby Transparency Protocol design record §4
+- **Referenced by:** Overby Transparency Protocol design record §4, `docs/otp-integration.md`
 
 Note on where this sits. Every Part of this corpus that requires something to be
 published states that requirement locally — CUR-H.5 §5.5A(i), CUR-H.6 §6.12,
@@ -241,7 +241,8 @@ stating it is better than implying more.
 | §5.4(a)-(e) | Corresponds to the Overby Transparency Protocol ledger: append-only, hash-linked, gap-free sequencing, independently verifiable | External, drafted |
 | §5.5 | Corresponds to the protocol's disclosure asymmetry: institutions named, beings committed per entry | External, drafted |
 | §5.8 | Corresponds to canonical serialisation and copy comparison | External, drafted |
-| §5.6(e) | Schema version per entry is specified but not yet carried in the entry format | Gap, tractable |
+| §5.6(e) | Corresponds to `Entry::schema_version` in `otp_ledger.h`, carried on every entry and never reinterpreted under a later version | External, drafted |
 | §5.6(b), §5.6(f) | The amendment threshold and the independent concurrence are procedural; the library's amendment validator can enforce the first | Gap, tractable |
 | §5.7(d) | A consumer resolving corrections correctly cannot be enforced by the publisher; it is a constraint on consumers | Not modelled |
-| CUR-X.1, CUR-X.2 | Definitions and Scope; Reserved | To be drafted |
+| CUR-X.1 | Definitions and Scope for the Cross-Domain layer | Drafted |
+| CUR-X.2 | Reserved | To be drafted |
