@@ -163,7 +163,7 @@
 | §3.6(e) | Corresponds to the `actor` and `fsmState` columns on `LogRecord` | Implemented |
 | §3.3(a)(4)-(6) | Precedence rules are not yet modelled; `libcur` evaluates one regulation set rather than resolving between domains | Not modelled |
 | §3.7 | Representation and standing are procedural and out of scope for the FSM | Not modelled |
-| CUR-X.1 | Definitions and Scope for the Cross-Domain layer | To be drafted |
+| CUR-X.1 | Definitions and Scope for the Cross-Domain layer | Drafted |
 | CUR-X.2 | Reserved | To be drafted |
 
 Note on §3.3 and `libcur`. The library composes regulations by union: where

@@ -313,7 +313,7 @@ which is the objection most often raised against this form.
 | §4.9(d), §4.9(g) | Corresponds to `CaptureMeasures::continuity_assumption_required` | Implemented |
 | §4.7 | Enterprise governance form is procedural and out of scope for the FSM | Not modelled |
 | §4.8 | Transparency levels exist in CUR-FOUNDATION-010 but are not represented in the library | Not modelled |
-| CUR-X.1 | Definitions and Scope for the Cross-Domain layer | To be drafted |
+| CUR-X.1 | Definitions and Scope for the Cross-Domain layer | Drafted |
 | CUR-X.2 | Reserved | To be drafted |
 
 Note on §4.2(d) and the Capture Risk Index. CUR-FOUNDATION-003 already computed

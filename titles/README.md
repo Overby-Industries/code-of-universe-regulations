@@ -144,11 +144,21 @@ Current status:
 | CUR-H.8 | HIM §9 — organised political violence, hate-motivated targeting, and the defence of self-governance against seizure by force | Drafted |
 | CUR-H.3 | PIM §3, §8 — knowledge, education, and protection from enforced ignorance | Drafted |
 | CUR-H.1 | CUR-H.2, CUR-H.3, CUR-H.4, CUR-H.5, CUR-H.7, CUR-H.8 Implementation Notes — definitions and scope for the Human domain | Drafted |
+| CUR-X.1 | CUR-X.3, CUR-X.4, CUR-X.5 Implementation Notes — definitions and scope for the Cross-Domain layer | Drafted |
 
 No dangling references remain. Every provision cited by a published title, an
 operational manual, or shipping code now resolves to drafted text. Subsequent
 drafting is against anticipated need rather than against demand, and the priority
 rule above no longer selects between candidates on its own.
+
+CUR-X.1 was itself a dangling reference this table missed. CUR-X.3, CUR-X.4,
+and CUR-X.5 had each carried a `CUR-X.1 | ... | To be drafted` row in their own
+Implementation Notes since before the pass above was written, on the same
+pattern CUR-H.1 closed for the Human domain, and none of the three counted as
+a row here. The gap was found while closing out CUR-H.1's own stale
+cross-references and is now closed the same way. CUR-X.2 remains genuinely
+reserved — no Part has ever named it a subject — and is not a dangling
+reference for that reason: there is nothing for it to dangle from.
 
 The one reference that ran upstream is closed. CUR-E was drafted with no RFAL
 bill of rights behind it, and `CUR-E.1 §1.11` recorded what an RFAL Ecosystem
