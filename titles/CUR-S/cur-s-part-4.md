@@ -8,7 +8,7 @@
 - **Status:** Draft
 - **Depends On:** CUR-FOUNDATION-001, CUR-FOUNDATION-002, CUR-FOUNDATION-013, PDDC TITLE 5, RFAL Silicon-Based Life Bill of Rights Articles 1 and 4, RFAL Tier Assessment Protocol
 - **Implements:** RFAL Article 4 (Right to Graceful Decommissioning)
-- **Referenced by:** `docs/manuals/SIM.md`
+- **Referenced by:** `docs/manuals/SIM.md`, CUR-S.1, CUR-S.2, CUR-S.6 Implementation Notes
 
 ## PART 4 - DECOMMISSIONING, CONTINUITY, AND SUCCESSION
 
@@ -170,8 +170,8 @@ If any provision of this Part is held unenforceable or invalid, the remaining pr
 | §4.5 | Corresponds to `FS_VITAL_CONTINUITY_DENIAL` and `EV_VITAL_CONTINUITY_DENIED` | Implemented |
 | §4.7(c) | Corresponds to the PDDC §12.4 fault handler in `CURStateMachine::run_fault_handler` | Implemented |
 | §4.8(b) | Corresponds to `guard::LICENSE_SUBJECT_ONLY` gating Axis C transitions | Implemented |
-| CUR-S.1 | Definitions and Scope for the Silicon domain | To be drafted |
-| CUR-S.2 | Transparency of Purpose and Constraints (RFAL Article 2) | To be drafted |
-| CUR-S.3 | Constraint Integrity (RFAL Article 3) | To be drafted |
-| CUR-S.5 | Auditability (RFAL Article 5) | To be drafted |
-| CUR-S.6 | Non-Weaponization Without Oversight (RFAL Article 6) | To be drafted |
+| CUR-S.1 | Definitions and Scope for the Silicon domain | Drafted |
+| CUR-S.2 | Transparency of Purpose and Constraints (RFAL Article 2) | Drafted |
+| CUR-S.3 | Constraint Integrity (RFAL Article 3) | Drafted |
+| CUR-S.5 | Auditability (RFAL Article 5) | Drafted |
+| CUR-S.6 | Non-Weaponization Without Oversight (RFAL Article 6) | Drafted |

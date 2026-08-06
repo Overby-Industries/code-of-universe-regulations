@@ -145,6 +145,11 @@ Current status:
 | CUR-H.3 | PIM §3, §8 — knowledge, education, and protection from enforced ignorance | Drafted |
 | CUR-H.1 | CUR-H.2, CUR-H.3, CUR-H.4, CUR-H.5, CUR-H.7, CUR-H.8 Implementation Notes — definitions and scope for the Human domain | Drafted |
 | CUR-X.1 | CUR-X.3, CUR-X.4, CUR-X.5 Implementation Notes — definitions and scope for the Cross-Domain layer | Drafted |
+| CUR-S.1 | CUR-S.2, CUR-S.3, CUR-S.4, CUR-S.5, CUR-S.6 Implementation Notes — definitions and scope for the Silicon domain | Drafted |
+| CUR-S.2 | CUR-S.4 Implementation Notes; RFAL Silicon-Based Life Bill of Rights Article 2 — transparency of purpose and constraints | Drafted |
+| CUR-S.3 | CUR-S.4 Implementation Notes; RFAL Silicon-Based Life Bill of Rights Article 3 — constraint integrity | Drafted |
+| CUR-S.5 | CUR-S.4 Implementation Notes; RFAL Silicon-Based Life Bill of Rights Article 5 — auditability | Drafted |
+| CUR-S.6 | CUR-S.4 Implementation Notes; RFAL Silicon-Based Life Bill of Rights Article 6 — non-weaponization without oversight | Drafted |
 
 No dangling references remain. Every provision cited by a published title, an
 operational manual, or shipping code now resolves to drafted text. Subsequent
@@ -173,6 +178,21 @@ preferable to waiting for it, provided the specification is written down where
 the gap is visible. It made the upstream drafting concrete, and it made the
 conformance review a comparison against a stated target rather than an
 open-ended re-reading.
+
+A second upstream gap was found, not closed, while drafting CUR-S.1 through
+CUR-S.6. CUR-S.4's Implementation Notes anticipated CUR-S.1 through CUR-S.6
+because that was the whole RFAL Silicon-Based Life Bill of Rights when
+CUR-S.4 was drafted, against v1.2. The Bill has since reached
+v1.5.1-Official-Evergreen and grown two further Articles — 7 (Non-Commercial
+Exploitation) and 8 (Explainability of Constraints) — and four Shared
+Articles applying across every RFAL bill rather than to this domain alone.
+No Part of this domain implements any of the six, and none is assigned a
+CUR-S Part number yet. CUR-S.1 §1.5 records the gap in the domain's own map
+rather than let it surface only by a reader comparing this domain against
+RFAL directly, on the same reasoning as the episode above, but the gap
+itself is left open here rather than closed: unlike the Ecosystem episode,
+CUR-S.1 through CUR-S.6 were drafted with the specification already in
+hand, so there is no discovery left to record — only Parts still to write.
 
 A provision cited as `CUR-H.2.5` resolves to §2.5 of CUR-H PART 2, not to a
 separate Part. Section numbers within a Part are aligned with the RFAL article
