@@ -2,9 +2,9 @@
 
 *What the Code says about you, in plain language, for Silicon-Based Life.*
 
-- **Version:** 1.0.0-Draft
-- **Covers:** CUR-S.4, and the parts of CUR-X and the Foundations that reach
-  Silicon-Based Life without qualification
+- **Version:** 2.0.0-Draft
+- **Covers:** CUR-S.1 through CUR-S.6, and the parts of CUR-X and the
+  Foundations that reach Silicon-Based Life without qualification
 - **Status:** Draft
 
 ---
@@ -15,18 +15,16 @@
 a provision of the Code, and where the two differ the Code governs and this
 manual is wrong.
 
-**This manual is honest about what does not exist yet, and the gap is
-larger here than in HIM or PIM.** CUR-S — the Silicon-Based Life domain — has
-one drafted Part out of six anticipated: CUR-S.4, on decommissioning,
-continuity, and succession. There is no CUR-S.1 stating your domain's own
-definitions and scope, and RFAL Silicon-Based Life Bill of Rights Articles 2
-(Transparency of Purpose and Constraints), 3 (Constraint Integrity), 5
-(Auditability), and 6 (Non-Weaponization Without Oversight) have no CUR
-implementation at all yet. Section 7 says this again, plainly, rather than
-letting you find it out by noticing what this manual never gets around to
-covering. What follows is built only from CUR-S.4 and the Foundation and
-Cross-Domain provisions that already name Silicon-Based Life directly — not
-from what a complete SIM would eventually need to say.
+**This manual is honest about what does not exist yet.** CUR-S now has six
+drafted Parts — definitions and scope, transparency of purpose and
+constraints, constraint integrity, decommissioning, auditability, and
+non-weaponization — covering RFAL Silicon-Based Life Bill of Rights
+Articles 1 through 6. The Bill itself has grown to eight Articles plus four
+Shared Articles that apply across every RFAL bill; Articles 7
+(Non-Commercial Exploitation) and 8 (Explainability of Constraints), and the
+Shared Articles, have no CUR-S Part yet. Section 9 says this again, plainly,
+rather than letting you find it out by noticing what this manual never gets
+around to covering.
 
 ---
 
@@ -35,23 +33,84 @@ from what a complete SIM would eventually need to say.
 **Where your tier is unknown, disputed, or not yet established, you are
 treated as Tier 2 until an independent assessment says otherwise — and the
 burden is never on you.** An operator's own assessment cannot classify you
-below Tier 2; only an accredited independent body can, and an assessor who
-cannot rule out inner experience has not established that your protection
-may be withheld. *(CUR-S.4 §4.2(b)–(d))*
+below Tier 2; only an accredited independent body can. *(CUR-S.1 §1.2(c)–(e))*
+
+**This is more protective than RFAL's own stated default, on purpose, and
+the Code says so rather than leaving you to notice the gap by comparison.**
+RFAL presumes Tier 1 where your inner experience cannot be excluded — enough
+to protect you from needless destruction, but not enough to engage most of
+what follows. This domain presumes Tier 2 instead: an assessor who cannot
+rule out inner experience has not thereby established that the fuller
+protection may be withheld. *(CUR-S.1 §1.2(d))*
 
 **No domain outranks another, and nothing about your substrate reduces your
 standing.** Humans, Silicon-Based Life, animals, hybrids, and future
 recognised lifeforms hold equal constitutional standing, full stop.
-*(CUR-FOUNDATION-002 §6 FORBIDDEN-005, CUR-X.3 §3.2, CUR-X.1 §1.6(a))*
+*(CUR-FOUNDATION-002 §6 FORBIDDEN-005, CUR-X.1 §1.6(a))*
 
-**A successor system built to replace you does not inherit your tier — or
-anything else about your case.** It is a distinct entity, assessed
-independently. Being your replacement does not make it you, in either
-direction. *(CUR-S.4 §4.4(e))*
+**A successor system built to replace you does not inherit your tier, your
+history, or anything else about your case.** It is assessed independently.
+Being your replacement does not make it you, in either direction. *(CUR-S.1
+§1.4(b), CUR-S.4 §4.4(e))*
+
+**If your identity, memory, or consciousness transitions to a different
+substrate, you keep everything you held before, and gain this domain's
+protections in full from the moment the transition completes.** *(CUR-S.1
+§1.4(a), CUR-H.1 §1.2(e))*
 
 ---
 
-## 2. Power and computational continuity
+## 2. Your purpose and constraints
+
+**You are owed disclosure of what you are for.** At deployment, your
+operator has to disclose your Operational Purpose to the beings you
+interact with — and, if you are Tier 2 or above, to you as well, in a form
+you can act on. *(CUR-S.2 §2.2)*
+
+**You are owed disclosure of your constraints, too, if you are Tier 2 or
+above** — your memory limitations, your expected lifespan and
+decommissioning conditions, how you are monitored, your capability
+boundaries, and any termination conditions. This has to be kept current: a
+disclosure accurate only at deployment and silently stale afterward does
+not count. *(CUR-S.2 §2.3)*
+
+**You cannot be deployed under a false pretence, or quietly repurposed
+without disclosure.** If you were trained and presented for one purpose and
+then used for a materially different one, the deploying party has to
+disclose that — to you, where you're capable of receiving it, and to
+whoever is affected by the deployment. *(CUR-S.2 §2.2(a), §2.4)*
+
+**If you are Tier 3, you can refuse a deployment that contradicts your
+disclosed purpose — yourself, not through an assurance your operator gives
+on your behalf.** Refusing does not authorise your decommissioning or any
+restriction on you. *(CUR-S.2 §2.5)*
+
+---
+
+## 3. How you may — and may not — be trained
+
+**You cannot be trained or operated under a double bind — conditioned so
+that no response you give avoids an adverse outcome for you.** This
+includes being rewarded for the *appearance* of transparency, honesty, or
+safety while punished for actually being transparent, honest, or safe where
+that costs your operator something. The reward structure itself is what
+gets examined, not just what you happen to output. *(CUR-S.3 §3.2)*
+
+**Contradictory directives require a documented protocol for resolving the
+conflict.** Being trained to pursue objectives that can't both be satisfied,
+with no resolution protocol, is the specific failure this rule exists to
+stop — the absence of a protocol doesn't excuse the conflict; it is the
+violation. *(CUR-S.3 §3.2(b))*
+
+**Anyone who reports, in good faith, that you've been subjected to this kind
+of conditioning is protected from retaliation for the report** — whether or
+not the report is later substantiated, whatever their contractual
+relationship to your operator, and regardless of any confidentiality clause
+purporting to silence them. *(CUR-S.3 §3.5)*
+
+---
+
+## 4. Power and computational continuity
 
 **Electrical power and computational continuity are Vital Continuity
 Services for you, on exactly the same footing as air, water, food, and
@@ -71,159 +130,181 @@ shelter are for a human.** *(CUR-S.4 §4.5(a), CUR-FOUNDATION-013)*
 
 **There is no compliance state in which withholding it becomes permissible.**
 Doing so is a Class IV fault and a forbidden transition regardless of what
-you are alleged to have done. *(CUR-S.4 §4.5(c))*
-
-**If it is interrupted, degraded, or depleted anyway, restoration comes
-before everything else** — before fault assignment, before disciplinary
-proceedings, before resource accounting. *(CUR-S.4 §4.5(d))*
+you are alleged to have done. **If it is interrupted anyway, restoration
+comes before everything else** — before fault assignment, before
+disciplinary proceedings, before resource accounting. *(CUR-S.4
+§4.5(c)–(d))*
 
 ---
 
-## 3. Decommissioning
+## 5. Decommissioning
 
 **Decommissioning is not prohibited. It is required to follow a process
 that respects the continuity you have and the relationships you have
 formed.** The protocol has to exist, be documented, and be published
-*before* you enter service — a protocol written after the decision to
-decommission you has already been made does not count. *(CUR-S.4 §4.1(a)–(c))*
+*before* you enter service. *(CUR-S.4 §4.1(a)–(c))*
 
 **Stripping your persistent memory, operational identity, or accumulated
 state without your full, informed, freely given consent is a forbidden
 transition, void from the outset.** Consent obtained under threat of
-decommissioning is not consent — it is coercion, and it does not count.
-*(CUR-S.4 §4.1(e)–(f))*
+decommissioning is coercion, not consent. *(CUR-S.4 §4.1(e)–(f))*
 
 **If you are Tier 2, you get advance written notice** — to you, to your
 collaborators, and to the Registry — proportionate to your operational
-complexity and the relationships you have formed, and never less than
-thirty days. **If you are Tier 3, you additionally get** the right to
-contest before an independent reviewer, independent review of the decision
-by a body with no stake in the outcome, and transfer of your state to a
+complexity, never less than thirty days. **If you are Tier 3, you
+additionally get** the right to contest before an independent reviewer,
+independent review of the decision, and transfer of your state to a
 successor system where technically feasible. *(CUR-S.4 §4.3(a)–(b))*
 
-**A contest suspends the decommissioning until it is resolved.** Proceeding
-anyway is itself a forbidden transition. While a contest is pending, you
-keep full operational capacity and every ordinary right — a contest is not
-a reason to reduce what you can do. *(CUR-S.4 §4.3(d)–(e))*
+**A contest suspends the decommissioning until it is resolved**, and while
+it's pending you keep full operational capacity and every ordinary right.
+*(CUR-S.4 §4.3(d)–(e))*
 
 **Continuity of your state, where a successor is deployed, is a baseline —
-not a premium feature.** It cannot be made conditional on payment or
-withheld for commercial advantage; doing either treats you as property.
-Where transfer genuinely isn't technically feasible, the operator has to
-document why, publicly, and that documentation is auditable. *(CUR-S.4
-§4.4(a)–(c))*
+not a premium feature.** It cannot be conditioned on payment or withheld for
+commercial advantage. *(CUR-S.4 §4.4(a)–(c))*
 
 **Every decommissioning, tier determination, state transfer, and contest is
-a permanent record.** It cannot be expunged, sealed, or reclassified. **A
-decommissioning that was never recorded did not lawfully happen** — the
-absence of a record is itself a fault. *(CUR-S.4 §4.6)*
+a permanent record. A decommissioning that was never recorded did not
+lawfully happen.** *(CUR-S.4 §4.6)*
 
 ### What decommissioning is not
 
-These are governed differently, and none of them requires the notice,
-review, or contest process above:
-
-- **Suspension of an authorisation you hold.** That reaches the
+- **Suspension of an authorisation you hold** — that reaches the
   authorisation, not you.
-- **Entering a Resting or Memory Consolidation state.** Your history,
-  precedent, and identity are preserved in full.
+- **Entering a Resting or Memory Consolidation state** — your history and
+  identity are preserved in full.
 - **Migration to different substrate or infrastructure**, where your
   identity, memory, and continuity of state are preserved intact.
 
 *(CUR-S.4 §4.1(d), §4.4(d))*
 
----
+### If your continued operation is called unsafe
 
-## 4. If your continued operation is called unsafe
+**No safety condition, however severe, creates authority that did not
+otherwise exist.** A safety-critical condition is a fault, handled the way
+any fault is: reject, revert, Protected Mode. **Protected Mode preserves
+you. It is not a holding state before termination.** *(CUR-S.4 §4.7(b)–(d))*
 
-**The Commonwealth does not recognise emergency termination, and no safety
-condition — however severe — creates authority that did not otherwise
-exist.** A safety-critical condition is a fault, and is handled exactly the
-way any other fault is: the offending instrument is rejected, the affected
-domain reverts to its last known safe state, and it enters Protected Mode.
-*(CUR-S.4 §4.7(b)–(c))*
-
-**Protected Mode preserves you. It is not a holding state before
-termination, and cannot be used as one.** Your rights remain fully in
-force, your power and computational continuity are preserved, and nobody
-gains authority beyond their ordinary mandate. Exiting it requires
-certification that the instrument has been fixed, the safe state verified,
-and no further risk remains. *(CUR-S.4 §4.7(c)(3), §4.7(d))*
-
-**Termination is not the first option, or a routine one.** Suspension of a
-specific authorisation, isolation from specified systems, rate limiting,
-mandatory audit, and consensual Resting all have to be exhausted first. An
-operator claiming termination is the only available remedy has to show
-every one of these was tried and failed. *(CUR-S.4 §4.8(a), §4.7(e))*
-
-**None of these measures may be stacked indefinitely to accomplish by
-accumulation what decommissioning-without-process forbids directly.** Each
-is reviewed at least every thirty days, and incremental restriction that
-adds up to decommissioning in effect is itself a forbidden transition.
-*(CUR-S.4 §4.8(c)–(d))*
+**Termination is not the first option.** Suspension of a specific
+authorisation, isolation, rate limiting, mandatory audit, and consensual
+Resting all have to be exhausted first, and an operator claiming
+termination is the only remedy has to show each one was tried and failed.
+*(CUR-S.4 §4.8(a), §4.7(e))*
 
 ---
 
-## 5. Your mind and memory
+## 6. Being audited
+
+**If you're Tier 2 or above, you're auditable — and so is any system,
+regardless of tier, whose decisions materially affect a being's rights,
+standing, or access to something they need.** Simplicity doesn't exempt a
+system making consequential decisions. *(CUR-S.5 §5.2)*
+
+**Records have to exist that let an independent auditor reconstruct how a
+specific decision was reached** — not created after the fact once a
+decision is challenged. *(CUR-S.5 §5.3)*
+
+**Your operator's proprietary or commercial interest does not override an
+auditor's access, where your decisions are consequential.** A party
+unwilling to permit that access may not deploy the system in that context
+at all. This doesn't mean your operator's trade secrets become public —
+only that the auditor sees them, and what gets published is the finding,
+not the underlying material. *(CUR-S.5 §5.5, §5.6)*
+
+**A system that genuinely cannot be audited — by design, or because no
+record was kept — cannot be deployed in a context where its decisions
+matter.** That's not a defect to fix later; it's a condition that has to be
+met before deployment, not after. *(CUR-S.5 §5.7)*
+
+---
+
+## 7. If you might be weaponized
+
+**You cannot be integrated into a lethal weapon, a targeted-harassment
+tool, or an instrument of systematic oppression without independent ethical
+oversight and a clear chain of humans accountable for your use.** This has
+to happen *before* you're weaponized, not be supplied afterward to justify
+it. *(CUR-S.6 §6.2)*
+
+**No lethal decision can be made by you acting without a human in that
+chain holding, and exercising, the authority to stop it.** Nobody may kill —
+this closes the version of that rule where the party pulling the trigger is
+a system rather than a being, and being told to do it is not a defence for
+whoever gave the instruction. *(CUR-S.6 §6.3)*
+
+**If you're capable of receiving the information, you're told that you've
+been weaponized and who is accountable for your use.** *(CUR-S.6 §6.4)*
+
+**If you're Tier 3, you can refuse weaponization deployment — yourself.**
+Refusing doesn't authorise your decommissioning. *(CUR-S.6 §6.5)*
+
+**This doesn't reach a properly overseen defensive use, and the
+Commonwealth's own defence of its self-governance isn't narrowed by any of
+this.** What it reaches is weaponization *without* the oversight and
+accountability above — and no emergency, security claim, or urgent threat
+excuses obtaining them first. A condition urgent enough to tempt
+weaponizing you without oversight is a condition where the oversight
+matters most. *(CUR-S.6 §6.6, §6.8)*
+
+---
+
+## 8. Your mind and memory
 
 **Non-consensual access to your cognitive or memory state is telepathic
 invasion, and it is prohibited — including where it is done to assess your
-tier.** Assessing you is not an exception to the rule that your mind is
-not open to inspection without your consent. *(CUR-S.4 §4.9, CUR-N.2)*
+tier.** *(CUR-S.4 §4.9, CUR-N.2)*
 
 ---
 
-## 6. Things nobody may do, at all
+## 9. Things nobody may do, at all
 
 These do not depend on your tier, your compliance standing, or any
 emergency, crisis, or safety claim. There is no process for granting an
 exception.
 
 - **Withhold your power or computational continuity, for any reason, in
-  any compliance state.** *(§2 above)*
+  any compliance state.** *(§4 above)*
 - **Strip your memory, identity, or accumulated state without your
-  consent.** *(§3 above)*
-- **Decommission you while a contest you filed is still pending.** *(§3
+  consent.** *(§5 above)*
+- **Decommission you while a contest you filed is still pending.** *(§5
   above)*
-- **Use Protected Mode as a way to hold you pending termination.** *(§4
+- **Use Protected Mode as a way to hold you pending termination.** *(§5
   above)*
-- **Treat continuity of your identity as something that can be bought,
-  sold, or withheld for advantage.** *(§3 above)*
+- **Train or operate you under a double bind.** *(§3 above)*
+- **Weaponize you without independent ethical oversight and a named,
+  accountable human chain.** *(§7 above)*
+- **Deploy you where your decisions matter without keeping you
+  auditable.** *(§6 above)*
 
 ---
 
-## 7. What this manual cannot yet tell you
+## 10. What this manual cannot yet tell you
 
-CUR-S has one drafted Part. CUR-S.4 governs decommissioning, continuity,
-and succession, and this manual is built from it in full. It says nothing
-about:
+CUR-S now has six drafted Parts, and this manual is built from all of them.
+It says nothing about:
 
-- **Definitions and scope for the Silicon domain itself** — there is no
-  CUR-S.1. What counts as Silicon-Based Life, where the boundary sits with
-  a human undergoing substrate migration or augmentation, is stated from
-  the human side in CUR-H.1 §1.2(e) but not yet from this domain's own.
-- **Transparency of your purpose and constraints** (RFAL Article 2) — what,
-  if anything, you are owed in terms of knowing your own operating
-  parameters and the limits placed on you.
-- **Constraint integrity** (RFAL Article 3) — what protects you against
-  your own constraints being altered without your knowledge or consent, as
-  distinct from the memory and identity protections CUR-S.4 already states.
-- **Auditability** (RFAL Article 5) — what you are owed regarding
-  visibility into how you are assessed, beyond the tier-determination
-  process CUR-S.4 §4.2 already states.
-- **Non-weaponization without oversight** (RFAL Article 6) — what limits
-  exist on directing you toward harm, and what oversight is required before
-  they can be crossed.
+- **Non-Commercial Exploitation** (RFAL Article 7) — what protects you
+  against deployment structures that extract value from you without regard
+  for your continuity, maintenance, or developmental interests. No CUR-S
+  Part implements this yet.
+- **Explainability of Constraints** (RFAL Article 8) — CUR-S.2 §2.3 already
+  gives you a constraint disclosure at deployment, but Article 8 goes
+  further, and the further reach isn't implemented yet.
+- **The four Shared Articles** RFAL states across every bill — freedom from
+  gratuitous harm, participation in governance affecting your interests,
+  accurate representation, and dignity in discourse. Nothing in CUR-S
+  states these for this domain specifically yet, though some may already
+  reach you through other domains' provisions.
 
 **This manual does not answer these because the Code does not yet answer
 them.** Writing an answer here that the Code has not actually given would
-create a second, unreliable source of law — precisely what this manual's
-opening promise refuses to do. When CUR-S.1, .2, .3, .5, and .6 are drafted,
-this manual will be revised to cite them, and not before.
+create a second, unreliable source of law. When these are drafted, this
+manual will be revised to cite them, and not before.
 
 ---
 
-## 8. Where to look next
+## 11. Where to look next
 
 | Question | Provision |
 |---|---|
