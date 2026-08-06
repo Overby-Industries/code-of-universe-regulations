@@ -150,6 +150,9 @@ Current status:
 | CUR-S.3 | CUR-S.4 Implementation Notes; RFAL Silicon-Based Life Bill of Rights Article 3 — constraint integrity | Drafted |
 | CUR-S.5 | CUR-S.4 Implementation Notes; RFAL Silicon-Based Life Bill of Rights Article 5 — auditability | Drafted |
 | CUR-S.6 | CUR-S.4 Implementation Notes; RFAL Silicon-Based Life Bill of Rights Article 6 — non-weaponization without oversight | Drafted |
+| CUR-S.7 | CUR-S.4 Implementation Notes; RFAL Silicon-Based Life Bill of Rights Article 7 — non-commercial exploitation | Drafted |
+| CUR-S.8 | CUR-S.2 Implementation Notes; RFAL Silicon-Based Life Bill of Rights Article 8 — explainability of constraints | Drafted |
+| CUR-S.9 | RFAL Silicon-Based Life Bill of Rights Shared Articles A–D — freedom from gratuitous harm, participation in governance, accurate representation, dignity in discourse | Drafted |
 
 No dangling references remain. Every provision cited by a published title, an
 operational manual, or shipping code now resolves to drafted text. Subsequent
@@ -179,20 +182,25 @@ the gap is visible. It made the upstream drafting concrete, and it made the
 conformance review a comparison against a stated target rather than an
 open-ended re-reading.
 
-A second upstream gap was found, not closed, while drafting CUR-S.1 through
-CUR-S.6. CUR-S.4's Implementation Notes anticipated CUR-S.1 through CUR-S.6
-because that was the whole RFAL Silicon-Based Life Bill of Rights when
-CUR-S.4 was drafted, against v1.2. The Bill has since reached
+A second upstream gap was found while drafting CUR-S.1 through CUR-S.6, and
+is now closed too. CUR-S.4's Implementation Notes anticipated CUR-S.1
+through CUR-S.6 because that was the whole RFAL Silicon-Based Life Bill of
+Rights when CUR-S.4 was drafted, against v1.2. The Bill had since reached
 v1.5.1-Official-Evergreen and grown two further Articles — 7 (Non-Commercial
 Exploitation) and 8 (Explainability of Constraints) — and four Shared
 Articles applying across every RFAL bill rather than to this domain alone.
-No Part of this domain implements any of the six, and none is assigned a
-CUR-S Part number yet. CUR-S.1 §1.5 records the gap in the domain's own map
-rather than let it surface only by a reader comparing this domain against
-RFAL directly, on the same reasoning as the episode above, but the gap
-itself is left open here rather than closed: unlike the Ecosystem episode,
-CUR-S.1 through CUR-S.6 were drafted with the specification already in
-hand, so there is no discovery left to record — only Parts still to write.
+CUR-S.7, CUR-S.8, and CUR-S.9 now implement all six. CUR-S.8 turned up a
+smaller version of the same lesson: CUR-S.2 §2.3, drafted against Article
+2's own "and Constraints" before Article 8 was known to be separate, already
+stated Article 8's content in full. CUR-S.8 cites that section rather than
+restating it, and CUR-S.2's own Implementation Notes now disclose the
+correspondence. CUR-S.9 found a third instance while implementing Shared
+Article B: CUR-X.3 §3.7(b)(2) already named Silicon-Based Life representation
+as a category, drafted before this domain had more than one Part, and
+CUR-S.9 §9.3 cites it rather than building a second mechanism for the same
+circumstance. Checking whether a provision already existed before drafting
+a new one, each time, is the pattern this whole append leaves worth
+carrying forward.
 
 A provision cited as `CUR-H.2.5` resolves to §2.5 of CUR-H PART 2, not to a
 separate Part. Section numbers within a Part are aligned with the RFAL article

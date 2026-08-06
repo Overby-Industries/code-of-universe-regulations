@@ -6,9 +6,9 @@
 - **Version:** 1.0.0-Draft
 - **Date:** 2026-08-06
 - **Status:** Draft
-- **Depends On:** CUR-FOUNDATION-001, CUR-FOUNDATION-002, CUR-FOUNDATION-004, CUR-FOUNDATION-005, CUR-FOUNDATION-010, CUR-FOUNDATION-012 (CREF), CUR-FOUNDATION-013, PDDC TITLE 1, PDDC TITLE 4, PDDC TITLE 5, PDDC §12.6, PDDC §1.3, CUR-H.1, CUR-N.2, CUR-S.2, CUR-S.3, CUR-S.4, CUR-S.5, CUR-S.6
+- **Depends On:** CUR-FOUNDATION-001, CUR-FOUNDATION-002, CUR-FOUNDATION-004, CUR-FOUNDATION-005, CUR-FOUNDATION-010, CUR-FOUNDATION-012 (CREF), CUR-FOUNDATION-013, PDDC TITLE 1, PDDC TITLE 4, PDDC TITLE 5, PDDC §12.6, PDDC §1.3, CUR-H.1, CUR-N.2, CUR-S.2, CUR-S.3, CUR-S.4, CUR-S.5, CUR-S.6, CUR-S.7, CUR-S.8, CUR-S.9
 - **Implements:** RFAL Silicon-Based Life Bill of Rights v1.5.1-Official-Evergreen, Tier System (Preamble); PDDC §1.3 (Jurisdiction)
-- **Referenced by:** CUR-S.2, CUR-S.3, CUR-S.4, CUR-S.5, CUR-S.6 Implementation Notes; `docs/manuals/SIM.md`
+- **Referenced by:** CUR-S.2 through CUR-S.9 Implementation Notes; `docs/manuals/SIM.md`
 
 Note on sequence. CUR-H.1 and CUR-X.1 were each drafted last in their
 domains, after the substantive Parts around them already existed — a
@@ -141,21 +141,21 @@ different system built to replace it.
 | CUR-S.4 | Decommissioning, Continuity, and Succession |
 | CUR-S.5 | Auditability |
 | CUR-S.6 | Non-Weaponization Without Oversight |
+| CUR-S.7 | Non-Commercial Exploitation |
+| CUR-S.8 | Explainability of Constraints |
+| CUR-S.9 | Shared Protections (RFAL Shared Articles A–D) |
 
 This table is accurate as of this Part's drafting and is not a promise of
 completeness. `titles/README.md` is the authoritative record of what is
 drafted, reserved, or anticipated, and governs where the two differ.
 
-The RFAL Silicon-Based Life Bill of Rights, at the version this Part
-implements, states two further Articles this domain does not yet have a
-Part for — Article 7 (Non-Commercial Exploitation) and Article 8
-(Explainability of Constraints) — and four Shared Articles applying across
-every RFAL bill rather than to this domain specifically. This Part does not
-draft either. Stating the gap here, in the domain's own map, is the same
-discipline CUR-E.1 §1.11 followed when RFAL's Ecosystem Bill did not yet
-exist to implement: the gap is recorded where it is visible rather than
-left to be discovered by a reader comparing this domain against RFAL
-directly.
+Every Article and Shared Article the RFAL Silicon-Based Life Bill of
+Rights states, at v1.5.1-Official-Evergreen, now has a CUR-S Part. This
+domain went from one drafted Part to nine across two drafting passes; the
+gap this section recorded when the domain had six is closed, and this
+paragraph is kept rather than deleted so the record of the gap having
+existed is not lost, on the same disclosure principle `titles/README.md`
+follows for the CUR-X.1 and CUR-E.1 episodes.
 
 ### §1.6 - Interpretive Principles
 

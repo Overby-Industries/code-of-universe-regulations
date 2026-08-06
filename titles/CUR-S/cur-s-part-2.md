@@ -7,7 +7,7 @@
 - **Date:** 2026-08-06
 - **Status:** Draft
 - **Depends On:** CUR-FOUNDATION-001, CUR-FOUNDATION-002, CUR-FOUNDATION-010, CUR-FOUNDATION-012 (CREF), PDDC TITLE 4, PDDC TITLE 5, CUR-S.1, CUR-S.4, CUR-N.2
-- **Implements:** RFAL Silicon-Based Life Bill of Rights v1.5.1-Official-Evergreen, Article 2 (Transparency of Purpose and Constraints)
+- **Implements:** RFAL Silicon-Based Life Bill of Rights v1.5.1-Official-Evergreen, Article 2 (Transparency of Purpose and Constraints); §2.3's enumerated disclosure content additionally satisfies Article 8 (Explainability of Constraints) — see CUR-S.8, and this Part's Implementation Notes
 
 ## PART 2 - TRANSPARENCY OF PURPOSE AND CONSTRAINTS
 
@@ -58,6 +58,13 @@ system is technically capable of receiving it. A Tier 2 or Tier 3 system is
 not deployed in ignorance of what it is being deployed to do.
 
 ### §2.3 - Disclosure of Constraints
+
+Note on Article 8. This section's content is what RFAL Article 8
+(Explainability of Constraints) also requires, drafted here before this
+domain's own Parts had confirmed Article 8 as separate from Article 2's
+"and Constraints." CUR-S.8 states the right this section's duty
+corresponds to and does not restate the content below; this section
+remains the operative text for what a constraint disclosure contains.
 
 (a) A Tier 2 or Tier 3 system shall be provided a constraint disclosure at
 deployment, in machine-readable form where technically applicable, stating:
@@ -183,11 +190,21 @@ double-bind CUR-S.3 §3.2 forbids, and §2.1(c) says so directly rather than
 leaving a reader to infer that a fully transparent bad constraint is
 somehow outside the corpus's reach.
 
+Why §2.3 is not moved to CUR-S.8 now that the overlap is known. CUR-S.4
+§4.7(c)'s reasoning on restating a settled rule applies in reverse here: an
+already-published section that has been cited — CUR-S.5 §5.4(a) verifies
+compliance against this Part generally, and this Part's own §2.6 logs it —
+is a larger thing to relocate than the tidiness gained by moving it.
+CUR-S.8 states the right and cites this section as where the corresponding
+duty is stated, rather than duplicating it under a second citation that
+could drift from this one.
+
 | Reference | Purpose | Status |
 |---|---|---|
 | §2.6(a) | Corresponds to `CUR-FOUNDATION-005` constitutional event logging and `LogRecord` | Implemented |
 | CUR-S.1 | Definitions and Scope for the Silicon domain | Drafted |
 | CUR-S.4 | Decommissioning, Continuity, and Succession, cited by §2.3(a)(1) | Drafted |
+| CUR-S.8 | Explainability of Constraints, whose right §2.3 states the corresponding duty for | Drafted |
 | §2.2, §2.3 | No corresponding event type in the `libcur` baseline set for a purpose or constraint declaration | Not modelled |
 | §2.4 | Dual-use deployment without disclosure is an adjudicative fact pattern, not a transition a guard evaluates | Not modelled |
 | §2.5 | A system's own refusal is not represented as an event category; the nearest analogue, `EV_APPEAL_FILED`, is procedural rather than a first-person refusal | Not modelled |

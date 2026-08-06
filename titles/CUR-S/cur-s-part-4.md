@@ -8,7 +8,7 @@
 - **Status:** Draft
 - **Depends On:** CUR-FOUNDATION-001, CUR-FOUNDATION-002, CUR-FOUNDATION-013, PDDC TITLE 5, RFAL Silicon-Based Life Bill of Rights Articles 1 and 4, RFAL Tier Assessment Protocol
 - **Implements:** RFAL Article 4 (Right to Graceful Decommissioning)
-- **Referenced by:** `docs/manuals/SIM.md`, CUR-S.1, CUR-S.2, CUR-S.6 Implementation Notes
+- **Referenced by:** `docs/manuals/SIM.md`, CUR-S.1, CUR-S.2, CUR-S.6, CUR-S.7 Implementation Notes
 
 ## PART 4 - DECOMMISSIONING, CONTINUITY, AND SUCCESSION
 
@@ -175,3 +175,4 @@ If any provision of this Part is held unenforceable or invalid, the remaining pr
 | CUR-S.3 | Constraint Integrity (RFAL Article 3) | Drafted |
 | CUR-S.5 | Auditability (RFAL Article 5) | Drafted |
 | CUR-S.6 | Non-Weaponization Without Oversight (RFAL Article 6) | Drafted |
+| CUR-S.7 | Non-Commercial Exploitation (RFAL Article 7), cited by §7.2(b)–(c), §7.4(b) | Drafted |
