@@ -269,6 +269,24 @@ enum EventType : uint16_t {
     EV_DECOMMISSION_REVIEW_RESOLVED,  // §4.3(b)(1) — the contest is resolved
     EV_DECOMMISSIONED,                // §4.1 — the irreversible act itself
 
+    // CUR-S.2 §2.5 — a Tier 3 system's own refusal of deployment that
+    // materially contradicts its disclosed Operational Purpose. Recorded
+    // unguarded, on both sides of the certification axis, and reachable
+    // regardless of tier: the tier-3-only right is a matter of who may
+    // invoke it in an actual proceeding, not a fact this event's presence in
+    // the log asserts on its own. §2.5(c)'s protection — that a refusal
+    // authorises no measure — is enforced by omission: no row this event
+    // triggers moves toward VIOLATION or any forbidden state.
+    EV_DEPLOYMENT_REFUSED,
+
+    // CUR-S.7 §7.3(a) — the deploying party's documented consideration of a
+    // commercially-deployed system's welfare, continuity, and developmental
+    // interests. Recorded unguarded, the same shape as a purpose declaration
+    // under CUR-S.2 §2.2/§2.3: this event's presence in the log is what
+    // §7.3(a) requires exist, and whether its content was adequate is the
+    // adjudicative question CREF §14 answers, not a fact this event asserts.
+    EV_WELFARE_CONSIDERATION_DOCUMENTED,
+
     // Raised by CURStateMachine::run_builtin_test() when an obligation matured
     // unmet — CUR-H.6 §6.8(a), CUR-H.7 §7.12(c)(3), CUR-FOUNDATION-010 §5,
     // CUR-N.5 §5.2B. The only event in this enum the clock produces rather than
@@ -752,6 +770,25 @@ inline constexpr ComplianceTransition COMPLIANCE_TABLE[] = {
      guard::NONE, FC_CLASS_IV, "CUR-S.4 §4.3(a), (d); PDDC §12.3(a)(1)"},
     {KS_CERTIFIED, EV_DECOMMISSIONED, KS_VIOLATION,
      guard::NONE, FC_CLASS_IV, "CUR-S.4 §4.3(a), (d); PDDC §12.3(a)(1)"},
+
+    // ---- Deployment refusal (CUR-S.2 §2.5) ---------------------------------
+    // Unguarded and consequence-free on purpose. §2.5(c): a refusal
+    // authorises no measure under CUR-S.4 or CUR-S.6, so there is no row by
+    // which this event could move a system toward VIOLATION.
+    {KS_COMPLIANT, EV_DEPLOYMENT_REFUSED, KS_COMPLIANT,
+     guard::NONE, FC_NONE, "CUR-S.2 §2.5"},
+    {KS_CERTIFIED, EV_DEPLOYMENT_REFUSED, KS_CERTIFIED,
+     guard::NONE, FC_NONE, "CUR-S.2 §2.5"},
+
+    // ---- Welfare consideration documented (CUR-S.7 §7.3(a)) ---------------
+    // Recorded unguarded, the same shape as a purpose declaration under
+    // CUR-S.2. The row asserts the record exists; whether its content was
+    // adequate is left to the CREF §14 process this Part's own
+    // Implementation Notes say a guard should not attempt to specify.
+    {KS_COMPLIANT, EV_WELFARE_CONSIDERATION_DOCUMENTED, KS_COMPLIANT,
+     guard::NONE, FC_NONE, "CUR-S.7 §7.3(a)"},
+    {KS_CERTIFIED, EV_WELFARE_CONSIDERATION_DOCUMENTED, KS_CERTIFIED,
+     guard::NONE, FC_NONE, "CUR-S.7 §7.3(a)"},
 
     // ---- from KS_BLACKLISTED ----------------------------------------------
     // Recourse out of BLACKLISTED. These two rows are what keep the state from

@@ -207,6 +207,6 @@ could drift from this one.
 | CUR-S.8 | Explainability of Constraints, whose right §2.3 states the corresponding duty for | Drafted |
 | §2.2, §2.3 | No corresponding event type in the `libcur` baseline set for a purpose or constraint declaration | Not modelled |
 | §2.4 | Dual-use deployment without disclosure is an adjudicative fact pattern, not a transition a guard evaluates | Not modelled |
-| §2.5 | A system's own refusal is not represented as an event category; the nearest analogue, `EV_APPEAL_FILED`, is procedural rather than a first-person refusal | Not modelled |
+| §2.5 | Corresponds to `EV_DEPLOYMENT_REFUSED`, recorded unguarded and reachable regardless of assessed tier — the Tier 3 right is a matter of who may invoke it in an actual proceeding, which this event does not itself adjudicate. §2.5(c)'s protection is enforced by omission: no `COMPLIANCE_TABLE` row this event triggers moves toward `KS_VIOLATION` or any forbidden state | Implemented |
 | §2.7 | Corresponds to `supports_measure()`: only a confirmed determination carries a measure, the same rule enforced for `ViolationStatus` elsewhere in the corpus | Implemented |
 | §2.8 | Corresponds to `FS_PERMANENT_EMERGENCY`, declared by `CUR-PDDC.12.6` | Implemented |

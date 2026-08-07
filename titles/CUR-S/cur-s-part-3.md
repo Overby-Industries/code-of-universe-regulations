@@ -187,4 +187,5 @@ verified sound.
 | §3.7 | Corresponds to `FS_PERMANENT_EMERGENCY`, declared by `CUR-PDDC.12.6` | Implemented |
 | CUR-S.1 | Definitions and Scope for the Silicon domain | Drafted |
 | CUR-S.2 | Transparency of Purpose and Constraints | Drafted |
-| §3.2, §3.3, §3.4 | A reward structure and its contradictions are not represented in the `libcur` baseline set; there is no event type for a training-time determination | Not modelled |
+| §3.3(a) | Corresponds to `ObligationKind::OBLIG_ROUTINE_AUDIT` — this subsection ties itself explicitly to "CUR-FOUNDATION-010's routine audit cycle" rather than defining its own, so it is a usage of the existing kind, not a gap requiring a new one | Implemented |
+| §3.2, §3.3(c), §3.4 | A reward structure's actual content, and whether an identified contradiction was remediated, are adjudicative facts the audit obligation's schedule does not itself verify; there is no event type for a training-time determination | Not modelled |

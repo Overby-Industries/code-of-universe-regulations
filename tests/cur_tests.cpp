@@ -1930,6 +1930,103 @@ static void test_decommission_regulations_registered() {
 }
 
 // ---------------------------------------------------------------------------
+// Smaller closures — CUR-S.2 §2.5, CUR-S.7 §7.3(a), CUR-S.3 §3.3(a), CUR-H.6 §6.5
+// ---------------------------------------------------------------------------
+
+static void test_deployment_refusal_carries_no_consequence() {
+    TEST("a Tier 3 system's own refusal of contradicting deployment carries "
+         "no measure (CUR-S.2 §2.5)");
+
+    cur::CURStateMachine m;
+    m.log().set_clock(fixed_clock);
+    auto node = m.entities().register_entity("node-6", cur::EC_AUTONOMOUS_SILICON);
+    CHECK(m.entities().assess_tier(node, 3, /*independently_assessed=*/false));
+
+    cur::TransitionContext empty;
+    auto r = m.submit_operational(node, cur::EV_DEPLOYMENT_REFUSED, empty, 1);
+
+    // §2.5(c): the refusal authorises no measure under CUR-S.4 or CUR-S.6.
+    // Nothing moves the entity toward VIOLATION or a forbidden state.
+    CHECK(r.accepted);
+    CHECK_EQ(m.compliance_of(node), cur::KS_COMPLIANT);
+    CHECK_EQ(r.fault, cur::FC_NONE);
+    CHECK(!r.fault_raised);
+
+    // Recorded, per §2.6(a)'s general audit-trail requirement.
+    bool logged = false;
+    for (const auto& rec : m.log().records()) {
+        if (rec.trigger == cur::EV_DEPLOYMENT_REFUSED) logged = true;
+    }
+    CHECK(logged);
+}
+
+static void test_welfare_consideration_recorded() {
+    TEST("documented welfare consideration is recorded, unguarded "
+         "(CUR-S.7 §7.3(a))");
+
+    cur::CURStateMachine m;
+    m.log().set_clock(fixed_clock);
+    auto node = m.entities().register_entity("node-7", cur::EC_AUTONOMOUS_SILICON);
+
+    cur::TransitionContext empty;
+    auto r = m.submit_operational(
+        node, cur::EV_WELFARE_CONSIDERATION_DOCUMENTED, empty, 1);
+    CHECK(r.accepted);
+    CHECK_EQ(r.fault, cur::FC_NONE);
+
+    // The event's presence is what §7.3(a) requires exist. Whether its
+    // content was adequate is not something this row can evaluate — that is
+    // deliberate, per this Part's own Implementation Notes.
+    bool logged = false;
+    for (const auto& rec : m.log().records()) {
+        if (rec.trigger == cur::EV_WELFARE_CONSIDERATION_DOCUMENTED) {
+            logged = true;
+        }
+    }
+    CHECK(logged);
+}
+
+static void test_reward_structure_audit_uses_routine_audit_obligation() {
+    TEST("a reward-structure audit schedule uses the same obligation kind "
+         "as any other routine audit (CUR-S.3 §3.3(a))");
+
+    cur::ObligationRegister reg;
+    const cur::EntityHandle auditor = 1;
+    const cur::EntityHandle node = 2;
+
+    // CUR-S.3 §3.3(a) ties itself explicitly to "CUR-FOUNDATION-010's
+    // routine audit cycle" rather than defining its own — so this is a usage
+    // of OBLIG_ROUTINE_AUDIT, not a new ObligationKind.
+    const uint32_t id =
+        reg.open(cur::OBLIG_ROUTINE_AUDIT, auditor, node, /*opened=*/0,
+                 /*due=*/100, /*recur=*/100, "reward structure audit");
+
+    CHECK_EQ(reg.check(100).size(), size_t{1});
+    CHECK_EQ(cur::lapse_fault_class(cur::OBLIG_ROUTINE_AUDIT), cur::FC_CLASS_II);
+    CHECK(reg.discharge(id, 110));
+    CHECK(reg.get(id)->lapsed);
+}
+
+static void test_minor_flag_defaults_false_and_is_settable() {
+    TEST("EntityRecord carries a minority flag rather than an age "
+         "(CUR-H.6 §6.5)");
+
+    cur::EntityRegistry reg;
+    auto h = reg.register_entity("citizen-1200", cur::EC_CIVIC);
+    const cur::EntityRecord* rec = reg.get(h);
+    CHECK(rec != nullptr);
+    if (rec == nullptr) return;
+
+    // Defaults false — an omitted flag is not itself evidence of minority,
+    // consistent with this library's precautionary defaults elsewhere.
+    CHECK(!rec->is_minor);
+
+    cur::EntityRecord* mutable_rec = reg.get(h);
+    mutable_rec->is_minor = true;
+    CHECK(reg.get(h)->is_minor);
+}
+
+// ---------------------------------------------------------------------------
 // Adversarial tests
 // ---------------------------------------------------------------------------
 // These do not test intended behaviour. They test whether the protections can
@@ -2325,6 +2422,10 @@ int main() {
     test_decommission_during_contest_faults();
     test_decommission_tier3_needs_independent_review();
     test_decommission_regulations_registered();
+    test_deployment_refusal_carries_no_consequence();
+    test_welfare_consideration_recorded();
+    test_reward_structure_audit_uses_routine_audit_obligation();
+    test_minor_flag_defaults_false_and_is_settable();
     test_lapsed_review_withdraws_support();
     test_decommission_measure_review_withdraws_support();
     test_builtin_test_runs_on_the_clock();

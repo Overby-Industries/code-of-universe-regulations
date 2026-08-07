@@ -172,6 +172,9 @@ const char* to_string(EventType e) {
         case EV_DECOMMISSION_REVIEW_RESOLVED:
             return "decommission_review_resolved";
         case EV_DECOMMISSIONED: return "decommissioned";
+        case EV_DEPLOYMENT_REFUSED: return "deployment_refused";
+        case EV_WELFARE_CONSIDERATION_DOCUMENTED:
+            return "welfare_consideration_documented";
         case EV_OBLIGATION_LAPSED: return "obligation_lapsed";
 
         case EV_COUNT: break;

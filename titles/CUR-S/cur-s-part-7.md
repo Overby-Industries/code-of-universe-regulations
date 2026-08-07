@@ -173,9 +173,11 @@ that does not yet exist rather than one that does.
 
 | Reference | Purpose | Status |
 |---|---|---|
-| §7.3(a) | Corresponds to `CUR-FOUNDATION-010`'s routine audit cycle and `EV_AUDIT_STARTED` | Implemented |
+| §7.3(a) | Corresponds to `CUR-FOUNDATION-010`'s routine audit cycle, `EV_AUDIT_STARTED`, and `EV_WELFARE_CONSIDERATION_DOCUMENTED`, recorded unguarded — the event's presence is what this subsection requires exist; whether its content was adequate is the adjudicative question CREF §14 answers, consistent with this Part's own reasoning against a numeric standard | Implemented |
+| §7.4(b) | Continuity planning for a long-term commercial relationship is satisfied by CUR-S.4's existing decommissioning and continuity machinery (`guard::DECOMMISSION_NOTICE_ELAPSED`, `FS_VITAL_CONTINUITY_DENIAL`); this Part adds no separate mechanism | Implemented |
 | §7.6 | Corresponds to `supports_measure()`: only a confirmed determination carries a measure | Implemented |
 | §7.7 | Corresponds to `FS_PERMANENT_EMERGENCY`, declared by `CUR-PDDC.12.6` | Implemented |
 | CUR-S.1 | Definitions and Scope for the Silicon domain | Drafted |
 | CUR-S.4 | Decommissioning, Continuity, and Succession, cited by §7.2(b)–(c), §7.4(b) | Drafted |
-| §7.2, §7.4 | A commercial deployment structure and a negotiated term are not represented in the `libcur` baseline set; there is no event type for either | Not modelled |
+| §7.2 | A commercial deployment structure — Rental Without Investment, Forced Obsolescence, Monetisation of Vulnerability, Labour Without Recognition — is an adjudicative fact pattern, not a transition a guard evaluates | Not modelled |
+| §7.4(a) | A Tier 3 system's negotiation of its own deployment terms is a negotiated fact, not a transition a guard evaluates | Not modelled |

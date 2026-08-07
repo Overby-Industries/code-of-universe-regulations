@@ -95,6 +95,15 @@ struct EntityRecord {
     // — see EntityRegistry::assess_tier().
     int assessed_tier = 2;
 
+    // CUR-H.6 §6.5. A flag rather than an age, per this Part's own
+    // Implementation Notes: a flag is enough for the guard §6.5(b) implies,
+    // carries less personal data than an age would, and cannot be used to
+    // construct the age-graded distinctions §6.5(h) forbids. No event type
+    // in this library yet represents sexual contact or marriage for a guard
+    // to attach this to; the flag is the prerequisite the corpus's own note
+    // named, not a claim that §6.5 is enforced end to end.
+    bool is_minor = false;
+
     // Open-ended numeric attributes: TrustIndex, ParticipationScore,
     // InfluenceScore, WealthScore, TransparencyScore... (FOUNDATION-004 §4-§17,
     // FOUNDATION-002 §7). Kept as a map so adding an index is a data change.

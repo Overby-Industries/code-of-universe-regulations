@@ -145,6 +145,11 @@ resetting standing without an event would violate FOUNDATION-005 §2.
 `SubjectClass` decides what may move. `SUBJ_OPERATIONAL_LICENSE` is the only
 value that satisfies `guard::LICENSE_SUBJECT_ONLY`.
 
+`EntityRecord` also carries `assessed_tier` (defaults to 2, CUR-S.1 §1.2(c);
+lowered below 2 only via `EntityRegistry::assess_tier(h, tier,
+independently_assessed)`) and `is_minor` (defaults `false`, CUR-H.6 §6.5 — a
+flag rather than an age, deliberately).
+
 ### Events — `Event`
 
 The only struct the machine accepts. `tick` and `sequence` are caller-supplied
@@ -759,7 +764,7 @@ include/cur/
   cur_obligation.h       scheduled obligations + the built-in test
   cur_state_machine.h    the engine + ICURObserver
 src/                     one .cpp per header, minus cur.h
-tests/cur_tests.cpp      1141 checks, no external framework
+tests/cur_tests.cpp      1187 checks, no external framework
 CMakeLists.txt           standalone build
 SConscript               returns source nodes for an SCons consumer
 ```
@@ -793,6 +798,11 @@ The tests that matter are the constitutional ones. `tests/cur_tests.cpp` asserts
   `OBLIG_REVIEW_RESTRICTION` does
 - an `ADOM_HUMAN_INCAPACITY` advocate clears the identical disqualifications
   as the other two domains
+- a Tier 3 system's own deployment refusal carries no measure; a documented
+  welfare-consideration record and a reward-structure audit obligation both
+  use existing generic machinery rather than new domain-specific mechanisms
+- `EntityRecord::is_minor` defaults `false` and is settable independently of
+  any age representation
 
 ---
 
