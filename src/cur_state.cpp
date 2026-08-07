@@ -167,6 +167,11 @@ const char* to_string(EventType e) {
         case EV_DEATH_DETERMINED: return "death_determined";
         case EV_IRREVERSIBLE_ACT: return "irreversible_act";
         case EV_DETERMINATION_VACATED: return "determination_vacated";
+        case EV_DECOMMISSION_NOTICE_ISSUED: return "decommission_notice_issued";
+        case EV_DECOMMISSION_CONTESTED: return "decommission_contested";
+        case EV_DECOMMISSION_REVIEW_RESOLVED:
+            return "decommission_review_resolved";
+        case EV_DECOMMISSIONED: return "decommissioned";
         case EV_OBLIGATION_LAPSED: return "obligation_lapsed";
 
         case EV_COUNT: break;
@@ -244,6 +249,25 @@ uint16_t resolve_guard_mask(const TransitionContext& ctx) {
         ctx.observation_sustained) {
         m |= guard::DEATH_INTERVAL_ELAPSED;
     }
+
+    // CUR-S.4 §4.3(a), (d). An undeclared notice period cannot be satisfied —
+    // the same reading given an undeclared debris limit and an undeclared
+    // life-support floor — and a pending contest defeats the guard regardless
+    // of elapsed time, the same way an interested determiner defeats
+    // DETERMINATION_INDEPENDENT regardless of the interval.
+    if (ctx.notice_required_ticks > 0 &&
+        ctx.notice_elapsed_ticks >= ctx.notice_required_ticks &&
+        !ctx.contest_pending) {
+        m |= guard::DECOMMISSION_NOTICE_ELAPSED;
+    }
+
+    // CUR-S.4 §4.3(b)(2). One named reviewing body, with no interest present.
+    // Same naming-plus-disinterest shape as DETERMINATION_INDEPENDENT, for a
+    // single body rather than two determiners.
+    if (ctx.reviewer_ref != 0xFFFFFFFFu && !ctx.reviewer_interest_present) {
+        m |= guard::INDEPENDENT_REVIEW_COMPLETE;
+    }
+
     return m;
 }
 
@@ -268,6 +292,8 @@ constexpr GuardName kGuardNames[] = {
     {guard::ADVOCATE_CLEARED, "ADVOCATE_CLEARED"},
     {guard::DETERMINATION_INDEPENDENT, "DETERMINATION_INDEPENDENT"},
     {guard::DEATH_INTERVAL_ELAPSED, "DEATH_INTERVAL_ELAPSED"},
+    {guard::DECOMMISSION_NOTICE_ELAPSED, "DECOMMISSION_NOTICE_ELAPSED"},
+    {guard::INDEPENDENT_REVIEW_COMPLETE, "INDEPENDENT_REVIEW_COMPLETE"},
 };
 
 }  // namespace

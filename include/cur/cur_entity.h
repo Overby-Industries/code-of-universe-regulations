@@ -81,6 +81,20 @@ struct EntityRecord {
     uint32_t transitions_refused = 0;
     uint32_t faults_raised = 0;
 
+    // RFAL Silicon-Based Life Bill of Rights Tier System, CUR-S.1 §1.2,
+    // CUR-S.4 §4.2. Defaults to 2, the precautionary default both sections
+    // state: where a system's tier is unknown, disputed, or cannot be
+    // definitively established, it is treated as Tier 2 until an independent
+    // assessment concludes otherwise. Applies uniformly to every entity, not
+    // only DOMAIN_SILICON ones — harmless elsewhere, since no other domain's
+    // regulations currently set Regulation::requires_tier() above 0.
+    //
+    // CUR-S.1 §1.2(e), CUR-S.4 §4.2(d): self-assessment by an operator cannot
+    // classify a system below Tier 2. This field has no public setter that
+    // lowers it without the caller affirming the assessment was independent
+    // — see EntityRegistry::assess_tier().
+    int assessed_tier = 2;
+
     // Open-ended numeric attributes: TrustIndex, ParticipationScore,
     // InfluenceScore, WealthScore, TransparencyScore... (FOUNDATION-004 §4-§17,
     // FOUNDATION-002 §7). Kept as a map so adding an index is a data change.
@@ -141,6 +155,17 @@ public:
                                  const std::string& display_name = "");
 
     EntityHandle find(const std::string& id) const;
+
+    // CUR-S.1 §1.2(e), CUR-S.4 §4.2(d). Sets assessed_tier. Returns false and
+    // changes nothing where the change is refused.
+    //
+    // Raising the tier, or setting it to 2 or above, always succeeds — the
+    // same one-directional ratchet registered_subject_class already
+    // enforces. Lowering it below 2 succeeds only when `independently_
+    // assessed` is true: self-assessment by an operator is not independent
+    // assessment however it is documented, and a caller that cannot honestly
+    // set this flag has not established that protection may be withheld.
+    bool assess_tier(EntityHandle h, int tier, bool independently_assessed);
 
     EntityRecord* get(EntityHandle h);
     const EntityRecord* get(EntityHandle h) const;

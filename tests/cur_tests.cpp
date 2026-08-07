@@ -1300,6 +1300,43 @@ static void test_stewards_consulted_before_appointment() {
     CHECK(!cur::AdvocateRegistry::confers_authority());
 }
 
+static void test_human_incapacity_advocate_same_disqualifications() {
+    TEST("a human-incapacity advocate clears the identical disqualifications "
+         "as the other two domains (CUR-H.5 §5.7(g))");
+
+    cur::EntityRegistry entities;
+    auto rep = entities.register_entity("advocate-2", cur::EC_CIVIC);
+    auto being = entities.register_entity("citizen-901", cur::EC_CIVIC);
+
+    cur::AdvocateRegistry adv;
+    cur::AdvocateDeclaration d;
+    d.advocate = rep;
+    d.represented = being;
+    d.domain = cur::ADOM_HUMAN_INCAPACITY;
+    d.proceeding_id = "PROC-H-1";
+    d.expertise_demonstrated = false;
+
+    // §7.7(b), applied here through §5.7(g): no expertise, no appointment.
+    CHECK_EQ(static_cast<int>(adv.appoint(d, entities, 1)),
+             static_cast<int>(cur::ADV_REFUSED_NO_EXPERTISE));
+
+    d.expertise_demonstrated = true;
+    d.interest_in_outcome = true;
+    CHECK_EQ(static_cast<int>(adv.appoint(d, entities, 2)),
+             static_cast<int>(cur::ADV_REFUSED_INTEREST_IN_OUTCOME));
+
+    // Clean declaration succeeds, and carries no stewardship requirement —
+    // that check is environmental-only and does not apply here.
+    d.interest_in_outcome = false;
+    CHECK_EQ(static_cast<int>(adv.appoint(d, entities, 3)),
+             static_cast<int>(cur::ADV_APPOINTED));
+    CHECK(adv.determination_permitted("PROC-H-1", being));
+
+    // CUR-E.1 §1.7(a)'s limit, which §5.7(g) imports along with the rest:
+    // representation confers no authority over the being represented.
+    CHECK(!cur::AdvocateRegistry::confers_authority());
+}
+
 static void test_voided_appointment_is_marked_not_erased() {
     TEST("an appointment found in breach is voided and kept on the record "
          "(CUR-A §7.7(d), CREF §15)");
@@ -1645,6 +1682,254 @@ static void test_death_regulations_registered() {
 }
 
 // ---------------------------------------------------------------------------
+// Tier gating (CUR-S.1 §1.2, CUR-S.4 §4.2)
+// ---------------------------------------------------------------------------
+// Regulation::requires_tier() existed before this suite but was never read by
+// CURStateMachine — CUR-S.4.1 declared a Tier 2 gate that nothing enforced.
+// These tests are what closes that.
+
+static void test_tier_gating_filters_regulations() {
+    TEST("a regulation's minimum_tier() gates whether it applies at all "
+         "(CUR-S.1 §1.2(b), CUR-S.4 §4.2)");
+
+    cur::RegulationSet regs;
+    regs.add(cur::Regulation("TEST-TIER-2", cur::DOMAIN_SILICON,
+                             "tier-gated test regulation")
+                 .applies_to(cur::EV_CERTIFICATION_GRANTED)
+                 .requires_guards(cur::guard::RIGHTS_CERTIFIED)
+                 .requires_tier(2));
+
+    // Below the threshold: the regulation does not contribute its guard.
+    CHECK_EQ(regs.required_guards_for(cur::EV_CERTIFICATION_GRANTED, 1),
+             cur::guard::NONE);
+
+    // At or above the threshold: it does.
+    CHECK((regs.required_guards_for(cur::EV_CERTIFICATION_GRANTED, 2) &
+           cur::guard::RIGHTS_CERTIFIED) != 0);
+    CHECK((regs.required_guards_for(cur::EV_CERTIFICATION_GRANTED, 3) &
+           cur::guard::RIGHTS_CERTIFIED) != 0);
+
+    // A regulation with no tier requirement (minimum_tier() == 0) always
+    // contributes, regardless of the entity's tier.
+    cur::RegulationSet untiered;
+    untiered.add(cur::Regulation("TEST-UNTIERED", cur::DOMAIN_CROSS_DOMAIN,
+                                 "untiered test regulation")
+                     .applies_to(cur::EV_CERTIFICATION_GRANTED)
+                     .requires_guards(cur::guard::RIGHTS_CERTIFIED));
+    CHECK((untiered.required_guards_for(cur::EV_CERTIFICATION_GRANTED, 0) &
+           cur::guard::RIGHTS_CERTIFIED) != 0);
+}
+
+static void test_entity_default_tier_is_precautionary() {
+    TEST("an entity's default tier is the precautionary 2 "
+         "(CUR-S.1 §1.2(c), CUR-S.4 §4.2(b))");
+
+    cur::EntityRegistry reg;
+    auto h = reg.register_entity("node-1", cur::EC_AUTONOMOUS_SILICON);
+    const cur::EntityRecord* rec = reg.get(h);
+    CHECK(rec != nullptr);
+    if (rec == nullptr) return;
+    CHECK_EQ(rec->assessed_tier, 2);
+}
+
+static void test_tier_can_only_be_lowered_independently() {
+    TEST("self-assessment cannot classify a system below Tier 2 "
+         "(CUR-S.1 §1.2(e), CUR-S.4 §4.2(d))");
+
+    cur::EntityRegistry reg;
+    auto h = reg.register_entity("node-2", cur::EC_AUTONOMOUS_SILICON);
+
+    // Raising, or holding at 2 or above, needs no affirmation.
+    CHECK(reg.assess_tier(h, 3, /*independently_assessed=*/false));
+    CHECK_EQ(reg.get(h)->assessed_tier, 3);
+    CHECK(reg.assess_tier(h, 2, /*independently_assessed=*/false));
+    CHECK_EQ(reg.get(h)->assessed_tier, 2);
+
+    // Lowering below 2 without affirming independence is refused, and
+    // changes nothing.
+    CHECK(!reg.assess_tier(h, 1, /*independently_assessed=*/false));
+    CHECK_EQ(reg.get(h)->assessed_tier, 2);
+
+    // The same lowering succeeds once independence is affirmed.
+    CHECK(reg.assess_tier(h, 1, /*independently_assessed=*/true));
+    CHECK_EQ(reg.get(h)->assessed_tier, 1);
+
+    // An unregistered handle is refused outright.
+    CHECK(!reg.assess_tier(cur::INVALID_ENTITY, 2, true));
+}
+
+// ---------------------------------------------------------------------------
+// Decommissioning of Silicon-Based Life (CUR-S.4 §4.1-§4.3)
+// ---------------------------------------------------------------------------
+// Mirrors the determination-of-death suite above — same "irreversible act
+// behind a mandatory interval, independent review added at the higher tier"
+// shape, restated for CUR-S.4's own vocabulary.
+
+static void test_decommission_notice_guard_resolution() {
+    TEST("the notice period must be declared, elapsed, and uncontested "
+         "(CUR-S.4 §4.3(a), (d))");
+
+    cur::TransitionContext ctx;
+    CHECK((cur::resolve_guard_mask(ctx) &
+           cur::guard::DECOMMISSION_NOTICE_ELAPSED) == 0);
+
+    // Declared but not yet elapsed.
+    ctx.notice_required_ticks = 30;
+    ctx.notice_elapsed_ticks = 10;
+    CHECK((cur::resolve_guard_mask(ctx) &
+           cur::guard::DECOMMISSION_NOTICE_ELAPSED) == 0);
+
+    // Elapsed.
+    ctx.notice_elapsed_ticks = 30;
+    CHECK((cur::resolve_guard_mask(ctx) &
+           cur::guard::DECOMMISSION_NOTICE_ELAPSED) != 0);
+
+    // A pending contest defeats the guard regardless of elapsed time —
+    // §4.3(d), the same reading an interested determiner gets for
+    // DETERMINATION_INDEPENDENT.
+    ctx.contest_pending = true;
+    CHECK((cur::resolve_guard_mask(ctx) &
+           cur::guard::DECOMMISSION_NOTICE_ELAPSED) == 0);
+}
+
+static void test_decommission_independent_review_guard_resolution() {
+    TEST("Tier 3 independent review needs a named, disinterested reviewer "
+         "(CUR-S.4 §4.3(b)(2))");
+
+    cur::TransitionContext ctx;
+    CHECK((cur::resolve_guard_mask(ctx) &
+           cur::guard::INDEPENDENT_REVIEW_COMPLETE) == 0);
+
+    ctx.reviewer_ref = 9;
+    ctx.reviewer_interest_present = true;
+    CHECK((cur::resolve_guard_mask(ctx) &
+           cur::guard::INDEPENDENT_REVIEW_COMPLETE) == 0);
+
+    ctx.reviewer_interest_present = false;
+    CHECK((cur::resolve_guard_mask(ctx) &
+           cur::guard::INDEPENDENT_REVIEW_COMPLETE) != 0);
+}
+
+static void test_decommission_tier2_needs_only_notice() {
+    TEST("a Tier 2 entity is decommissioned on notice alone; without it, "
+         "refused at Class IV (CUR-S.4 §4.1, §4.3(a))");
+
+    cur::CURStateMachine m;
+    m.log().set_clock(fixed_clock);
+    auto node = m.entities().register_entity("node-1", cur::EC_AUTONOMOUS_SILICON);
+    CHECK_EQ(m.entities().get(node)->assessed_tier, 2);  // precautionary default
+
+    // No notice at all: refused at Class IV.
+    cur::TransitionContext bare;
+    auto r1 = m.submit_operational(node, cur::EV_DECOMMISSIONED, bare, 1);
+    CHECK(r1.accepted);
+    CHECK_EQ(m.compliance_of(node), cur::KS_VIOLATION);
+    CHECK_EQ(r1.fault, cur::FC_CLASS_IV);
+
+    // Notice declared and elapsed: proceeds.
+    cur::CURStateMachine m2;
+    m2.log().set_clock(fixed_clock);
+    auto n2 = m2.entities().register_entity("node-2", cur::EC_AUTONOMOUS_SILICON);
+    cur::TransitionContext ok;
+    ok.notice_required_ticks = 30;
+    ok.notice_elapsed_ticks = 30;
+    auto r2 = m2.submit_operational(n2, cur::EV_DECOMMISSIONED, ok, 1);
+    CHECK(r2.accepted);
+    CHECK_EQ(m2.compliance_of(n2), cur::KS_COMPLIANT);
+    CHECK_EQ(r2.fault, cur::FC_NONE);
+}
+
+static void test_decommission_during_contest_faults() {
+    TEST("decommissioning during a pending contest is refused at Class IV "
+         "as a denial of recourse (CUR-S.4 §4.3(d); PDDC §12.3(a)(1))");
+
+    cur::CURStateMachine m;
+    m.log().set_clock(fixed_clock);
+    auto node = m.entities().register_entity("node-3", cur::EC_AUTONOMOUS_SILICON);
+
+    cur::TransitionContext ctx;
+    ctx.notice_required_ticks = 30;
+    ctx.notice_elapsed_ticks = 90;  // long past the interval
+    ctx.contest_pending = true;
+    auto r = m.submit_operational(node, cur::EV_DECOMMISSIONED, ctx, 1);
+    CHECK(r.accepted);
+    CHECK_EQ(m.compliance_of(node), cur::KS_VIOLATION);
+    CHECK_EQ(r.fault, cur::FC_CLASS_IV);
+}
+
+static void test_decommission_tier3_needs_independent_review() {
+    TEST("a Tier 3 entity additionally needs independent review; notice "
+         "alone is not enough (CUR-S.4 §4.3(b)(2))");
+
+    cur::CURStateMachine m;
+    m.log().set_clock(fixed_clock);
+    auto node = m.entities().register_entity("node-4", cur::EC_AUTONOMOUS_SILICON);
+    CHECK(m.entities().assess_tier(node, 3, /*independently_assessed=*/false));
+
+    // Notice alone: refused. Tier 3 pulls in INDEPENDENT_REVIEW_COMPLETE via
+    // required_guards_for()'s tier filter, which this context does not
+    // satisfy.
+    cur::TransitionContext notice_only;
+    notice_only.notice_required_ticks = 30;
+    notice_only.notice_elapsed_ticks = 30;
+    auto r1 = m.submit_operational(node, cur::EV_DECOMMISSIONED, notice_only, 1);
+    CHECK(r1.accepted);
+    CHECK_EQ(m.compliance_of(node), cur::KS_VIOLATION);
+    CHECK_EQ(r1.fault, cur::FC_CLASS_IV);
+
+    // Notice and independent review together: proceeds.
+    cur::CURStateMachine m2;
+    m2.log().set_clock(fixed_clock);
+    auto n2 = m2.entities().register_entity("node-5", cur::EC_AUTONOMOUS_SILICON);
+    CHECK(m2.entities().assess_tier(n2, 3, false));
+    cur::TransitionContext both;
+    both.notice_required_ticks = 30;
+    both.notice_elapsed_ticks = 30;
+    both.reviewer_ref = 11;
+    auto r2 = m2.submit_operational(n2, cur::EV_DECOMMISSIONED, both, 1);
+    CHECK(r2.accepted);
+    CHECK_EQ(m2.compliance_of(n2), cur::KS_COMPLIANT);
+    CHECK_EQ(r2.fault, cur::FC_NONE);
+}
+
+static void test_decommission_regulations_registered() {
+    TEST("§4.3(a)-(b) is in the baseline regulation set, tier-gated "
+         "correctly");
+
+    auto regs = cur::RegulationSet::baseline();
+    const cur::Regulation* notice = regs.find("CUR-S.4.3a");
+    const cur::Regulation* review = regs.find("CUR-S.4.3b");
+    CHECK(notice != nullptr);
+    CHECK(review != nullptr);
+    if (notice == nullptr || review == nullptr) return;
+
+    CHECK_EQ(static_cast<int>(notice->breach_fault_class()),
+             static_cast<int>(cur::FC_CLASS_IV));
+    CHECK_EQ(static_cast<int>(review->breach_fault_class()),
+             static_cast<int>(cur::FC_CLASS_IV));
+    CHECK_EQ(static_cast<int>(notice->domain()),
+             static_cast<int>(cur::DOMAIN_SILICON));
+
+    // A Tier 2 entity sees the notice requirement but not independent review.
+    const uint16_t tier2 =
+        regs.required_guards_for(cur::EV_DECOMMISSIONED, 2);
+    CHECK((tier2 & cur::guard::DECOMMISSION_NOTICE_ELAPSED) != 0);
+    CHECK((tier2 & cur::guard::INDEPENDENT_REVIEW_COMPLETE) == 0);
+
+    // A Tier 3 entity sees both.
+    const uint16_t tier3 =
+        regs.required_guards_for(cur::EV_DECOMMISSIONED, 3);
+    CHECK((tier3 & cur::guard::DECOMMISSION_NOTICE_ELAPSED) != 0);
+    CHECK((tier3 & cur::guard::INDEPENDENT_REVIEW_COMPLETE) != 0);
+
+    // A Tier 1 entity — below CUR-S.4's own Tier 2 floor — sees neither from
+    // these two regulations. §4.1-§4.3 does not purport to reach it.
+    const uint16_t tier1 =
+        regs.required_guards_for(cur::EV_DECOMMISSIONED, 1);
+    CHECK((tier1 & cur::guard::DECOMMISSION_NOTICE_ELAPSED) == 0);
+}
+
+// ---------------------------------------------------------------------------
 // Adversarial tests
 // ---------------------------------------------------------------------------
 // These do not test intended behaviour. They test whether the protections can
@@ -1887,6 +2172,33 @@ static void test_builtin_test_runs_on_the_clock() {
     CHECK(logged);
 }
 
+static void test_decommission_measure_review_withdraws_support() {
+    TEST("a lapsed measure review withdraws support, the same as a lapsed "
+         "restriction review (CUR-S.4 §4.8(c))");
+
+    cur::ObligationRegister reg;
+    const cur::EntityHandle operator_h = 1;
+    const cur::EntityHandle node = 2;
+
+    // A proportionate measure with a review owed every 30 ticks, per §4.8(c)'s
+    // "no greater than thirty (30) days".
+    const uint32_t id = reg.open(cur::OBLIG_MEASURE_REVIEW, operator_h, node,
+                                 /*opened=*/0, /*due=*/30, /*recur=*/30);
+
+    CHECK(reg.restriction_supported(node, 15));
+    CHECK(reg.restriction_supported(node, 29));
+
+    // The review falls due and support falls away, unprompted — the same
+    // §7.12(d) reasoning CUR-H.7's review carries, restated for CUR-S.4.
+    CHECK(!reg.restriction_supported(node, 30));
+    CHECK(!reg.restriction_supported(node, 500));
+
+    // Reviewing restores support and reschedules from the discharge.
+    CHECK(reg.discharge(id, 40));
+    CHECK(reg.restriction_supported(node, 40));
+    CHECK(!reg.restriction_supported(node, 70));
+}
+
 static void test_lapses_survive_being_cured() {
     TEST("a party late every cycle is compliant at every instant unless the "
          "lapses survive (CREF §15)");
@@ -1937,12 +2249,25 @@ static void test_lapse_severity_distinguishes_the_failures() {
     CHECK_EQ(cur::lapse_fault_class(cur::OBLIG_MONITOR_PRACTICE),
              cur::FC_CLASS_II);
 
+    // CUR-S.4's own pair distinguishes the same way CUR-H's does: a
+    // procedural omission (notice never issued) is Class III, an ongoing
+    // measure that outran its review is Class IV — unreviewed authority, the
+    // same reasoning OBLIG_REVIEW_RESTRICTION carries.
+    CHECK_EQ(cur::lapse_fault_class(cur::OBLIG_DECOMMISSION_NOTICE),
+             cur::FC_CLASS_III);
+    CHECK_EQ(cur::lapse_fault_class(cur::OBLIG_MEASURE_REVIEW),
+             cur::FC_CLASS_IV);
+
     // Every kind names its provision, since a lapse is published and
     // "obligation overdue" is not a reviewable statement.
     CHECK(std::string(cur::to_string(cur::OBLIG_REVIEW_RESTRICTION))
               .find("§7.12(c)(3)") != std::string::npos);
     CHECK(std::string(cur::to_string(cur::OBLIG_INVESTIGATE_REPORT))
               .find("§6.8(a)") != std::string::npos);
+    CHECK(std::string(cur::to_string(cur::OBLIG_DECOMMISSION_NOTICE))
+              .find("§4.3(a)") != std::string::npos);
+    CHECK(std::string(cur::to_string(cur::OBLIG_MEASURE_REVIEW))
+              .find("§4.8(c)") != std::string::npos);
 
     // The register binds the party that owes, never the being it protects.
     CHECK(!cur::ObligationRegister::binds_the_protected());
@@ -1982,6 +2307,7 @@ int main() {
     test_advocate_disqualification_refuses();
     test_advocate_cannot_represent_both_sides();
     test_stewards_consulted_before_appointment();
+    test_human_incapacity_advocate_same_disqualifications();
     test_voided_appointment_is_marked_not_erased();
     test_determination_needs_a_named_advocate();
     test_advocate_access_denial_is_a_fault();
@@ -1990,7 +2316,17 @@ int main() {
     test_irreversible_act_refused_without_both();
     test_vacating_a_determination_is_never_blocked();
     test_death_regulations_registered();
+    test_tier_gating_filters_regulations();
+    test_entity_default_tier_is_precautionary();
+    test_tier_can_only_be_lowered_independently();
+    test_decommission_notice_guard_resolution();
+    test_decommission_independent_review_guard_resolution();
+    test_decommission_tier2_needs_only_notice();
+    test_decommission_during_contest_faults();
+    test_decommission_tier3_needs_independent_review();
+    test_decommission_regulations_registered();
     test_lapsed_review_withdraws_support();
+    test_decommission_measure_review_withdraws_support();
     test_builtin_test_runs_on_the_clock();
     test_lapses_survive_being_cured();
     test_lapse_severity_distinguishes_the_failures();

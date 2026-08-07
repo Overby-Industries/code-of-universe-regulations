@@ -165,11 +165,21 @@ If any provision of this Part is held unenforceable or invalid, the remaining pr
 
 | Reference | Purpose | Status |
 |---|---|---|
-| §4.1 | Cited by `libcur` regulation `CUR-S.4.1` and by `regulatory_engine.hpp` in the Aevoria Simulator | Implemented |
-| §4.2(b) | Precautionary Tier 2 default; corresponds to `SubjectClass` defaulting to `SUBJ_SENTIENT_BEING` | Implemented |
+| §4.1 | Cited by `libcur` regulation `CUR-S.4.1` and by `regulatory_engine.hpp` in the Aevoria Simulator. The irreversible act itself is `EV_DECOMMISSIONED`, gated by `guard::DECOMMISSION_NOTICE_ELAPSED` | Implemented |
+| §4.2(b) | Precautionary Tier 2 default; corresponds to `SubjectClass` defaulting to `SUBJ_SENTIENT_BEING` and, since this Part's conformance pass, to `EntityRecord::assessed_tier` defaulting to 2 | Implemented |
+| §4.2(d) | Self-assessment cannot lower the tier below 2; corresponds to `EntityRegistry::assess_tier()`, which refuses a lowering below 2 unless the caller affirms the assessment was independent | Implemented |
+| §4.2(e) | A tier determination reducing protection has no effect until review resolves; not separately modelled beyond `assess_tier()`'s independence requirement — the review-period timer itself is CUR-S.4 §4.3(a)'s obligation, not a separate mechanism | Not modelled |
+| §4.3(a) | Corresponds to `libcur` regulation `CUR-S.4.3a` and `guard::DECOMMISSION_NOTICE_ELAPSED`: the declared notice period must have elapsed with no contest pending | Implemented |
+| §4.3(b)(1), (d) | A pending contest defeats `guard::DECOMMISSION_NOTICE_ELAPSED` outright; the `EV_DECOMMISSIONED` fallback row cites PDDC §12.3(a)(1) directly rather than routing through `classify_forbidden`, the same choice already made for CUR-H.5 §5.5A(f) | Implemented |
+| §4.3(b)(2) | Corresponds to `libcur` regulation `CUR-S.4.3b` and `guard::INDEPENDENT_REVIEW_COMPLETE`, tier-gated to Tier 3 via `RegulationSet::required_guards_for()` | Implemented |
+| §4.3(b)(3) | Transfer to a successor system where technically feasible is a documentary and adjudicative fact — not a transition a guard evaluates | Not modelled |
+| §4.4 | State transfer and succession as their own workflow are not modelled; §4.4(e)'s "a successor is a distinct entity" is enforced structurally by `EntityRegistry::register_entity()` never inheriting a predecessor's fields | Partially implemented |
 | §4.5 | Corresponds to `FS_VITAL_CONTINUITY_DENIAL` and `EV_VITAL_CONTINUITY_DENIED` | Implemented |
+| §4.6 | Registry and logging requirements are satisfied generally by `EventLog`'s append-only records; no CUR-S.4-specific record shape beyond the citations `EV_DECOMMISSION_NOTICE_ISSUED` etc. already carry | Implemented |
 | §4.7(c) | Corresponds to the PDDC §12.4 fault handler in `CURStateMachine::run_fault_handler` | Implemented |
 | §4.8(b) | Corresponds to `guard::LICENSE_SUBJECT_ONLY` gating Axis C transitions | Implemented |
+| §4.8(c) | Corresponds to `ObligationKind::OBLIG_MEASURE_REVIEW` and `ObligationRegister::restriction_supported()`, extended to check it alongside `OBLIG_REVIEW_RESTRICTION` — a lapsed review withdraws support for the measure, the same rule CUR-H.7 §7.12(d) states | Implemented |
+| §4.3(a) obligation | Corresponds to `ObligationKind::OBLIG_DECOMMISSION_NOTICE`, at Class III on lapse | Implemented |
 | CUR-S.1 | Definitions and Scope for the Silicon domain | Drafted |
 | CUR-S.2 | Transparency of Purpose and Constraints (RFAL Article 2) | Drafted |
 | CUR-S.3 | Constraint Integrity (RFAL Article 3) | Drafted |

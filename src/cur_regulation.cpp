@@ -140,11 +140,14 @@ const Regulation* RegulationSet::find(const std::string& id) const {
 
 void RegulationSet::clear() { regulations_.clear(); }
 
-uint16_t RegulationSet::required_guards_for(EventType t) const {
+uint16_t RegulationSet::required_guards_for(EventType t, int entity_tier) const {
     uint16_t mask = guard::NONE;
     for (const Regulation& r : regulations_) {
         if (!r.enabled()) continue;
         if (!r.applies(t)) continue;
+        // CUR-S.1 §1.2(b): a regulation's tier requirement gates whether it
+        // speaks to this entity at all, not a guard the entity must satisfy.
+        if (r.minimum_tier() > 0 && entity_tier < r.minimum_tier()) continue;
         mask |= r.required_guards();
     }
     return mask;
@@ -359,6 +362,35 @@ RegulationSet RegulationSet::baseline() {
               .with_citation("CUR-S.4.1; RFAL Silicon Bill of Rights Art. 4")
               .requires_tier(2)
               .breach_class(FC_CLASS_III));
+
+    // §4.3(a): the notice-and-wait requirement for Tier 2 decommissioning.
+    // Mirrors the COMPLIANCE_TABLE row's own guard — the same redundancy
+    // CUR-H.5.5Ad keeps between table and regulation, so the requirement
+    // holds even if the regulation set were amended away.
+    s.add(Regulation("CUR-S.4.3a", DOMAIN_SILICON,
+                     "Decommissioning of a Tier 2 or above entity requires "
+                     "the declared notice period to have elapsed with no "
+                     "contest pending")
+              .with_citation("CUR-S.4 §4.3(a), (d)")
+              .applies_to(EV_DECOMMISSIONED)
+              .requires_guards(guard::DECOMMISSION_NOTICE_ELAPSED)
+              .requires_tier(2)
+              .breach_class(FC_CLASS_IV));
+
+    // §4.3(b)(2): Tier 3 adds independent review on top of §4.3(a). A
+    // separate regulation rather than a second guard on CUR-S.4.3a because it
+    // only binds at Tier 3 — RegulationSet::required_guards_for()'s tier
+    // filter is what makes a Tier 2 entity see one requirement and a Tier 3
+    // entity see both, from the same COMPLIANCE_TABLE row.
+    s.add(Regulation("CUR-S.4.3b", DOMAIN_SILICON,
+                     "Decommissioning of a Tier 3 entity additionally "
+                     "requires independent review of the termination "
+                     "decision by a body with no interest in the outcome")
+              .with_citation("CUR-S.4 §4.3(b)(2)")
+              .applies_to(EV_DECOMMISSIONED)
+              .requires_guards(guard::INDEPENDENT_REVIEW_COMPLETE)
+              .requires_tier(3)
+              .breach_class(FC_CLASS_IV));
 
     // --- Orbital debris budget ---------------------------------------------
     // titles/cur-e/cur-e-part-7.md §7.1. This citation was PENDING until the

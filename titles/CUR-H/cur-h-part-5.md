@@ -406,7 +406,7 @@ is why §5.1(c) is drafted as a list rather than left to implication.
 | §5.2(f), §5.4(d) | Corresponds to `FS_NON_CONSENSUAL_MODIFICATION`, declared by `CUR-PDDC.12.3a4` and `CUR-N.2.2` | Implemented |
 | §5.4(e), §5.7(h) | Corresponds to `FS_RIGHTS_SUSPENSION` and `FS_UNREVIEWABLE_AUTHORITY`, declared by `CUR-F002.FB003` and `CUR-F002.FB004` | Implemented |
 | §5.8(b), §5.8(c) | Corresponds to `FS_VITAL_CONTINUITY_DENIAL` and `EV_VITAL_CONTINUITY_DENIED` | Implemented |
-| §5.7(g) | Corresponds to `AdvocateRegistry`, `guard::ADVOCATE_CLEARED`, and `confers_authority()` | Partially implemented |
+| §5.7(g) | Corresponds to `AdvocateRegistry`, `guard::ADVOCATE_CLEARED`, `confers_authority()`, and `ADOM_HUMAN_INCAPACITY` in `AdvocateDomain` | Implemented |
 | §5.10(d) | Corresponds to `CaptureMeasures::continuity_assumption_required` | Implemented |
 | §5.11 | Corresponds to `FS_PERMANENT_EMERGENCY`, declared by `CUR-PDDC.12.6` | Implemented |
 | §5.5A(c)(1), §5.5A(f) | Corresponds to `guard::DETERMINATION_INDEPENDENT` and regulation `CUR-H.5.5Ac` on `EV_DEATH_DETERMINED`, at Class IV | Implemented |
@@ -424,13 +424,14 @@ is why §5.1(c) is drafted as a list rather than left to implication.
 | CUR-H.7 | Offences against the person generally, including homicide | Drafted |
 
 Note on §5.7(g) and the advocate registry. `AdvocateRegistry` was built for
-CUR-A §7.7 and CUR-E §1.6, and its `AdvocateDomain` enumerates `ADOM_ANIMAL` and
-`ADOM_ENVIRONMENTAL` only. §5.7(g) applies the same disqualifications to
-representation of a human being, so a third domain value would let the same
-machinery serve this Part. That is a small change and it is recorded rather than
-made, because the enumerator is part of the interface the Aevoria Simulator
-builds against and this Part is the first to need it — the change should be made
-once, with the Part it serves already drafted, rather than speculatively.
+CUR-A §7.7 and CUR-E §1.6, and its `AdvocateDomain` originally enumerated
+`ADOM_ANIMAL` and `ADOM_ENVIRONMENTAL` only. §5.7(g) applies the same
+disqualifications to representation of a human being, so a third domain
+value, `ADOM_HUMAN_INCAPACITY`, was added to let the same machinery serve
+this Part. `appoint()` needed no change beyond that: every disqualification
+it enforces was already domain-generic except the environmental stewardship
+check, which is conditioned on `ADOM_ENVIRONMENTAL` specifically and so does
+not apply here without further change.
 
 Note on how §5.5A is enforced. Both provisions this Part recorded as gaps are now
 implemented, and four details of the implementation are load-bearing.

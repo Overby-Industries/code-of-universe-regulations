@@ -6,6 +6,7 @@ const char* to_string(AdvocateDomain d) {
     switch (d) {
         case ADOM_ANIMAL: return "Animal (CUR-A §7.7)";
         case ADOM_ENVIRONMENTAL: return "Environmental (CUR-E §1.6)";
+        case ADOM_HUMAN_INCAPACITY: return "Human incapacity (CUR-H.5 §5.7(g))";
         case ADOM_COUNT: break;
     }
     return "Unknown";

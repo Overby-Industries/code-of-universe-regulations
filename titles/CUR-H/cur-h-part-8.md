@@ -384,7 +384,7 @@ and is not restated here.
 
 | Reference | Purpose | Status |
 |---|---|---|
-| §8.2(a)-(c) | Corresponds to the unreachability of `FS_RIGHTS_SUSPENSION` and to the absence, in `cur_state.h`, of any guard keyed to belief, affiliation, or membership — there is nothing for a determination resting on those alone to attach to | Not modelled |
+| §8.2(a)-(c) | Corresponds to the unreachability of `FS_RIGHTS_SUSPENSION` and to the absence, in `cur_state.h`, of any guard keyed to belief, affiliation, or membership — there is nothing for a determination resting on those alone to attach to | Not modelled — absence is the enforcement |
 | §8.3(a)-(d) | Where the group's conduct is completed, reached by CUR-H.7 §7.14(a) and the homicide/injury/enslavement machinery already Implemented there. The organising conduct itself, prior to completion, is an adjudicative determination | Gap, tractable |
 | §8.4 | Same reasoning as CUR-H.2 §2.7: the incitement standard is adjudicative and not reducible to a transition guard | Not modelled |
 | §8.5(a)-(c) | The bias-motive finding is adjudicative | Not modelled |
@@ -393,7 +393,7 @@ and is not restated here.
 | §8.7(a)-(b) | An absence of expanded authority cannot be represented as an absence; there is nothing in the library to remove — the same reasoning CUR-H.6 §6.9(b) records for an unarmed response capability | Not modelled |
 | §8.8(b) | Corresponds to `guard::LICENSE_SUBJECT_ONLY` and the unreachability of `FS_RIGHTS_SUSPENSION`, which already keep a being's rights off the axis any vote or sanction can move | Implemented |
 | §8.9(a) | Corresponds to `ViolationStatus` and `supports_measure()`: only `VS_CONFIRMED` carries a measure | Implemented |
-| §8.9(e) | Corresponds to `run_builtin_test()` raising no fault, and no guard evaluating, on affiliation or belief alone — the same absence recorded at §8.2 | Not modelled |
+| §8.9(e) | Corresponds to `run_builtin_test()` raising no fault, and no guard evaluating, on affiliation or belief alone — the same absence recorded at §8.2 | Not modelled — absence is the enforcement |
 | §8.10 | Corresponds to `FS_PERMANENT_EMERGENCY`, declared by `CUR-PDDC.12.6` | Implemented |
 | CUR-H.1 | Definitions and Scope for the Human domain | Drafted |
 | CUR-H.3 | RFAL Human Bill Article III (Knowledge and Education) | Drafted |

@@ -122,8 +122,17 @@ public:
     const std::vector<Regulation>& all() const { return regulations_; }
     void clear();
 
-    // Union of required_guards over every enabled regulation matching `t`.
-    uint16_t required_guards_for(EventType t) const;
+    // Union of required_guards over every enabled regulation matching `t`,
+    // restricted to regulations whose minimum_tier() the entity meets.
+    //
+    // A regulation with minimum_tier() == 0 always contributes. One with
+    // minimum_tier() > 0 contributes only when entity_tier >= minimum_tier()
+    // — CUR-S.1 §1.2(b): a tier's Article protections do not bind an entity
+    // that has not reached that tier. `entity_tier` defaults to 3 (the
+    // highest defined tier) so a caller with no tier-bearing entity in view
+    // — every existing call site before this parameter existed — sees the
+    // same unfiltered union it always did.
+    uint16_t required_guards_for(EventType t, int entity_tier = 3) const;
 
     // First enabled regulation that declares a forbidden state AND explicitly
     // names `t` among its triggers.

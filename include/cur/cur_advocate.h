@@ -45,6 +45,14 @@ namespace cur {
 enum AdvocateDomain : uint8_t {
     ADOM_ANIMAL = 0,     // CUR-A §7.7 — an animal with standing under §7.6
     ADOM_ENVIRONMENTAL,  // CUR-E §1.6 — an environmental interest under §1.5
+
+    // CUR-H.5 §5.7(g) — a human being who cannot presently express a
+    // decision. §5.7(g) applies "the terms of CUR-A §7.7(c) to (h)... to
+    // human beings" rather than restating them, so this domain carries the
+    // identical disqualifications the other two do and needs no appoint()
+    // changes beyond being a third value appoint() already treats generically.
+    ADOM_HUMAN_INCAPACITY,
+
     ADOM_COUNT
 };
 

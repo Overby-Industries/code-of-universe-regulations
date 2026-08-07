@@ -265,6 +265,8 @@ Bit flags; a row's whole mask must hold. Guards are pure predicates over
 | `ADVOCATE_CLEARED` | a named advocate cleared the disqualifications | CUR-A.7 §7.7; CUR-E.1 §1.6 |
 | `DETERMINATION_INDEPENDENT` | two named, distinct, disinterested parties determined death | CUR-H.5 §5.5A(c), §5.5A(f) |
 | `DEATH_INTERVAL_ELAPSED` | the observation interval elapsed with the being observed across it | CUR-H.5 §5.5A(d)-(e) |
+| `DECOMMISSION_NOTICE_ELAPSED` | the declared notice period elapsed with no contest pending | CUR-S.4 §4.3(a), (d) |
+| `INDEPENDENT_REVIEW_COMPLETE` | a named, disinterested body reviewed a Tier 3 termination decision | CUR-S.4 §4.3(b)(2) |
 
 Five of these read an undeclared value as unsatisfiable rather than as
 permissive, and they do it for one reason. A `debris_limit` of zero means *no
@@ -285,6 +287,18 @@ acting independently. `DEATH_INTERVAL_ELAPSED` requires
 requires the being be observed across the interval rather than merely stored
 across it — time passing in a drawer meets the letter of an interval and defeats
 its purpose.
+
+`DECOMMISSION_NOTICE_ELAPSED` and `INDEPENDENT_REVIEW_COMPLETE` mirror
+`DEATH_INTERVAL_ELAPSED` and `DETERMINATION_INDEPENDENT` for CUR-S.4's own
+decommissioning process, deliberately without the observation requirement —
+CUR-S.4 §4.3(a) requires only that the notice period have elapsed, not that
+the entity be observed across it. A `contest_pending` flag defeats
+`DECOMMISSION_NOTICE_ELAPSED` outright regardless of elapsed time, the same
+reading `determiner_interest_present` gets for `DETERMINATION_INDEPENDENT`.
+`INDEPENDENT_REVIEW_COMPLETE` only binds a Tier 3 entity: it is contributed by
+regulation `CUR-S.4.3b`, which `RegulationSet::required_guards_for()` filters
+by `entity_tier` — the first consumer of `Regulation::minimum_tier()`, which
+existed as a field before this and was never actually read until now.
 
 ---
 
@@ -334,6 +348,17 @@ A regulation with **no** triggers is universal for guard purposes but never
 matches `forbidden_for()`. That is deliberate: a principle-stating provision
 like `CUR-PDDC.12.3a1` would otherwise classify every event in the system as an
 attempted forbidden transition.
+
+`.requires_tier(n)` gates whether a regulation contributes its guard mask at
+all, rather than adding to it: `RegulationSet::required_guards_for(t,
+entity_tier)` skips a regulation whose `minimum_tier()` exceeds `entity_tier`.
+Pass no `entity_tier` and every regulation is included regardless of tier —
+the default (3, the highest defined tier) exists so call sites with no
+tier-bearing entity in view see the same unfiltered union they always did.
+`EntityRecord::assessed_tier` defaults to 2, the precautionary default CUR-S.1
+§1.2(c) and CUR-S.4 §4.2(b) both state, and only `EntityRegistry::
+assess_tier()` may lower it below 2 — and only when the caller affirms the
+assessment was independent, per CUR-S.1 §1.2(e).
 
 ### Amendments
 
@@ -734,7 +759,7 @@ include/cur/
   cur_obligation.h       scheduled obligations + the built-in test
   cur_state_machine.h    the engine + ICURObserver
 src/                     one .cpp per header, minus cur.h
-tests/cur_tests.cpp      959 checks, no external framework
+tests/cur_tests.cpp      1141 checks, no external framework
 CMakeLists.txt           standalone build
 SConscript               returns source nodes for an SCons consumer
 ```
@@ -758,6 +783,16 @@ The tests that matter are the constitutional ones. `tests/cur_tests.cpp` asserts
 - `dry_run` changes nothing and agrees with `submit`
 - the OTF-1 export is balanced and complete
 - a bounded log reports truncation rather than hiding it
+- `minimum_tier()` actually filters `required_guards_for()`; an entity's
+  default tier is the CUR-S.1 §1.2(c) precautionary 2, and only an
+  independently-assessed lowering may reduce it
+- CUR-S.4 decommissioning: notice-and-wait proceeds at Tier 2, a pending
+  contest refuses it as a denial of recourse, and Tier 3 additionally needs
+  independent review — the same shape as CUR-H.5's death-determination suite
+- a lapsed `OBLIG_MEASURE_REVIEW` withdraws support the same way a lapsed
+  `OBLIG_REVIEW_RESTRICTION` does
+- an `ADOM_HUMAN_INCAPACITY` advocate clears the identical disqualifications
+  as the other two domains
 
 ---
 

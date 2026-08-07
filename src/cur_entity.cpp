@@ -40,6 +40,20 @@ EntityHandle EntityRegistry::find(const std::string& id) const {
     return it == by_id_.end() ? INVALID_ENTITY : it->second;
 }
 
+bool EntityRegistry::assess_tier(EntityHandle h, int tier,
+                                 bool independently_assessed) {
+    EntityRecord* rec = get(h);
+    if (rec == nullptr) return false;
+
+    // CUR-S.1 §1.2(e), CUR-S.4 §4.2(d): only an independent assessment may
+    // narrow protection. Raising the tier, or holding it at 2 or above,
+    // needs no such affirmation — the ratchet only turns toward protection.
+    if (tier < 2 && !independently_assessed) return false;
+
+    rec->assessed_tier = tier;
+    return true;
+}
+
 EntityRecord* EntityRegistry::get(EntityHandle h) {
     if (h == INVALID_ENTITY || h >= records_.size()) return nullptr;
     return &records_[h];
