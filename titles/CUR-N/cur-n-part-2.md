@@ -290,3 +290,16 @@ are substantive and are recorded here rather than made silently.
 | CUR-N.4 | Accountability for Telepathic Invasion | To be drafted |
 | CUR-N.5 | Secret Coalitions and Human Collaborators | To be drafted |
 | NIM.3, NIM.4, NIM.5, XIM.7, CHIM.1 | Operational manuals referenced by this Part | RFAL operational scope |
+
+`docs/manuals/NIM.md` and `docs/manuals/XIM.md` now exist, drafted at this
+repository's Information Manual layer — the plain-language explainer HIM and
+SIM provide for their own domains, covering CUR-N.2, CUR-N.4, and CUR-N.5, and
+CUR-X.1, CUR-X.3, and CUR-X.5, respectively. They are not the same artifact as
+the numbered operational sections this row still lists: NIM.3 (the Ombudsman
+Office reporting channel), NIM.4 (enforcement procedure against a non-human
+cognitive actor), NIM.5 (the restraining-order petition itself), and XIM.7
+(the Telepathic Incident Review Board's own procedure) are specific procedural
+mechanisms this Part cites, and remain RFAL operational scope, not yet
+written. The row above is accurate as it stands; this note exists so a reader
+finding the drafted manuals does not mistake general coverage of the same
+acronym for those specific, still-unwritten procedures.

@@ -330,8 +330,10 @@ violation of what it claims to be defending. *(CUR-H.8 §8.7)*
 | The exact words on any of the above | The cited section |
 | Why a provision is drafted as it is | Implementation Notes at the end of that Part |
 | How to read a citation | [reading-cur.md](../reading-cur.md) |
-| What is published about you | CUR-X.5, especially §5.5 and §5.7 |
-| What happens when domains overlap | CUR-X §3.3, §3.4 |
+| What is published about you | [XIM.md](XIM.md) §3, especially CUR-X.5 §5.5 and §5.7 |
+| What happens when domains overlap | [XIM.md](XIM.md) §2, CUR-X §3.3, §3.4 |
+| If your mind was accessed without consent | [NIM.md](NIM.md) |
+| If you were pressured about worship or belief | [DIM.md](DIM.md) |
 
 **If something in this manual does not match the Code, the Code is right.** Please
 report the discrepancy — a manual that has drifted from the corpus is worse than

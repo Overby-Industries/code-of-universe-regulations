@@ -319,9 +319,10 @@ authorisation, never the beings who received the distribution.** *(CUR-X.6
 | The exact words on any of the above | The cited section |
 | Why a provision is drafted as it is | Implementation Notes at the end of that Part |
 | How to read a citation | [reading-cur.md](../reading-cur.md) |
-| What Cross-Domain itself covers and why an enterprise belongs to no domain | CUR-X.1 §1.2–§1.3 |
-| What is published about a determination concerning you | CUR-X.5, especially §5.2 and §5.5 |
+| What Cross-Domain itself covers and why an enterprise belongs to no domain | [XIM.md](XIM.md) §1, CUR-X.1 §1.2–§1.3 |
+| What is published about a determination concerning you | [XIM.md](XIM.md) §3, CUR-X.5, especially §5.2 and §5.5 |
 | Where the currency boundary actually sits | CUR-X.6 in full |
+| Your obligations toward the environment your operations affect | [EHM.md](EHM.md) |
 
 **If something in this manual does not match the Code, the Code is right.**
 Please report the discrepancy — a manual that has drifted from the corpus is

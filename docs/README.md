@@ -39,7 +39,7 @@ division of labour is the same.
      │
      │  explains
      ▼
-  Manuals       HIM, PIM, and others to come
+  Manuals       HIM, PIM, SIM, EIM, AAM, DIM, EHM, NIM, XIM
   ────────      Plain language. States what the rules mean for a
                 person actually living under them. Cites CUR and
                 RFAL; adds nothing of its own.
@@ -61,6 +61,11 @@ and the manual is wrong.
 | [manuals/PIM.md](manuals/PIM.md) | Parent Information Manual — what raising a child does and does not give you authority to do, built from the provisions that already exist. Says plainly, in its §8, that custody and guardianship have no dedicated title yet, and that CUR-H.3 narrows but does not close the education gap, rather than implying either is settled | Parents and guardians |
 | [manuals/SIM.md](manuals/SIM.md) | Silicon Information Manual — for Silicon-Based Life, on the same terms. Covers all nine drafted CUR-S Parts, implementing the RFAL Silicon-Based Life Bill of Rights in full | Silicon-Based Life |
 | [manuals/EIM.md](manuals/EIM.md) | Enterprise Information Manual — obligations of a body that directs the work of others, built from CUR-X.4 and CUR-X.6. Reads as obligations rather than protections on purpose — see its own opening note | Enterprises and their coordinators |
+| [manuals/AAM.md](manuals/AAM.md) | Animal Advocate Manual — what you owe an animal in your care, and what serving as its advocate requires, built from the one drafted CUR-A Part, CUR-A.7 | Anyone responsible for or advocating for an animal |
+| [manuals/DIM.md](manuals/DIM.md) | Deities Information Manual — coercive-worship and destructive-intervention protections for every being, and the rights and limits that bind divine sentience itself, built from CUR-D.6 | Everyone; §4–5 specifically for divine sentience |
+| [manuals/EHM.md](manuals/EHM.md) | Ecosystem and Habitat Manual — what's required before you extract, operate, or run a habitat, and what environmental protection may never be used to do to a being, built from CUR-E.1, CUR-E.2, and CUR-E.7 | Operators, habitat crews, and environmental advocates |
+| [manuals/NIM.md](manuals/NIM.md) | Non-Human Cognitive Actor Information Manual — cognitive-sovereignty protections, what happens if you're accused of invasion, and secret-coalition liability, built from CUR-N.2, CUR-N.4, and CUR-N.5 | Everyone |
+| [manuals/XIM.md](manuals/XIM.md) | Cross-Domain Information Manual — what happens when more than one domain applies to you, and what's published about you either way, built from CUR-X.1, CUR-X.3, and CUR-X.5 | Everyone |
 | [cur-library-api.md](cur-library-api.md) | `libcur` API, the three state axes, guards, and the interpretation notes where the corpus needed a judgement call | Implementers |
 | [otp-integration.md](otp-integration.md) | How CUR-X.5 maps onto `otp::Ledger` and `otp::Registry` in `transparency-protocol` — the publishable set, disclosure, instance identity, and what neither side has closed yet | Implementers |
 

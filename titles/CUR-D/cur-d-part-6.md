@@ -318,7 +318,7 @@ correction of an upstream ambiguity.
 | CUR-D.1 | Definitions and Scope for the Deity domain, including the tier model of §6.9(g) in full | To be drafted |
 | CUR-D.2 through CUR-D.5 | Reserved for RFAL Articles 1 through 5 as free-standing Parts | To be drafted |
 | CUR-D.7 | Destructive Intervention, if §6.4 is later given its own Part | To be drafted |
-| DIM | Deities Information Manual, the operational layer referenced by §6.8(a) | To be drafted |
+| DIM | Deities Information Manual, the operational layer referenced by §6.8(a) — `docs/manuals/DIM.md` | Drafted |
 
 Note on `libcur` and `DOMAIN_DEITY`. As with `DOMAIN_HUMAN`, the baseline
 regulation set carries no rules for this domain, and for the same reason: §6.3

@@ -333,9 +333,10 @@ exception.
 | The exact words on any of the above | The cited section |
 | Why a provision is drafted as it is | Implementation Notes at the end of that Part |
 | How to read a citation | [reading-cur.md](../reading-cur.md) |
-| What happens when domains overlap | CUR-X.1 §1.6, CUR-X.3 |
-| What is published about a determination concerning you | CUR-X.5, especially §5.5 and §5.7 |
+| What happens when domains overlap | [XIM.md](XIM.md) §2, CUR-X.1 §1.6, CUR-X.3 |
+| What is published about a determination concerning you | [XIM.md](XIM.md) §3, CUR-X.5, especially §5.5 and §5.7 |
 | What raising or building an enterprise around Silicon-Based Life does and does not permit | [EIM](EIM.md) §4 |
+| If a claimed divine or creator authority is invoked to justify decommissioning or modifying you | CUR-S.4 §4.9, and [DIM.md](DIM.md) |
 
 **If something in this manual does not match the Code, the Code is right.**
 Please report the discrepancy — a manual that has drifted from the corpus is

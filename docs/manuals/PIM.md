@@ -228,7 +228,7 @@ these is drafted, this manual will be revised to cite it, and not before.
 | The exact words on any of the above | The cited section |
 | Why a provision is drafted as it is | Implementation Notes at the end of that Part |
 | How to read a citation | [reading-cur.md](../reading-cur.md) |
-| What is published if a finding is made | CUR-X.5, especially §5.5 and §5.7 |
+| What is published if a finding is made | [XIM.md](XIM.md) §3, CUR-X.5, especially §5.5 and §5.7 |
 
 **If something in this manual does not match the Code, the Code is right.**
 Please report the discrepancy — a manual that has drifted from the corpus is
