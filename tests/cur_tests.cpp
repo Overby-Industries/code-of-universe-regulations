@@ -2296,6 +2296,33 @@ static void test_decommission_measure_review_withdraws_support() {
     CHECK(!reg.restriction_supported(node, 70));
 }
 
+static void test_decommission_notice_obligation_lapses() {
+    TEST("an operator who never issues the required notice lapses the "
+         "obligation to (CUR-S.4 §4.3(a))");
+
+    cur::ObligationRegister reg;
+    const cur::EntityHandle op = 1;
+    const cur::EntityHandle node = 2;
+
+    const uint32_t id = reg.open(cur::OBLIG_DECOMMISSION_NOTICE, op, node,
+                                 /*opened=*/0, /*due=*/30, /*recur=*/0);
+
+    CHECK(reg.outstanding(29).empty());
+    CHECK_EQ(reg.check(30).size(), size_t{1});
+    CHECK(reg.get(id)->lapsed);
+
+    // Class III on lapse — a real procedural failure, but not the Class IV
+    // severity of an ongoing measure continuing unreviewed.
+    CHECK_EQ(cur::lapse_fault_class(cur::OBLIG_DECOMMISSION_NOTICE),
+             cur::FC_CLASS_III);
+
+    // Issuing notice late still discharges the obligation; the lapse
+    // already recorded survives the discharge, the same principle
+    // CREF §15 states for every other obligation kind.
+    CHECK(reg.discharge(id, 45));
+    CHECK(reg.get(id)->lapsed);
+}
+
 static void test_lapses_survive_being_cured() {
     TEST("a party late every cycle is compliant at every instant unless the "
          "lapses survive (CREF §15)");
@@ -2428,6 +2455,7 @@ int main() {
     test_minor_flag_defaults_false_and_is_settable();
     test_lapsed_review_withdraws_support();
     test_decommission_measure_review_withdraws_support();
+    test_decommission_notice_obligation_lapses();
     test_builtin_test_runs_on_the_clock();
     test_lapses_survive_being_cured();
     test_lapse_severity_distinguishes_the_failures();

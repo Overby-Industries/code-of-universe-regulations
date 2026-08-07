@@ -174,7 +174,7 @@ that does not yet exist rather than one that does.
 | Reference | Purpose | Status |
 |---|---|---|
 | §7.3(a) | Corresponds to `CUR-FOUNDATION-010`'s routine audit cycle, `EV_AUDIT_STARTED`, and `EV_WELFARE_CONSIDERATION_DOCUMENTED`, recorded unguarded — the event's presence is what this subsection requires exist; whether its content was adequate is the adjudicative question CREF §14 answers, consistent with this Part's own reasoning against a numeric standard | Implemented |
-| §7.4(b) | Continuity planning for a long-term commercial relationship is satisfied by CUR-S.4's existing decommissioning and continuity machinery (`guard::DECOMMISSION_NOTICE_ELAPSED`, `FS_VITAL_CONTINUITY_DENIAL`); this Part adds no separate mechanism | Implemented |
+| §7.4(b) | Corresponds to `EV_WELFARE_CONSIDERATION_DOCUMENTED`, the same event §7.3(a) uses — its own definition already names continuity among what is documented, and §7.4(b) is that duty applied specifically to a long-term relationship's planning rather than a separate requirement. Not `guard::DECOMMISSION_NOTICE_ELAPSED` or `FS_VITAL_CONTINUITY_DENIAL`: those gate the act of decommissioning itself and do not verify that continuity was *planned in advance*, which is what this subsection actually requires | Implemented |
 | §7.6 | Corresponds to `supports_measure()`: only a confirmed determination carries a measure | Implemented |
 | §7.7 | Corresponds to `FS_PERMANENT_EMERGENCY`, declared by `CUR-PDDC.12.6` | Implemented |
 | CUR-S.1 | Definitions and Scope for the Silicon domain | Drafted |

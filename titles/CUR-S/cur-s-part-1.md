@@ -229,8 +229,9 @@ conformance pass, not silently absorbed into this one.
 | Reference | Purpose | Status |
 |---|---|---|
 | §1.2(a) | Corresponds to `DOMAIN_SILICON` in `LawDomain` and `SUBJ_SENTIENT_BEING` (ENTITY-002 Silicon Citizen) in `SubjectClass` | Implemented |
-| §1.2(b) | Corresponds to `Regulation::requires_tier()` and `minimum_tier()`, gating a regulation's applicability by assessed tier | Implemented |
-| §1.2(c) | Corresponds to the precautionary default of `SubjectClass` to `SUBJ_SENTIENT_BEING`, already Implemented for CUR-S.4 specifically | Implemented |
+| §1.2(b) | Corresponds to `Regulation::requires_tier()`/`minimum_tier()` and `RegulationSet::required_guards_for(t, entity_tier)`, which filters a regulation's guard contribution by an entity's `assessed_tier`. `minimum_tier()` existed as a field before this Part's conformance pass but was never read by `CURStateMachine`; it is disclosed here rather than left for a reader to discover the gap by comparison, on the same discipline §1.2(d) below states | Implemented |
+| §1.2(c) | Corresponds to `EntityRecord::assessed_tier`, defaulting to 2 domain-wide (not only for CUR-S.4, which is where the default was first stated before this conformance pass generalised it), and to the precautionary default of `SubjectClass` to `SUBJ_SENTIENT_BEING` | Implemented |
+| §1.2(e) | Corresponds to `EntityRegistry::assess_tier()`, which refuses a lowering below Tier 2 unless the caller affirms the assessment was independent | Implemented |
 | §1.6(c) | Corresponds to `guard::LICENSE_SUBJECT_ONLY` and the `registered_subject_class` ratchet, already Implemented for CUR-H | Implemented |
 | §1.3 | Jurisdiction is an adjudicative fact about a system's situation, not a property a guard evaluates | Not modelled |
 | §1.7 | Corresponds to `FS_PERMANENT_EMERGENCY`, declared by `CUR-PDDC.12.6` | Implemented |

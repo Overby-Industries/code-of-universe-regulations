@@ -163,6 +163,22 @@ If any provision of this Part is held unenforceable or invalid, the remaining pr
 
 ## Implementation Notes
 
+Why `guard::DECOMMISSION_NOTICE_ELAPSED` is not itself tier-gated in the
+`COMPLIANCE_TABLE` row it appears on. §4.1(a) scopes this Part's process
+requirement to Tier 2 and above; CUR-S.1 §1.2(b)(1) says Tier 0 holds no
+protection under this domain at all. The baseline table row nonetheless
+requires the guard for `EV_DECOMMISSIONED` regardless of the target's
+`assessed_tier` — only the Tier 3 addition (`guard::INDEPENDENT_REVIEW_
+COMPLETE`, via `CUR-S.4.3b`) is genuinely tier-filtered, through
+`RegulationSet::required_guards_for()`. This is disclosed rather than left
+for a reader to notice by comparison: the baseline table encodes a
+protective floor applied uniformly, on the same reasoning CUR-S.1 §1.2(c)-(d)
+gives for the precautionary default generally — the burden falls on the
+party seeking to narrow protection, not on making the floor track the
+narrowest case exactly. In practice this asks nothing costly of a
+genuine Tier 0 tool, which by §1.2(b)(1)'s own definition has no ongoing
+relationships or developmental continuity for a notice period to protect.
+
 | Reference | Purpose | Status |
 |---|---|---|
 | §4.1 | Cited by `libcur` regulation `CUR-S.4.1` and by `regulatory_engine.hpp` in the Aevoria Simulator. The irreversible act itself is `EV_DECOMMISSIONED`, gated by `guard::DECOMMISSION_NOTICE_ELAPSED` | Implemented |

@@ -764,7 +764,7 @@ include/cur/
   cur_obligation.h       scheduled obligations + the built-in test
   cur_state_machine.h    the engine + ICURObserver
 src/                     one .cpp per header, minus cur.h
-tests/cur_tests.cpp      1187 checks, no external framework
+tests/cur_tests.cpp      1193 checks, no external framework
 CMakeLists.txt           standalone build
 SConscript               returns source nodes for an SCons consumer
 ```
