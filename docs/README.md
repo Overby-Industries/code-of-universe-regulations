@@ -50,6 +50,20 @@ what makes them trustworthy — a manual that invents a rule becomes a second an
 conflicting source of law. If a manual and a title disagree, the title governs
 and the manual is wrong.
 
+**Two kinds of manual live under `manuals/`.** The ones above — HIM, PIM, SIM,
+EIM, AAM, DIM, EHM, NIM, XIM — are *Information Manuals*: what a set of titles
+means for the person reading them. [`manuals/operational/`](manuals/operational/)
+holds a second kind, *Operational Manuals*: step-by-step procedure for a
+specific mechanism a title names — how to file a report, what a crisis
+protocol says to do in the moment. All six currently scoped instances are
+drafted, all in the Non-Human Cognitive Actors domain: `TIM-N` (reporting and
+crisis response), `NIM.3`–`NIM.5` (Ombuds intake, accountability, and
+restraining orders), `XIM.7` (the review board for a protective action or
+provisional order), and `CHIM.1` (amnesty and disclosure for a human
+collaborator). Both kinds cite CUR and RFAL and add nothing of their own;
+where they diverge is depth, not authority. RFAL's Enforcement Appendix §5.5
+scopes this category and tracks each instance's status.
+
 ---
 
 ## What is in this directory
@@ -66,6 +80,10 @@ and the manual is wrong.
 | [manuals/EHM.md](manuals/EHM.md) | Ecosystem and Habitat Manual — what's required before you extract, operate, or run a habitat, and what environmental protection may never be used to do to a being, built from CUR-E.1, CUR-E.2, and CUR-E.7 | Operators, habitat crews, and environmental advocates |
 | [manuals/NIM.md](manuals/NIM.md) | Non-Human Cognitive Actor Information Manual — cognitive-sovereignty protections, what happens if you're accused of invasion, and secret-coalition liability, built from CUR-N.2, CUR-N.4, and CUR-N.5 | Everyone |
 | [manuals/XIM.md](manuals/XIM.md) | Cross-Domain Information Manual — what happens when more than one domain applies to you, and what's published about you either way, built from CUR-X.1, CUR-X.3, and CUR-X.5 | Everyone |
+| [manuals/operational/tim-n/TIM-N.md](manuals/operational/tim-n/TIM-N.md) | Telepathic Incident Manual — an Operational Manual, not an Information Manual (see above): reporting protocol and crisis response for suspected telepathic invasion under CUR-N.2. Most of its own numbered sections (`TIM-N.2`–`TIM-N.7`) are still placeholders | Any being reporting, witnessing, or responding to telepathic invasion |
+| [manuals/operational/nim/NIM.md](manuals/operational/nim/NIM.md) | Non-Human Cognitive Actor Operational Manual — `NIM.3` (Ombuds reporting channel), `NIM.4` (accountability procedure), `NIM.5` (restraining-order petition) under CUR-N.4 and CUR-N.5. Not the same artifact as the Information Manual above, despite the shared acronym — see its own opening note | Reporters, Responsible Beings, and the bodies conducting a determination |
+| [manuals/operational/xim/XIM.7.md](manuals/operational/xim/XIM.7.md) | Telepathic Incident Review Board procedure — reviews a protective action or provisional restraining order within 72 hours, under CUR-N.2 §2.5(e), CUR-N.4 §4.11(d), and CUR-N.5 §5.9(e) | The Board itself, and anyone whose protective action or provisional order is under review |
+| [manuals/operational/chim/CHIM.1.md](manuals/operational/chim/CHIM.1.md) | Amnesty and Disclosure procedure for a human collaborator in a secret coalition, under CUR-N.5 §5.6 | A human weighing whether to disclose their own role in a coalition |
 | [cur-library-api.md](cur-library-api.md) | `libcur` API, the three state axes, guards, and the interpretation notes where the corpus needed a judgement call | Implementers |
 | [otp-integration.md](otp-integration.md) | How CUR-X.5 maps onto `otp::Ledger` and `otp::Registry` in `transparency-protocol` — the publishable set, disclosure, instance identity, and what neither side has closed yet | Implementers |
 

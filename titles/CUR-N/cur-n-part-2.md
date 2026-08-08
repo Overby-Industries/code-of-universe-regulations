@@ -289,17 +289,23 @@ are substantive and are recorded here rather than made silently.
 | CUR-N.3 | Reserved | To be drafted |
 | CUR-N.4 | Accountability for Telepathic Invasion | To be drafted |
 | CUR-N.5 | Secret Coalitions and Human Collaborators | To be drafted |
-| NIM.3, NIM.4, NIM.5, XIM.7, CHIM.1 | Operational manuals referenced by this Part | RFAL operational scope |
+| NIM.3, NIM.4, NIM.5, XIM.7, CHIM.1 | Operational manuals referenced by this Part | Drafted |
 
-`docs/manuals/NIM.md` and `docs/manuals/XIM.md` now exist, drafted at this
-repository's Information Manual layer — the plain-language explainer HIM and
-SIM provide for their own domains, covering CUR-N.2, CUR-N.4, and CUR-N.5, and
-CUR-X.1, CUR-X.3, and CUR-X.5, respectively. They are not the same artifact as
-the numbered operational sections this row still lists: NIM.3 (the Ombudsman
-Office reporting channel), NIM.4 (enforcement procedure against a non-human
-cognitive actor), NIM.5 (the restraining-order petition itself), and XIM.7
-(the Telepathic Incident Review Board's own procedure) are specific procedural
-mechanisms this Part cites, and remain RFAL operational scope, not yet
-written. The row above is accurate as it stands; this note exists so a reader
-finding the drafted manuals does not mistake general coverage of the same
-acronym for those specific, still-unwritten procedures.
+`docs/manuals/NIM.md` and `docs/manuals/XIM.md` are this repository's
+Information Manual layer — the plain-language explainer HIM and SIM provide
+for their own domains, covering CUR-N.2, CUR-N.4, and CUR-N.5, and CUR-X.1,
+CUR-X.3, and CUR-X.5, respectively. They are not the same artifact as the
+numbered operational sections this row lists: NIM.3 (the Ombudsman Office
+reporting channel), NIM.4 (enforcement procedure against a non-human cognitive
+actor), NIM.5 (the restraining-order petition itself), and XIM.7 (the
+Telepathic Incident Review Board's own procedure) are specific procedural
+mechanisms this Part cites. All five, plus `CHIM.1`, are now drafted at
+`docs/manuals/operational/{nim,xim,chim}/` — the row above reflects that; this
+note exists so a reader finding both layers does not mistake general coverage
+of the same acronym for these specific procedures.
+
+That scope is formally named on the RFAL side as well, not only inferable
+from this citation: RFAL's Enforcement Appendix §5.5, Operational Manuals,
+scopes the category and lists all six known instances alongside `TIM-N`.
+`TIM-N.1` and `TIM-N.5` were drafted first; `NIM.3`, `NIM.4`, `NIM.5`,
+`XIM.7`, and `CHIM.1` closed the queue in the same session.

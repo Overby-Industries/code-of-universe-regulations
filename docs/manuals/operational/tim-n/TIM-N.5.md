@@ -9,7 +9,7 @@
 - **Primary Author:** Keefe Overby
 - **Contributing Author:** DeepSeek (DeepSeek AI)
 
-Target Directory: `/manuals/operational/tim-n/TIM-N.5.md`
+Target Directory: `/docs/manuals/operational/tim-n/TIM-N.5.md`
 
 ## Constitutional Scope Note
 

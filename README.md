@@ -132,11 +132,10 @@ code-of-universe-regulations/
 │   └── README.md                                   # Conventions and drafting-order status
 │
 ├── docs/                                           # Where to start reading; manuals; library and OTP API
-│   ├── manuals/                                    # HIM, PIM, SIM, EIM — plain-language, per audience
+│   ├── manuals/                                    # HIM, PIM, SIM, EIM, and others — plain-language, per audience
+│   │   └── operational/                            # Procedural manuals: tim-n/, nim/, xim/, chim/
 │   ├── reading-cur.md  cur-library-api.md  otp-integration.md
 │   └── README.md
-│
-├── manuals/operational/                            # Operational manuals for institutions (TIM-N and others)
 │
 ├── proposals/                                      # The repository's own contribution process
 │   ├── ACTIVE/                                     # Proposals under discussion
@@ -153,17 +152,15 @@ code-of-universe-regulations/
 │   ├── resource-distribution.md  incentives.md  trade-policy.md
 │   └── README.md
 │
-├── history-lessons/                                # Reserved — case studies from governance history. Empty.
-├── technical/                                       # Reserved — technical specifications. Empty.
-│
 ├── include/cur/  src/  tests/                      # libcur — the CUR regulatory FSM, C++17
 └── scripts/                                         # Release tooling
 ```
 
-`history-lessons/` and `technical/` are named in this diagram because
-`CUR-FORMAT-GUIDE.md` anticipates them, not because they currently hold
-anything — they are empty, honestly, the way `titles/README.md` marks a
-provision `Reserved` rather than pretending it is drafted.
+`CUR-FORMAT-GUIDE.md` anticipates `history-lessons/` (case studies from
+governance history) and `technical/` (technical specifications) as future
+directories. Neither exists yet — they are not created in advance of holding
+anything, the way `titles/README.md` marks a provision `Reserved` rather than
+pretending it is drafted.
 
 ---
 
