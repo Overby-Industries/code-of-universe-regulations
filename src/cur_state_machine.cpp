@@ -475,7 +475,8 @@ TransitionResult CURStateMachine::submit(const Event& e) {
     }
 
     // Step 3 — table lookup.
-    const uint16_t extra = regulations_.required_guards_for(e.type);
+    const uint16_t extra =
+        regulations_.required_guards_for(e.type, target->assessed_tier);
     const ComplianceTransition* row =
         lookup(target->state.compliance, e.type, satisfied, extra);
     const ComplianceTransition* candidate =
@@ -646,7 +647,8 @@ TransitionResult CURStateMachine::dry_run(const Event& e) const {
     out.guards_satisfied = satisfied;
 
     std::string citation;
-    const uint16_t extra = regulations_.required_guards_for(e.type);
+    const uint16_t extra =
+        regulations_.required_guards_for(e.type, target->assessed_tier);
     const ComplianceTransition* row =
         lookup(target->state.compliance, e.type, satisfied, extra);
     const ComplianceTransition* candidate =

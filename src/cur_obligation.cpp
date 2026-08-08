@@ -12,6 +12,10 @@ const char* to_string(ObligationKind k) {
             return "Routine audit (CUR-FOUNDATION-010 §5)";
         case OBLIG_MONITOR_PRACTICE:
             return "Monitor practice (CUR-N.5 §5.2B)";
+        case OBLIG_DECOMMISSION_NOTICE:
+            return "Decommission notice (CUR-S.4 §4.3(a))";
+        case OBLIG_MEASURE_REVIEW:
+            return "Measure review (CUR-S.4 §4.8(c))";
         case OBLIG_KIND_COUNT:
             break;
     }
@@ -33,6 +37,22 @@ FaultClass lapse_fault_class(ObligationKind k) {
         // deprivation of liberty nobody has justified, which is unreviewable
         // authority within CUR-X.4 §4.3(b).
         case OBLIG_REVIEW_RESTRICTION:
+            return FC_CLASS_IV;
+
+        // Decommissioning proceeded, or was allowed to, without the operator
+        // ever discharging the notice CUR-S.4 §4.3(a) requires. Class III:
+        // a real procedural failure, not the paperwork-lapse severity of a
+        // missed routine sweep, but the entity has not yet lost anything an
+        // ongoing unjustified restriction takes — that is what distinguishes
+        // it from OBLIG_REVIEW_RESTRICTION's Class IV.
+        case OBLIG_DECOMMISSION_NOTICE:
+            return FC_CLASS_III;
+
+        // A proportionate measure continued past its §4.8(c) review. Same
+        // reasoning as OBLIG_REVIEW_RESTRICTION: the lapse withdraws the
+        // measure's support, so what continues is unreviewed authority
+        // rather than a bounded, periodically-justified restriction.
+        case OBLIG_MEASURE_REVIEW:
             return FC_CLASS_IV;
 
         case OBLIG_ROUTINE_AUDIT:
@@ -115,7 +135,13 @@ std::vector<uint32_t> ObligationRegister::check(uint64_t now_tick) {
 bool ObligationRegister::restriction_supported(EntityHandle concerning,
                                                uint64_t now_tick) const {
     for (const auto& o : obligations_) {
-        if (o.kind != OBLIG_REVIEW_RESTRICTION) continue;
+        // CUR-H.7 §7.12(d) and CUR-S.4 §4.8(c) state the identical rule for a
+        // restriction and a proportionate measure respectively — one failure
+        // under two provisions, not two failures.
+        if (o.kind != OBLIG_REVIEW_RESTRICTION &&
+            o.kind != OBLIG_MEASURE_REVIEW) {
+            continue;
+        }
         if (o.concerning != concerning) continue;
         if (o.discharged) continue;
 

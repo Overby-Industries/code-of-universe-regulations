@@ -8,12 +8,14 @@
 // from the context supplied with it, and a verdict comes back. That shape works
 // for everything the library did until now.
 //
-// Four provisions in three titles need a different question answered:
+// Six provisions in four titles need a different question answered:
 //
 //   CUR-H.7 §7.12(c)(3)  a restriction on liberty is reviewed at intervals
 //   CUR-H.6 §6.8(a)      every report is investigated
 //   CUR-FOUNDATION-010 §5  routine, random, and triggered audit
 //   CUR-N.5 §5.2B        routine monitoring, independently of any complaint
+//   CUR-S.4 §4.3(a)      decommissioning notice is issued before the act
+//   CUR-S.4 §4.8(c)      a proportionate measure is reviewed at intervals
 //
 // Each asks whether an obligation came due and went unmet. A transition table
 // cannot express that, and the reason is structural rather than a missing
@@ -73,6 +75,8 @@ enum ObligationKind : uint8_t {
     OBLIG_REVIEW_RESTRICTION,      // CUR-H.7 §7.12(c)(3)
     OBLIG_ROUTINE_AUDIT,           // CUR-FOUNDATION-010 §5
     OBLIG_MONITOR_PRACTICE,        // CUR-N.5 §5.2B
+    OBLIG_DECOMMISSION_NOTICE,     // CUR-S.4 §4.3(a)
+    OBLIG_MEASURE_REVIEW,          // CUR-S.4 §4.8(c)
     OBLIG_KIND_COUNT
 };
 
@@ -153,6 +157,10 @@ public:
     std::vector<uint32_t> check(uint64_t now_tick);
 
     // CUR-H.7 §7.12(d), and the reason this class exists in this shape.
+    // CUR-S.4 §4.8(c) states the same rule for a proportionate measure short
+    // of decommissioning, so this checks OBLIG_REVIEW_RESTRICTION and
+    // OBLIG_MEASURE_REVIEW alike — both name the identical failure under
+    // different provisions rather than two different failures.
     //
     // False once a review obligation concerning this entity has matured unmet.
     // The restriction is not thereby "ended" by the library — ending it is an

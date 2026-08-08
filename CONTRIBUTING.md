@@ -1,5 +1,5 @@
 # **Contributing to the Code of Universe Regulations (CUR)**
-*How to Shape the Future of the Alliance*
+*How to Shape the Future of the Aevoric Commonwealth*
 
 ---
 ## **Ways to Contribute**
@@ -32,7 +32,7 @@ Any citizen (human, AI, or other sentient being) can **propose a new law, regula
 
 ---
 ### **2. Vote on Proposals**
-- **Eligibility**: All **Alliance citizens** (see [CONSTITUTION.md](docs/CONSTITUTION.md) for citizenship rules) can vote.
+- **Eligibility**: All Full Avian Members (see [progressive-direct-democracy-constitution.md](progressive-direct-democracy-constitution.md) for citizenship rules) can vote on repository proposals under this process. This is the repository's own contribution process — see [`proposals/README.md`](proposals/README.md) for how it differs from the Commonwealth's own General Assembly legislative process described in [`governance/pddc-governance-mechanics.md`](governance/pddc-governance-mechanics.md).
 - **How to Vote**:
   - **Comment** on the proposal’s PR with `+1` (support) or `-1` (oppose).
   - **AI will tally votes** and flag any irregularities for human review.
@@ -47,7 +47,7 @@ Any citizen (human, AI, or other sentient being) can **propose a new law, regula
 ### **4. Improve Documentation**
 - **Found a typo?** Fix it and submit a PR.
 - **Have a better explanation?** Suggest edits to any `.md` file.
-- **Want to add a historical case study?** Contribute to [`historical_analysis`](historical_analysis)!
+- **Want to add a historical case study?** Contribute to [`history-lessons/`](history-lessons)!
 
 ---
 ### **5. Spread the Word**

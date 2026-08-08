@@ -13,7 +13,8 @@ Scope note. CUR-N.4 governs accountability for an invasion. This Part governs
 the concealed arrangements through which invasions are organised, and the
 accountability of those who participate in them without performing the invasion
 themselves. The operational amnesty and disclosure procedure is CHIM.1, an RFAL
-manual not yet written. Where this Part and a manual differ, this Part governs.
+manual drafted at `docs/manuals/operational/chim/CHIM.1.md`. Where this Part
+and a manual differ, this Part governs.
 
 ## PART 5 - SECRET COALITIONS AND COLLABORATORS
 
@@ -261,7 +262,7 @@ accountable. §5.5(e) states the evidentiary counterpart, because the prohibitio
 on collective measures is ineffective if collective inference is permitted.
 
 On amnesty. CUR-N.2 §2.8(d) routes human collaborators to CHIM.1 for amnesty and
-disclosure. §5.6 states the substantive rules that manual will implement: full
+disclosure. §5.6 states the substantive rules that manual implements: full
 amnesty where disclosure is the effective cause of identification, no
 extinguishment of the Target's remedy, protection from retaliation, no
 compulsion to disclose, and availability once only. §5.6(c)(1) is the provision
@@ -278,7 +279,7 @@ that keeps amnesty from operating at the Target's expense.
 | §5.6 | Amnesty has no representation in the library; a disclosure is an event the FSM does not currently define | Not modelled |
 | §5.8(b) | Corresponds to `is_adjudicated` / `supports_measure` and to `latest_sanctionable_violation`; a measure cannot become active against an allegation | Implemented |
 | §5.10(e) | Corresponds to `VS_OVERTURNED` and the one-way `adjudication_permitted` table | Implemented |
-| CHIM.1 | Amnesty and Disclosure procedure referenced by §5.6 and by CUR-N.2 §2.8(d) | RFAL operational scope, not yet written |
+| CHIM.1 | Amnesty and Disclosure procedure referenced by §5.6 and by CUR-N.2 §2.8(d) | Drafted at `docs/manuals/operational/chim/CHIM.1.md` |
 | CUR-N.1 | Definitions and Scope for the domain | To be drafted |
 | CUR-N.3 | Reserved | To be drafted |
 

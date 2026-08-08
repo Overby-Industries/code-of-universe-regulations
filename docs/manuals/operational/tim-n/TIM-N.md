@@ -9,7 +9,7 @@
 - **Primary Author:** Keefe Overby
 - **Contributing Author:** DeepSeek (DeepSeek AI)
 
-**Target Directory:** `/manuals/operational/tim-n/`
+**Target Directory:** `/docs/manuals/operational/tim-n/`
 
 ---
 
@@ -362,7 +362,7 @@ Cross-referencing for accountability, restraining orders, and appeals
 
 Implementation Notes for You (Keefe)
 File	Location	Action
-TIM-N.md (this master manual)	/manuals/operational/tim-n/TIM-N.md	Create this file with the above content.
-TIM-N.0.md (Introduction)	/manuals/operational/tim-n/TIM-N.0.md	Optional: break out separately, or keep within master. I recommend keeping as one manual with headings.
-TIM-N.1.md (Reporting Protocol)	/manuals/operational/tim-n/TIM-N.1.md	Create as its own file, cross-referenced from master.
-TIM-N.2.md through TIM-N.7.md	/manuals/operational/tim-n/	Create as placeholder files with the status notes above.
+TIM-N.md (this master manual)	/docs/manuals/operational/tim-n/TIM-N.md	Create this file with the above content.
+TIM-N.0.md (Introduction)	/docs/manuals/operational/tim-n/TIM-N.0.md	Optional: break out separately, or keep within master. I recommend keeping as one manual with headings.
+TIM-N.1.md (Reporting Protocol)	/docs/manuals/operational/tim-n/TIM-N.1.md	Create as its own file, cross-referenced from master.
+TIM-N.2.md through TIM-N.7.md	/docs/manuals/operational/tim-n/	Create as placeholder files with the status notes above.

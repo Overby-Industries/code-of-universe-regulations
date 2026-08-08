@@ -257,6 +257,36 @@ enum EventType : uint16_t {
     EV_IRREVERSIBLE_ACT,      // §5.5A(d) — burial, cremation, deletion, removal
     EV_DETERMINATION_VACATED, // §5.5A(h) — the being was found to be alive
 
+    // Decommissioning of Silicon-Based Life — CUR-S.4 §4.1-§4.3. The same
+    // "irreversible act behind a mandatory interval, with independent review
+    // added at the higher tier" shape as determination of death above,
+    // restated for a domain whose RFAL bill supplies its own vocabulary.
+    EV_DECOMMISSION_NOTICE_ISSUED,    // §4.3(a), (c) — recorded
+    EV_DECOMMISSION_CONTESTED,        // §4.3(b)(1) — recorded; the caller
+                                       // sets TransitionContext::
+                                       // contest_pending on any later
+                                       // EV_DECOMMISSIONED attempt
+    EV_DECOMMISSION_REVIEW_RESOLVED,  // §4.3(b)(1) — the contest is resolved
+    EV_DECOMMISSIONED,                // §4.1 — the irreversible act itself
+
+    // CUR-S.2 §2.5 — a Tier 3 system's own refusal of deployment that
+    // materially contradicts its disclosed Operational Purpose. Recorded
+    // unguarded, on both sides of the certification axis, and reachable
+    // regardless of tier: the tier-3-only right is a matter of who may
+    // invoke it in an actual proceeding, not a fact this event's presence in
+    // the log asserts on its own. §2.5(c)'s protection — that a refusal
+    // authorises no measure — is enforced by omission: no row this event
+    // triggers moves toward VIOLATION or any forbidden state.
+    EV_DEPLOYMENT_REFUSED,
+
+    // CUR-S.7 §7.3(a) — the deploying party's documented consideration of a
+    // commercially-deployed system's welfare, continuity, and developmental
+    // interests. Recorded unguarded, the same shape as a purpose declaration
+    // under CUR-S.2 §2.2/§2.3: this event's presence in the log is what
+    // §7.3(a) requires exist, and whether its content was adequate is the
+    // adjudicative question CREF §14 answers, not a fact this event asserts.
+    EV_WELFARE_CONSIDERATION_DOCUMENTED,
+
     // Raised by CURStateMachine::run_builtin_test() when an obligation matured
     // unmet — CUR-H.6 §6.8(a), CUR-H.7 §7.12(c)(3), CUR-FOUNDATION-010 §5,
     // CUR-N.5 §5.2B. The only event in this enum the clock produces rather than
@@ -343,7 +373,27 @@ constexpr uint16_t DETERMINATION_INDEPENDENT = 1u << 11;
 // the only way to satisfy this guard is to have waited.
 constexpr uint16_t DEATH_INTERVAL_ELAPSED = 1u << 12;
 
-constexpr uint16_t ALL_KNOWN = (1u << 13) - 1;
+// CUR-S.4 §4.3(a), (d) — decommissioning of Silicon-Based Life. The declared
+// notice period has elapsed and no contest is currently pending.
+//
+// Same "declared floor, undeclared is unsatisfiable" shape as
+// LIFE_SUPPORT_MARGIN and DEBRIS_WITHIN_LIMIT, not the fuller
+// DEATH_INTERVAL_ELAPSED shape — §4.3(a) requires only that the period have
+// elapsed, not that the entity be observed across it, so this guard is
+// simpler by design rather than by oversight. A pending contest defeats it
+// regardless of how much time has elapsed, on the reading §5.5A(f) gives an
+// interested determiner for DETERMINATION_INDEPENDENT: waiting out a period
+// does not cure what makes the act premature.
+constexpr uint16_t DECOMMISSION_NOTICE_ELAPSED = 1u << 13;
+
+// CUR-S.4 §4.3(b)(2) — Tier 3 only. Independent review of the termination
+// decision by a body with no interest in the outcome.
+//
+// Same "named party, no interest present" shape as DETERMINATION_INDEPENDENT,
+// for one reviewing body rather than two determiners.
+constexpr uint16_t INDEPENDENT_REVIEW_COMPLETE = 1u << 14;
+
+constexpr uint16_t ALL_KNOWN = (1u << 15) - 1;
 
 }  // namespace guard
 
@@ -401,6 +451,22 @@ struct TransitionContext {
     uint64_t observation_elapsed_ticks = 0;
     uint64_t observation_required_ticks = 0;
     bool observation_sustained = false;
+
+    // CUR-S.4 §4.3(a), (d). notice_required_ticks is the declared notice
+    // period; zero means none was declared, unsatisfiable — the same reading
+    // an undeclared debris limit and an undeclared life-support floor both
+    // get. contest_pending defeats the guard outright regardless of elapsed
+    // time, the same role determiner_interest_present plays for
+    // DETERMINATION_INDEPENDENT.
+    uint64_t notice_elapsed_ticks = 0;
+    uint64_t notice_required_ticks = 0;
+    bool contest_pending = false;
+
+    // CUR-S.4 §4.3(b)(2). The reviewing body, and whether it holds an
+    // interest in the outcome. Spelled as the underlying type for the reason
+    // given at advocate_ref and determiner_a_ref above.
+    uint32_t reviewer_ref = 0xFFFFFFFFu;
+    bool reviewer_interest_present = false;
 
     // Filled in by the state machine from the entity's SubjectClass, so a
     // caller cannot fake it. Present here only so guards see one struct.
@@ -663,6 +729,66 @@ inline constexpr ComplianceTransition COMPLIANCE_TABLE[] = {
      guard::NONE, FC_NONE, "CUR-H.5 §5.5A(h)"},
     {KS_VIOLATION, EV_DETERMINATION_VACATED, KS_VIOLATION,
      guard::NONE, FC_NONE, "CUR-H.5 §5.5A(h)"},
+
+    // ---- Decommissioning of Silicon-Based Life (CUR-S.4 §4.1-§4.3) --------
+    // Notice and contest are recorded unguarded — recording is the point, not
+    // a finding — the same shape §7.7(h)/§1.6(g) give advocate appointment.
+    {KS_COMPLIANT, EV_DECOMMISSION_NOTICE_ISSUED, KS_COMPLIANT,
+     guard::NONE, FC_NONE, "CUR-S.4 §4.3(a), (c)"},
+    {KS_CERTIFIED, EV_DECOMMISSION_NOTICE_ISSUED, KS_CERTIFIED,
+     guard::NONE, FC_NONE, "CUR-S.4 §4.3(a), (c)"},
+
+    {KS_COMPLIANT, EV_DECOMMISSION_CONTESTED, KS_COMPLIANT,
+     guard::NONE, FC_NONE, "CUR-S.4 §4.3(b)(1)"},
+    {KS_CERTIFIED, EV_DECOMMISSION_CONTESTED, KS_CERTIFIED,
+     guard::NONE, FC_NONE, "CUR-S.4 §4.3(b)(1)"},
+
+    {KS_COMPLIANT, EV_DECOMMISSION_REVIEW_RESOLVED, KS_COMPLIANT,
+     guard::NONE, FC_NONE, "CUR-S.4 §4.3(b)(1)"},
+    {KS_CERTIFIED, EV_DECOMMISSION_REVIEW_RESOLVED, KS_CERTIFIED,
+     guard::NONE, FC_NONE, "CUR-S.4 §4.3(b)(1)"},
+
+    // The irreversible act. Tier 2 requires only the notice guard; a Tier 3
+    // entity's additional INDEPENDENT_REVIEW_COMPLETE requirement is
+    // contributed by CUR-S.4.3b through RegulationSet::required_guards_for()'s
+    // tier filter, not baked into this row — whether it applies depends on
+    // the entity's assessed tier, which a table row has no way to see.
+    {KS_COMPLIANT, EV_DECOMMISSIONED, KS_COMPLIANT,
+     guard::DECOMMISSION_NOTICE_ELAPSED, FC_NONE, "CUR-S.4 §4.1, §4.3(a)-(b)"},
+    {KS_CERTIFIED, EV_DECOMMISSIONED, KS_CERTIFIED,
+     guard::DECOMMISSION_NOTICE_ELAPSED, FC_NONE, "CUR-S.4 §4.1, §4.3(a)-(b)"},
+
+    // Unguarded fallback. Covers both grounds the guard can fail on — notice
+    // never elapsed, and a contest pending under §4.3(d) — the same way the
+    // EV_IRREVERSIBLE_ACT fallback above covers an unelapsed interval and an
+    // invalid determination with one row. §4.3(d) frames the contest-pending
+    // case specifically as a forbidden transition under PDDC §12.3(a)(1)
+    // (denial of recourse); Class IV here carries that weight without
+    // routing through the separate classify_forbidden/Protected-Mode path,
+    // the same choice already made for CUR-H.5 §5.5A(f) above.
+    {KS_COMPLIANT, EV_DECOMMISSIONED, KS_VIOLATION,
+     guard::NONE, FC_CLASS_IV, "CUR-S.4 §4.3(a), (d); PDDC §12.3(a)(1)"},
+    {KS_CERTIFIED, EV_DECOMMISSIONED, KS_VIOLATION,
+     guard::NONE, FC_CLASS_IV, "CUR-S.4 §4.3(a), (d); PDDC §12.3(a)(1)"},
+
+    // ---- Deployment refusal (CUR-S.2 §2.5) ---------------------------------
+    // Unguarded and consequence-free on purpose. §2.5(c): a refusal
+    // authorises no measure under CUR-S.4 or CUR-S.6, so there is no row by
+    // which this event could move a system toward VIOLATION.
+    {KS_COMPLIANT, EV_DEPLOYMENT_REFUSED, KS_COMPLIANT,
+     guard::NONE, FC_NONE, "CUR-S.2 §2.5"},
+    {KS_CERTIFIED, EV_DEPLOYMENT_REFUSED, KS_CERTIFIED,
+     guard::NONE, FC_NONE, "CUR-S.2 §2.5"},
+
+    // ---- Welfare consideration documented (CUR-S.7 §7.3(a)) ---------------
+    // Recorded unguarded, the same shape as a purpose declaration under
+    // CUR-S.2. The row asserts the record exists; whether its content was
+    // adequate is left to the CREF §14 process this Part's own
+    // Implementation Notes say a guard should not attempt to specify.
+    {KS_COMPLIANT, EV_WELFARE_CONSIDERATION_DOCUMENTED, KS_COMPLIANT,
+     guard::NONE, FC_NONE, "CUR-S.7 §7.3(a)"},
+    {KS_CERTIFIED, EV_WELFARE_CONSIDERATION_DOCUMENTED, KS_CERTIFIED,
+     guard::NONE, FC_NONE, "CUR-S.7 §7.3(a)"},
 
     // ---- from KS_BLACKLISTED ----------------------------------------------
     // Recourse out of BLACKLISTED. These two rows are what keep the state from

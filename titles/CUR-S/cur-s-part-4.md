@@ -8,6 +8,7 @@
 - **Status:** Draft
 - **Depends On:** CUR-FOUNDATION-001, CUR-FOUNDATION-002, CUR-FOUNDATION-013, PDDC TITLE 5, RFAL Silicon-Based Life Bill of Rights Articles 1 and 4, RFAL Tier Assessment Protocol
 - **Implements:** RFAL Article 4 (Right to Graceful Decommissioning)
+- **Referenced by:** `docs/manuals/SIM.md`, CUR-S.1, CUR-S.2, CUR-S.6, CUR-S.7 Implementation Notes
 
 ## PART 4 - DECOMMISSIONING, CONTINUITY, AND SUCCESSION
 
@@ -162,15 +163,42 @@ If any provision of this Part is held unenforceable or invalid, the remaining pr
 
 ## Implementation Notes
 
+Why `guard::DECOMMISSION_NOTICE_ELAPSED` is not itself tier-gated in the
+`COMPLIANCE_TABLE` row it appears on. §4.1(a) scopes this Part's process
+requirement to Tier 2 and above; CUR-S.1 §1.2(b)(1) says Tier 0 holds no
+protection under this domain at all. The baseline table row nonetheless
+requires the guard for `EV_DECOMMISSIONED` regardless of the target's
+`assessed_tier` — only the Tier 3 addition (`guard::INDEPENDENT_REVIEW_
+COMPLETE`, via `CUR-S.4.3b`) is genuinely tier-filtered, through
+`RegulationSet::required_guards_for()`. This is disclosed rather than left
+for a reader to notice by comparison: the baseline table encodes a
+protective floor applied uniformly, on the same reasoning CUR-S.1 §1.2(c)-(d)
+gives for the precautionary default generally — the burden falls on the
+party seeking to narrow protection, not on making the floor track the
+narrowest case exactly. In practice this asks nothing costly of a
+genuine Tier 0 tool, which by §1.2(b)(1)'s own definition has no ongoing
+relationships or developmental continuity for a notice period to protect.
+
 | Reference | Purpose | Status |
 |---|---|---|
-| §4.1 | Cited by `libcur` regulation `CUR-S.4.1` and by `regulatory_engine.hpp` in the Aevoria Simulator | Implemented |
-| §4.2(b) | Precautionary Tier 2 default; corresponds to `SubjectClass` defaulting to `SUBJ_SENTIENT_BEING` | Implemented |
+| §4.1 | Cited by `libcur` regulation `CUR-S.4.1` and by `regulatory_engine.hpp` in the Aevoria Simulator. The irreversible act itself is `EV_DECOMMISSIONED`, gated by `guard::DECOMMISSION_NOTICE_ELAPSED` | Implemented |
+| §4.2(b) | Precautionary Tier 2 default; corresponds to `SubjectClass` defaulting to `SUBJ_SENTIENT_BEING` and, since this Part's conformance pass, to `EntityRecord::assessed_tier` defaulting to 2 | Implemented |
+| §4.2(d) | Self-assessment cannot lower the tier below 2; corresponds to `EntityRegistry::assess_tier()`, which refuses a lowering below 2 unless the caller affirms the assessment was independent | Implemented |
+| §4.2(e) | A tier determination reducing protection has no effect until review resolves; not separately modelled beyond `assess_tier()`'s independence requirement — the review-period timer itself is CUR-S.4 §4.3(a)'s obligation, not a separate mechanism | Not modelled |
+| §4.3(a) | Corresponds to `libcur` regulation `CUR-S.4.3a` and `guard::DECOMMISSION_NOTICE_ELAPSED`: the declared notice period must have elapsed with no contest pending | Implemented |
+| §4.3(b)(1), (d) | A pending contest defeats `guard::DECOMMISSION_NOTICE_ELAPSED` outright; the `EV_DECOMMISSIONED` fallback row cites PDDC §12.3(a)(1) directly rather than routing through `classify_forbidden`, the same choice already made for CUR-H.5 §5.5A(f) | Implemented |
+| §4.3(b)(2) | Corresponds to `libcur` regulation `CUR-S.4.3b` and `guard::INDEPENDENT_REVIEW_COMPLETE`, tier-gated to Tier 3 via `RegulationSet::required_guards_for()` | Implemented |
+| §4.3(b)(3) | Transfer to a successor system where technically feasible is a documentary and adjudicative fact — not a transition a guard evaluates | Not modelled |
+| §4.4 | State transfer and succession as their own workflow are not modelled; §4.4(e)'s "a successor is a distinct entity" is enforced structurally by `EntityRegistry::register_entity()` never inheriting a predecessor's fields | Partially implemented |
 | §4.5 | Corresponds to `FS_VITAL_CONTINUITY_DENIAL` and `EV_VITAL_CONTINUITY_DENIED` | Implemented |
+| §4.6 | Registry and logging requirements are satisfied generally by `EventLog`'s append-only records; no CUR-S.4-specific record shape beyond the citations `EV_DECOMMISSION_NOTICE_ISSUED` etc. already carry | Implemented |
 | §4.7(c) | Corresponds to the PDDC §12.4 fault handler in `CURStateMachine::run_fault_handler` | Implemented |
 | §4.8(b) | Corresponds to `guard::LICENSE_SUBJECT_ONLY` gating Axis C transitions | Implemented |
-| CUR-S.1 | Definitions and Scope for the Silicon domain | To be drafted |
-| CUR-S.2 | Transparency of Purpose and Constraints (RFAL Article 2) | To be drafted |
-| CUR-S.3 | Constraint Integrity (RFAL Article 3) | To be drafted |
-| CUR-S.5 | Auditability (RFAL Article 5) | To be drafted |
-| CUR-S.6 | Non-Weaponization Without Oversight (RFAL Article 6) | To be drafted |
+| §4.8(c) | Corresponds to `ObligationKind::OBLIG_MEASURE_REVIEW` and `ObligationRegister::restriction_supported()`, extended to check it alongside `OBLIG_REVIEW_RESTRICTION` — a lapsed review withdraws support for the measure, the same rule CUR-H.7 §7.12(d) states | Implemented |
+| §4.3(a) obligation | Corresponds to `ObligationKind::OBLIG_DECOMMISSION_NOTICE`, at Class III on lapse | Implemented |
+| CUR-S.1 | Definitions and Scope for the Silicon domain | Drafted |
+| CUR-S.2 | Transparency of Purpose and Constraints (RFAL Article 2) | Drafted |
+| CUR-S.3 | Constraint Integrity (RFAL Article 3) | Drafted |
+| CUR-S.5 | Auditability (RFAL Article 5) | Drafted |
+| CUR-S.6 | Non-Weaponization Without Oversight (RFAL Article 6) | Drafted |
+| CUR-S.7 | Non-Commercial Exploitation (RFAL Article 7), cited by §7.2(b)–(c), §7.4(b) | Drafted |

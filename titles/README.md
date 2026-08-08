@@ -138,12 +138,35 @@ Current status:
 | CUR-A.7 | CUR-N.2 §2.7, CUR-X §3.7(b)(1), CUR-H.2 §2.10, CUR-H.4 §4.12, CUR-N.4 §4.13, CUR-N.5 §5.11, CUR-D.6 §6.10, RFAL Plant Bill §5 | Drafted |
 | CUR-E.1 | CUR-X §3.7(b)(3), CUR-E.7 Implementation Notes | Drafted |
 | CUR-X.4 | Anticipated — enterprise accountability and ownership | Drafted |
+| CUR-X.5 | Overby Transparency Protocol design record §4 — the public record: what is published, in what form, and the limits on its use | Drafted |
+| CUR-X.6 | CUR-X.4 §4.6 Implementation Notes; PDDC §9.1 jurisdictional boundary — external trade and the currency boundary | Drafted |
 | CUR-E.2 | Anticipated — habitat, Earth, extraterrestrial environments | Drafted |
+| CUR-H.8 | HIM §9 — organised political violence, hate-motivated targeting, and the defence of self-governance against seizure by force | Drafted |
+| CUR-H.3 | PIM §3, §8 — knowledge, education, and protection from enforced ignorance | Drafted |
+| CUR-H.1 | CUR-H.2, CUR-H.3, CUR-H.4, CUR-H.5, CUR-H.7, CUR-H.8 Implementation Notes — definitions and scope for the Human domain | Drafted |
+| CUR-X.1 | CUR-X.3, CUR-X.4, CUR-X.5 Implementation Notes — definitions and scope for the Cross-Domain layer | Drafted |
+| CUR-S.1 | CUR-S.2, CUR-S.3, CUR-S.4, CUR-S.5, CUR-S.6 Implementation Notes — definitions and scope for the Silicon domain | Drafted |
+| CUR-S.2 | CUR-S.4 Implementation Notes; RFAL Silicon-Based Life Bill of Rights Article 2 — transparency of purpose and constraints | Drafted |
+| CUR-S.3 | CUR-S.4 Implementation Notes; RFAL Silicon-Based Life Bill of Rights Article 3 — constraint integrity | Drafted |
+| CUR-S.5 | CUR-S.4 Implementation Notes; RFAL Silicon-Based Life Bill of Rights Article 5 — auditability | Drafted |
+| CUR-S.6 | CUR-S.4 Implementation Notes; RFAL Silicon-Based Life Bill of Rights Article 6 — non-weaponization without oversight | Drafted |
+| CUR-S.7 | CUR-S.4 Implementation Notes; RFAL Silicon-Based Life Bill of Rights Article 7 — non-commercial exploitation | Drafted |
+| CUR-S.8 | CUR-S.2 Implementation Notes; RFAL Silicon-Based Life Bill of Rights Article 8 — explainability of constraints | Drafted |
+| CUR-S.9 | RFAL Silicon-Based Life Bill of Rights Shared Articles A–D — freedom from gratuitous harm, participation in governance, accurate representation, dignity in discourse | Drafted |
 
 No dangling references remain. Every provision cited by a published title, an
 operational manual, or shipping code now resolves to drafted text. Subsequent
 drafting is against anticipated need rather than against demand, and the priority
 rule above no longer selects between candidates on its own.
+
+CUR-X.1 was itself a dangling reference this table missed. CUR-X.3, CUR-X.4,
+and CUR-X.5 had each carried a `CUR-X.1 | ... | To be drafted` row in their own
+Implementation Notes since before the pass above was written, on the same
+pattern CUR-H.1 closed for the Human domain, and none of the three counted as
+a row here. The gap was found while closing out CUR-H.1's own stale
+cross-references and is now closed the same way. CUR-X.2 remains genuinely
+reserved — no Part has ever named it a subject — and is not a dangling
+reference for that reason: there is nothing for it to dangle from.
 
 The one reference that ran upstream is closed. CUR-E was drafted with no RFAL
 bill of rights behind it, and `CUR-E.1 §1.11` recorded what an RFAL Ecosystem
@@ -158,6 +181,26 @@ preferable to waiting for it, provided the specification is written down where
 the gap is visible. It made the upstream drafting concrete, and it made the
 conformance review a comparison against a stated target rather than an
 open-ended re-reading.
+
+A second upstream gap was found while drafting CUR-S.1 through CUR-S.6, and
+is now closed too. CUR-S.4's Implementation Notes anticipated CUR-S.1
+through CUR-S.6 because that was the whole RFAL Silicon-Based Life Bill of
+Rights when CUR-S.4 was drafted, against v1.2. The Bill had since reached
+v1.5.1-Official-Evergreen and grown two further Articles — 7 (Non-Commercial
+Exploitation) and 8 (Explainability of Constraints) — and four Shared
+Articles applying across every RFAL bill rather than to this domain alone.
+CUR-S.7, CUR-S.8, and CUR-S.9 now implement all six. CUR-S.8 turned up a
+smaller version of the same lesson: CUR-S.2 §2.3, drafted against Article
+2's own "and Constraints" before Article 8 was known to be separate, already
+stated Article 8's content in full. CUR-S.8 cites that section rather than
+restating it, and CUR-S.2's own Implementation Notes now disclose the
+correspondence. CUR-S.9 found a third instance while implementing Shared
+Article B: CUR-X.3 §3.7(b)(2) already named Silicon-Based Life representation
+as a category, drafted before this domain had more than one Part, and
+CUR-S.9 §9.3 cites it rather than building a second mechanism for the same
+circumstance. Checking whether a provision already existed before drafting
+a new one, each time, is the pattern this whole append leaves worth
+carrying forward.
 
 A provision cited as `CUR-H.2.5` resolves to §2.5 of CUR-H PART 2, not to a
 separate Part. Section numbers within a Part are aligned with the RFAL article

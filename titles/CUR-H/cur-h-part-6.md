@@ -391,22 +391,23 @@ and leaves the institution untouched.
 | §6.9(d)(4), §6.13(c) | Corresponds to `FS_RIGHTS_SUSPENSION` and to the ratchet in `EntityRecord::is_license()`, which is what stops a detested being being reclassified into suspendability | Implemented |
 | §6.12(e) | Corresponds to `VS_OVERTURNED`: corrected on the record rather than erased | Implemented |
 | §6.14 | Corresponds to `FS_PERMANENT_EMERGENCY`, declared by `CUR-PDDC.12.6` | Implemented |
-| §6.5 | Age is not represented in the entity model; the prohibition is absolute and has no guard to attach to | Gap, tractable |
+| §6.5 | Corresponds to `EntityRecord::is_minor`, a flag rather than an age, per the reasoning below. No event type in the library yet represents sexual contact or marriage for a guard to attach this to, so the flag is the prerequisite this Part's own note named rather than §6.5 enforced end to end | Partially implemented |
 | §6.8(a) | Corresponds to `OBLIG_INVESTIGATE_REPORT` and `run_builtin_test()`, which raises a Class III fault when a report goes uninvestigated past its due tick | Implemented |
 | §6.9(b) | An absence of capability cannot be represented as an absence; there is nothing in the library to remove | Not modelled |
 | §6.2, §6.3 | Consent is a property of a relationship over time; the library has no representation of it | Not modelled |
 | CUR-H.7 | Offences against the person generally, including homicide; §7.15(b) incorporates §6.7, §6.8(a)-(d), §6.12, and §6.13(f) rather than restating them | Drafted |
 
-Note on the two recorded gaps. Both are real and both are smaller than they look.
-`EntityRecord` carries no age, so §6.5 cannot be checked by the library at all —
-an event involving a child is indistinguishable from any other. Adding a
-minority flag rather than an age would be enough for the guard §6.5(b) implies,
-carries less personal data, and cannot be used to construct the age-graded
-distinctions §6.5(h) forbids. §6.8(a) needs an `EV_REPORT_RECEIVED` and a check
-that every such event is followed by an investigation event, which is the first
-provision in the corpus requiring the library to notice something that did *not*
-happen. Neither is built here: both touch the published interface, and three
-interface changes have landed in as many days.
+Note on §6.5 and the minority flag. `EntityRecord` carried no age at all when
+this Part was drafted, so §6.5 could not be checked by the library in any
+form — an event involving a child was indistinguishable from any other. A
+minority flag, added since, is enough for the guard §6.5(b) implies, carries
+less personal data than an age would, and cannot be used to construct the
+age-graded distinctions §6.5(h) forbids. It is the prerequisite this note
+originally recorded rather than §6.5 enforced end to end: no event type in
+the library yet represents sexual contact or marriage, so there is nothing
+for a guard reading this flag to attach to. Building that event is a larger
+architectural question than adding a flag, and is not undertaken here on
+that basis rather than by oversight.
 
 Note on what §6.9(b) cannot be. An unarmed Commonwealth is a decision about what
 is procured, trained, and deployed, and there is no code path whose absence

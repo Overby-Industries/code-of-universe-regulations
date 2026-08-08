@@ -8,6 +8,7 @@
 - **Status:** Draft
 - **Depends On:** CUR-FOUNDATION-001, CUR-FOUNDATION-002, CUR-FOUNDATION-003, CUR-FOUNDATION-004 (GEM), CUR-FOUNDATION-010, CUR-FOUNDATION-012 (CREF), CUR-FOUNDATION-013, PDDC TITLE 3, PDDC TITLE 4, PDDC TITLE 5, PDDC §9.1, PDDC §13.1, CUR-X.3
 - **Informed by:** Overby Industries Operating Constitution v1.0 (CC0), as a worked example of the enterprise form described in §4.7
+- **Referenced by:** `docs/manuals/EIM.md`
 
 Note on vocabulary. This Part describes mechanisms and avoids the names of
 economic systems. Labels carry commitments the Code has not made and invite
@@ -313,7 +314,7 @@ which is the objection most often raised against this form.
 | §4.9(d), §4.9(g) | Corresponds to `CaptureMeasures::continuity_assumption_required` | Implemented |
 | §4.7 | Enterprise governance form is procedural and out of scope for the FSM | Not modelled |
 | §4.8 | Transparency levels exist in CUR-FOUNDATION-010 but are not represented in the library | Not modelled |
-| CUR-X.1 | Definitions and Scope for the Cross-Domain layer | To be drafted |
+| CUR-X.1 | Definitions and Scope for the Cross-Domain layer | Drafted |
 | CUR-X.2 | Reserved | To be drafted |
 
 Note on §4.2(d) and the Capture Risk Index. CUR-FOUNDATION-003 already computed
@@ -359,5 +360,16 @@ conditions a Vital Continuity Service, and a suspension delays one exactly as a
 withdrawal ends it. The library sets `continuity_assumption_required` for both,
 and the text now says so rather than leaving the implementation ahead of it.
 
-One extension recorded in CUR-A §7.7 and CUR-E §1.6 remains outstanding: the
-advocate registry.
+The advocate registry recorded here as outstanding is now implemented; see
+CUR-A §7.7 and CUR-E §1.6 Implementation Notes.
+
+Note on §4.6 and the currency boundary. §4.6 states that access is independent
+of contribution and that beings work for resources rather than currency, inside
+the Commonwealth. It does not state what happens where the Commonwealth trades
+with a party that uses currency and does not recognise that allocation — a
+silence that matters, because it is exactly where a cashless internal economy
+is at risk of being reconstituted through an external label. CUR-X.6 states the
+boundary: External Trade is conducted by institutions and enterprises, not by
+beings on Commonwealth account, and currency received in it does not cross back
+into the internal allocation this section describes as wage, dividend, or a
+condition of access.

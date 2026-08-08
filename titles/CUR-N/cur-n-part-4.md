@@ -12,8 +12,8 @@
 Scope note. CUR-N.2 states the prohibition. This Part states what follows from
 breaching it: how a degree is determined, what measures are available, and —
 more importantly — what is never available. The operational procedures sit in
-NIM.4 and NIM.5, which are RFAL manuals and not yet written. Where this Part and
-a manual differ, this Part governs.
+NIM.4 and NIM.5, RFAL manuals drafted at `docs/manuals/operational/nim/`.
+Where this Part and a manual differ, this Part governs.
 
 ## PART 4 - ACCOUNTABILITY FOR TELEPATHIC INVASION
 
@@ -285,7 +285,7 @@ of a Responsible Being remains a forbidden transition under PDDC §12.3(a)(4).
 | §4.3 | Due process is procedural; the FSM models its completion as `guard::DUE_PROCESS_COMPLETE` but not its content | Partially implemented |
 | §4.4 | Degree determination is adjudicative and out of scope for the FSM | Not modelled |
 | §4.7(d), (e) | Review intervals and maximum durations are not modelled; the library has no timer | Not modelled |
-| NIM.4, NIM.5 | Operational procedures referenced by this Part | RFAL operational scope, not yet written |
+| NIM.4, NIM.5 | Operational procedures referenced by this Part | Drafted at `docs/manuals/operational/nim/NIM.4.md`, `NIM.5.md` |
 | CUR-N.1 | Definitions and Scope for the domain | To be drafted |
 | CUR-N.3 | Reserved | To be drafted |
 
